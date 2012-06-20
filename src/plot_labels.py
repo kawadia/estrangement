@@ -406,7 +406,7 @@ if __name__ == '__main__':
         (0., 0.), # ignored
     ]
 
-    COW_ccode_dict  = COW_country_codes()
+    #COW_ccode_dict  = COW_country_codes()
     #COW_ccode_dict  = rca_country_codes()
     plot_temporal_communities()
     #plot_sigmas()
