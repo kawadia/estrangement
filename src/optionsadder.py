@@ -114,7 +114,7 @@ def add_options(parser, reader_functions={}):
             type="choice",
             choices=reader_functions.keys(),
             help="generator fcn to read graph snapshots. Choices are " + str(reader_functions.keys()) + " [default: %default]",
-            default="read_karate",
+            default="read_general",
             config='true')
     
     

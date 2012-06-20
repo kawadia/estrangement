@@ -67,12 +67,12 @@ function main () {
         source "${configScriptsFN}"
     fi
     [[ -z "${RUNNER_SCRIPT}" ]] && RUNNER_SCRIPT="simulation-runner.bash"
-    [[ -z "${SIMULATION_SCRIPT}" ]] && SIMULATION_SCRIPT="lpa/main.py"
+    [[ -z "${SIMULATION_SCRIPT}" ]] && SIMULATION_SCRIPT="main.py"
     [[ -z "${WATCH_SCRIPT}" ]] && WATCH_SCRIPT="watch-progress.sh"
     [[ -z "${TASK_SETUP_SCRIPT}" ]] && TASK_SETUP_SCRIPT="setup-tasks.py"
     #[[ -z "${MASTER_CONFIG}" ]] && MASTER_CONFIG="configs/slinky.conf"
-    [[ -z "${ANALYSIS_SCRIPT}" ]] && ANALYSIS_SCRIPT="lpa/plot_labels.py"
-    [[ -z "${POSTPROCESS_SCRIPT}" ]] && POSTPROCESS_SCRIPT="lpa/postpro.py"
+    [[ -z "${ANALYSIS_SCRIPT}" ]] && ANALYSIS_SCRIPT="plot_labels.py"
+    [[ -z "${POSTPROCESS_SCRIPT}" ]] && POSTPROCESS_SCRIPT="postpro.py"
     
     # make a symbolic link to the runner script
     RUNNER_SCRIPT="${RUNNERSCRIPTSDIR}/${RUNNER_SCRIPT}"
