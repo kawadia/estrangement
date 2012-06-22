@@ -197,7 +197,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
         communities = set((label_dict.values()))
         Q = agglomerate.modularity(label_dict, G)
         E = utils.Estrangement(G, label_dict, Z, opt.gap_proof_estrangement)
-        F = mod - lambduh*E + lambduh*opt.delta
+        F = Q - lambduh*E + lambduh*opt.delta
         logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
             iteration, len(communities), Q, E, F)
 
