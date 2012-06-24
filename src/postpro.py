@@ -23,7 +23,6 @@ import pprint
 import csv
 import math
 import re
-from enthought.mayavi import mlab
 
 import utils
 import visualoptions
@@ -546,28 +545,6 @@ def lifetime_size_scatterplot():
 
 
 
-def tile3d(x, y, z):
-    """use mayavi2 to create a 3d plot"""
-    # Create data with x and y random in the [-2, 2] segment, and z a
-    # Gaussian function of x and y.
-
-    mlab.figure(1, fgcolor=(0, 0, 0), bgcolor=(1, 1, 1))
-
-    # Visualize the points
-    pts = mlab.points3d(x, [i/20.0 for i in y], [i*4 for i in z], z,
-        colormap='Paired', mode='sphere',
-        resolution=8, scale_mode='none', scale_factor=0.8)
-
-    #mlab.xlabel("Time")
-    #mlab.ylabel("Senators")
-    
-    # Create and visualize the mesh
-    #mesh = mlab.pipeline.delaunay2d(pts)
-    #surf = mlab.pipeline.surface(mesh)
-
-    #mlab.view(47, 57, 8.2, (0.1, 0.15, 0.14))
-    mlab.show()
-
 
 def COW_country_codes():
     """ read COW country codes """
@@ -893,10 +870,6 @@ def plot_temporal_communities(nodes_of_interest=[]):
         Labels.fill(-1)
 
         
-        mayavi_x = []
-        mayavi_y = []
-        mayavi_z = []
-
         with open(os.path.join(taskdir,"matched_temporal_labels.log"), 'r') as label_file:
             matched_temporal_label_dict = eval(label_file.read())
            
@@ -905,15 +878,7 @@ def plot_temporal_communities(nodes_of_interest=[]):
                 Labels[node_index_dict[n], t_index_dict[t]] = label_index_dict[l]
             elif not nodes_of_interest:    
                 Labels[node_index_dict[n], t_index_dict[t]] = label_index_dict[l]
-                mayavi_x.append(t_index_dict[t])
-                mayavi_y.append(node_index_dict[n])
-                mayavi_z.append(label_index_dict[l])
 
-        if opt.mayavi is True and delta == 0.05:
-            tile3d(mayavi_x, mayavi_y, mayavi_z)
-
-
-            
 
         #numpy.set_printoptions(threshold=400)
         #print("time: %d, Labels: %s" %(time, str(Labels)))

@@ -201,14 +201,7 @@ def add_options(parser):
             config='true'
     )
     
-    parser.add_option("--mayavi",
-            dest="mayavi", 
-            help="use mayavi to do a 3d plot [default: %default]",
-            action="store_true",
-            default=False,
-            config='true'
-    )
-
+    
     parser.add_option("--show_title",
             dest="show_title", 
             help="show title on plots [default: %default]",
