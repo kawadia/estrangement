@@ -1,4 +1,20 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+This module implements various functions used to compute and plot temporal communities.
+"""
+
+__author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
+                                    'Sameet Sreenivasan <sreens@rpi.edu>'])
+
+#   Copyright (C) 2012 by 
+#   Vikas Kawadia <vkawadia@bbn.com>
+#   Sameet Sreenivasan <sreens@rpi.edu>
+#   All rights reserved. 
+#   BSD license. 
+
+__all__ = ['graph_distance','node_graph_distance']
+
 
 import networkx as nx
 import collections
@@ -10,11 +26,28 @@ import sys
 
 
 def graph_distance(g0, g1, weighted=True):
+    """Return the Tanimoto distance between the two input graphs.
 
-    # Tanimoto distance between the set of edges
-    # this is defined as    (a.b - (aUb - a.b)) /aUb
-    # weighted case; a.b is dot product and aUb = a^2 + b^2 - a.b
-    #   so distance = (3a.b - a^2 - b ^2)/(a^2+b^2 = a.b)
+    Tanimoto distance between the set of edges is defined as    
+    (a.b - aUb)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
+
+    Parameters
+    ----------
+    g0,g1: graph
+	Input networkx graphs to be compared
+    weighted: bool
+	True if the edges of the graph are weighted, False otherwise
+
+    Returns
+    -------
+    graph_distance: float
+	The Tanimoto distance between the nodes of g0 and g1
+	
+    Note
+    ----
+    Used only in snapstats to plot. 
+    """
+
     intersection = set(g1.edges_iter()) & set(g0.edges_iter())
     if weighted is False:
         union = set(g1.edges_iter()) | set(g0.edges_iter())
@@ -29,11 +62,27 @@ def graph_distance(g0, g1, weighted=True):
 
     return graph_distance
 
-
 def node_graph_distance(g0, g1):
+    """Return the Tanimoto distance between the two input graphs.
 
-    # Jaccard distance between the set of nodes
-    # this is defined as    (a.b - (aUb - a.b)) /aUb
+    Jaccard distance between the set of nodes is defined as    
+    (a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
+
+    Parameters
+    ----------
+    g0,g1: graph
+        Input networkx graphs to be compared
+
+    Returns
+    -------
+    node_graph_distance: float
+        The Jaccard distance between the nodes of g0 and g1
+        
+    Note
+    ----
+    Used only in snapstats to plot. 
+    """
+
     g1_nodes = set(g1.nodes())
     g0_nodes = set(g0.nodes())
     graph_distance = 1 - len(g0_nodes & g1_nodes)/float(len(g0_nodes | g1_nodes)) 
@@ -43,7 +92,30 @@ def node_graph_distance(g0, g1):
 
 
 def Estrangement(G, label_dict, Zgraph, gap_proof):
-    """ compute Q-tauE """
+    """Return the Estrangement between G and Zgraph
+
+    Compute Q-tauE for the given input parameters
+
+    Parameters
+    -----------
+    G: graph
+	A networkx graph object
+    label_dict: dictionary
+	key = node_identifier, value = community label
+    ZGraph: graph
+	<>
+    gap_proof: boolean
+	<>
+
+    Returns
+    -------
+    estrangement: float
+	the value of Q-tauE for the given input
+ 
+    Note
+    ----
+    Used in LPA and Agglomerate"""
+
     consort_edge_set =  set(Zgraph.edges()) & set(G.edges())
     logging.info("Estrangement(): Z edges: %s", str(Zgraph.edges(data=True)))   
     logging.info("Estrangement(): G edges: %s", str(G.edges(data=True)))   
