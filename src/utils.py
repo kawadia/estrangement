@@ -13,7 +13,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   All rights reserved. 
 #   BSD license. 
 
-__all__ = ['graph_distance','node_graph_distance']
+__all__ = ['graph_distance','node_graph_distance','estrangement','match_labels']
 
 
 import networkx as nx
