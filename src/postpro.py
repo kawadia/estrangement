@@ -2,7 +2,8 @@
 
 import matplotlib
 #matplotlib.use('SVG')
-matplotlib.use('WXAgg')
+#matplotlib.use('WXAgg')
+matplotlib.use('Agg')
 from matplotlib import pyplot
 from matplotlib.ticker import MultipleLocator
 import pylab
