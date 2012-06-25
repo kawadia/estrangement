@@ -1,3 +1,23 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+""" 
+Estrangement functions.
+"""
+
+__author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
+                                    'Sameet Sreenivasan <sreens@rpi.edu>'])
+
+#   Copyright (C) 2012 by 
+#   Vikas Kawadia <vkawadia@bbn.com>
+#   Sameet Sreenivasan <sreens@rpi.edu>
+#   All rights reserved. 
+#   BSD license. 
+
+__all__ = ['make_Zgraph']
+
+
+
+
 import networkx as nx
 import random
 import sys
@@ -11,19 +31,32 @@ import numpy
 from scipy import optimize
 import pylab
 import pprint
-#local modules
 import lpa
 import snapshot_stats
 import utils
 import agglomerate
 #import louvainorig
+#local modules
 
 #have to make this global for access inside g_of_lambda
 itrepeats = 0
 
 def make_Zgraph(g0, g1, g0_label_dict):
-    """ compute the graph Z which consists of edges in the intersection
-    of g0 and g1 that have the same labels on the endpoint nodes."""
+    """Constructs and returns  a graphs which consists of only edges that appear
+    in both input graphs and the endpoints have the same label (i.e. both end
+    points are in the same community). 
+
+    Parameters
+    ----------
+    g0, g1: graph
+	A networkx graph object as inputs to the function
+    g0_label_dict: dictionary
+	{node:community} for the nodes in g0
+
+    Returns
+    -------
+    Z: graph
+	A networkx graph object """
 
     Z = nx.Graph()
     Z.add_weighted_edges_from(
@@ -34,16 +67,34 @@ def make_Zgraph(g0, g1, g0_label_dict):
 
     return Z 
 
+#SD: I think g1 can be removed from here
 def update_Zgraph(Zgraph, g0, g1, g0_label_dict):
-    """ update the graph Z which consists of all consort edges upto to time t
-    
-    This Zgraph may have edges which are not in g1
+    """ Returns a new graph Z, which consists of all consort edges upto to time t
+   
+    Parameters
+    ----------
+    Zgraph: graph
+	The current Zgraph
+    g0: graph
+	The latest snaphot
+    g1: graph
+	<>
+    g0_label_dict: dictionary
+	{node:label} denoting the community label assigned to each node in g0
 
+    Returns
+    -------
+    Z: graphs
+	The updated Zgraph
+
+    Note
+    ---- 
+    This Zgraph may have edges which are not in g1
     The weight on the consort edges has also not been averaged
     
     """
-
     # add consort edges from g0 to Zgraph, this also updates the weights
+    # note: consrot edges are edges joining nodes with the same community label
     Zgraph.add_weighted_edges_from([(e[0], e[1], e[2]['weight']) for e in g0.edges(data=True) 
       if g0_label_dict[e[0]] == g0_label_dict[e[1]] ])
 
@@ -53,13 +104,13 @@ def update_Zgraph(Zgraph, g0, g1, g0_label_dict):
 
 
     # further remove edges (u, v) Zgraph, if both u and v are present in g0 but
-    # are no connected by an edge
+    # are not connected by an edge
     #@todo assumes that there are no zero weight edges
     extra_Zgraph_edges = set(Zgraph.edges()) - set(g0.edges())
     Zgraph.remove_edges_from([e for e in list(extra_Zgraph_edges)
       if e[0] in g0.nodes() and e[1] in g0.nodes() ])
 
-
+    return Zgraph
 
 def repeated_runs(g1, opt, lambduh, Zgraph, repeats):
     """ do repeated call to agglomerate lpa to optimize F
