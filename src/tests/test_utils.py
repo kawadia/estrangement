@@ -50,6 +50,6 @@ class test_utils:
 
 	def test_match_labels(self):
 		assert utils.match_labels(self.label_dict1, self.label_dict1) == self.label_dict1  # snapshots are the same
-                assert utils.match_labels(lself.abel_dict5, self.label_dict4) == self.label_dict4  # same community, diff label
-                assert utils.match_labels(lself.abel_dict4, self.label_dict4) == self.label_dict4  # same community, same label
+                assert utils.match_labels(self.label_dict5, self.label_dict4) == self.label_dict4  # same community, diff label
+                assert utils.match_labels(self.label_dict4, self.label_dict4) == self.label_dict4  # same community, same label
 
