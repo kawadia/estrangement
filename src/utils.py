@@ -89,8 +89,6 @@ def node_graph_distance(g0, g1):
     
     return graph_distance
 
-
-
 def Estrangement(G, label_dict, Zgraph, gap_proof):
     """Return the Estrangement between G and Zgraph
 
@@ -130,145 +128,6 @@ def Estrangement(G, label_dict, Zgraph, gap_proof):
             estrangement = sum([e[2]['weight'] for e in Zgraph.edges(data=True) if label_dict[e[0]] !=
             label_dict[e[1]]]) / float(G.size(weight='weight'))
     return estrangement
-
-
-def compute_VI(label_dict, prev_label_dict):
-    """ Compute variation of information
-
-    There is one nagging issue with VI that we have not settled:
-
-    It implicitly assumes that the number of nodes is unchanged when
-    comparing two partitions since there is an 'n' in the denominator.
-
-
-         What we do to be formally correct is to compute partition
-    distance between nodes present in both snapshots. I don't remember if we're
-    already doing this?
-
-    What I mean is that n_i, n_j and n_ij in the VI definition should be adapted
-    to consider only nodes present in both snapshots. So if I call the set of
-    nodes present in both snapshots, S
-    Then, following Clauset's notation:   n_ij = nodes belonging to S that are
-    belong to group i in C and group j in C'
-    Similarly, for n_i and n_j.
-
-    This of course does not preclude VI from being large the network changes a
-    lot, because then estrangement can (and should) help very little, but at
-    least our comparison of partitions will be appropriate.
-    
-    """
-   
-    VI = 0
-    common_nodes = set(label_dict.keys()) & set(prev_label_dict.keys())
-
-    C0 = collections.defaultdict(list)
-    C1 = collections.defaultdict(list)
-
-    for n in common_nodes:
-        C0[prev_label_dict[n]].append(n)
-        C1[label_dict[n]].append(n)
-
-    #for n, l in prev_label_dict.items():
-    #    C0[l].append(n)
-    #for n, l in label_dict.items():
-    #    C1[l].append(n)
-
-    for i in C1.keys():
-        for j in C0.keys():
-            n_ij = len(set(C1[i]) & set(C0[j]))
-            #logging.debug("n_ij, n_i, n_j ", n_ij, len(C0[j]), len(C1[j]))
-            if n_ij > 0: 
-                # normalized VI
-                #VI += -1*(n_ij/(math.log(n)*float(len(common_nodes))))*math.log(n_ij**2/float(len(C0[j])*len(C1[i])))
-                # not normalized
-                VI += -1*(n_ij/float(len(common_nodes)))*math.log(n_ij**2/float(len(C0[j])*len(C1[i])))
-
-    return VI
-
-
-def compute_VL(label_dict, prev_label_dict):
-    """ Compute normalized variation of labels"""
-    
-    common_nodes = set(label_dict.iterkeys()) & set(prev_label_dict.iterkeys())
-
-    VL_dict = {}
-    for n in common_nodes:
-        if label_dict[n] == prev_label_dict[n]:
-            VL_dict[n] = 0
-        else:
-            VL_dict[n] = 1
-    
-    if len(VL_dict) > 0:
-        VL = sum(VL_dict.itervalues())/float(len(VL_dict))
-    else:
-        # -1 denotes no common nodes, so VL is undefined
-        VL = -1
-    return VL
-
-
-
-def simplified_match_labels(label_dict, prev_label_dict):
-    """ match labels by finding a max weight matching fromt he overlap graph
-    
-    also check if max_cardinality helps
-   
-    """
-    
-    # corner case for the first snapshot
-    if prev_label_dict == {}:
-        return label_dict
-
-    nodesets_per_label_t = collections.defaultdict(set) # key = label, val = set
-                                                    # of nodes with that label
-
-    nodesets_per_label_t_minus_1 = collections.defaultdict(set) # key = label, val = set
-                                                    # of nodes with that label
-    
-    for n,l in label_dict.items():
-        nodesets_per_label_t[l].add(n)
-
-
-    for n,l in prev_label_dict.items():
-        nodesets_per_label_t_minus_1[l].add(n)
-
-
-    logging.debug("nodesets_per_label_t_minus_1: %s",
-        str(nodesets_per_label_t_minus_1))
-    logging.debug("nodesets_per_label_t: %s", str(nodesets_per_label_t))
-
-    overlap_dict = {} # key = (prev_label, new_label), value = jaccard overlap
-
-    overlap_graph = nx.Graph() # store jaccard overlap between all pairs of
-    # labels between t and t-1. Undirected bi-partite graph
-    # compute jaccard between all possible directed pairs of labels between
-    # snapshopts t and t-1
-    for l_t, nodeset_t in nodesets_per_label_t.items():
-        for l_t_minus_1, nodeset_t_minus_1 in nodesets_per_label_t_minus_1.items():
-            jaccard =  len(nodeset_t_minus_1 & nodeset_t)/float(len((nodeset_t_minus_1 | nodeset_t))) 
-            overlap_graph.add_edge(l_t_minus_1, l_t, weight=jaccard)
-
-    logging.debug("overlap_graph nodes: %s", overlap_graph.nodes())
-    logging.debug("overlap_graph edges: %s", overlap_graph.edges(data=True))
-
-    mate = nx.max_weight_matching(overlap_graph, maxcardinality=False)
-    logging.debug("max_weight_matching mate: %s", str(mate))
-
-    # the matching func is not for a bipartite graph specifically so we dont
-    # know if the kets come from the t-1 labels only. make rev_mate.
-    #rev_mate = dict([(v,k) for (k,v) in mate.items()])
-    #logging.debug("max_weight_matching rev_mate: %s", str(rev_mate))
-    
-    matched_label_dict = {} # key = node, value = new label
-    for l_t in nodesets_per_label_t.keys():
-        if mate.has_key(l_t):
-            best_matched_label = mate[l_t]
-        else:
-            best_matched_label = l_t
-        for n in nodesets_per_label_t[l_t]:
-            matched_label_dict[n] = best_matched_label
-
-    #logging.debug("matched_label_dict %s", str(matched_label_dict))
-    return matched_label_dict
 
 
 
@@ -364,30 +223,5 @@ def match_labels(label_dict, prev_label_dict):
 
     #logging.debug("matched_label_dict %s", str(matched_label_dict))
     return matched_label_dict
-
-
-
-def Tanimoto(g0, g1, weighted=True):
-    """ compute Tanimoto similarity between one hop neginbors of all nodes in g0
-    and g1"""
-    T_dict = {}
-    for v in g1.nodes():
-        n1 = g1[v]
-        if v in g0.nodes():
-            n0 = g0[v]
-        else:
-            n0 = {}
-
-        intersection = set(n1.keys()) & set(n0.keys())
-        union = set(n1.keys()) | set(n0.keys())
-        if weighted is False:
-            T_dict[v] = len(intersection)/float(len(union))
-        else:
-            dot_product = sum((n1[i]['weight']*n0[i]['weight'] for i in intersection))
-            n1_norm = sum((n1[i]['weight']**2 for i in n1.keys()))
-            n0_norm = sum((n0[i]['weight']**2 for i in n0.keys()))
-            T_dict[v] = dot_product/float(n0_norm + n1_norm - dot_product)
-
-    return T_dict
 
 

@@ -66,13 +66,6 @@ def read_general(datadir):
     datadir = os.path.join(repo_datadir, datadir)
     print "datadir: ", datadir
     
-    if os.path.exists(os.path.join(datadir, "network.merged")):
-        g1 = nx.read_edgelist(os.path.join(datadir, "network.merged"), nodetype=int, data=(('weight',float),))
-        if not os.path.exists(os.path.join(datadir, "merged_label_dict")):
-            merged_label_dict = maxQ(g1)
-            with open(os.path.join(datadir, 'merged_label_dict.txt'), 'w') as lf:
-                lf.write(repr(merged_label_dict))
-    
     raw_file_list = os.listdir(datadir)
     timestamps = sorted([int(f.rstrip(".ncol")) for f in raw_file_list if f.endswith(".ncol")])
 

@@ -107,12 +107,6 @@ def ERA(graph_reader_fn, opt):
     nodename_set = set()
     snapshots_list = []
 
-    # to plot the histogram of node appearances in snapshots
-    # motivation is to see if there is a persistent core
-    # its only a one-time thing, so does not need to be in the sim loop but...
-    node_appearances_dict = collections.defaultdict(int) # key = nodeid,
-                                              # val=number of appearances
-    
     beginning = True
     snapshot_number = 0
     for t, g1, initial_label_dict in graph_reader_fn(opt.graph_reader_fn_arg):
@@ -239,8 +233,6 @@ def ERA(graph_reader_fn, opt):
             snapstats.Estrangement[t] = Elam[best_feasible_lambda][bestr]
             snapstats.Q[t] =  Qlam[best_feasible_lambda][bestr]
             snapstats.F[t] =  Flam[best_feasible_lambda][bestr]
-            snapstats.VI[t] = utils.compute_VI(label_dict, prev_label_dict)
-            snapstats.VL[t] = utils.compute_VL(label_dict, prev_label_dict)
             snapstats.Qdetails[t] = Qlam
             snapstats.Edetails[t] = Elam
             snapstats.Fdetails[t] = Flam
@@ -273,11 +265,6 @@ def ERA(graph_reader_fn, opt):
             snapstats.LargestComponentsize[t] = 0
 
         
-
-        for n in g1.nodes():
-            node_appearances_dict[n] += 1
-
-
         # save graph for layout
         if opt.savefor_layouts:
             glay = g1.copy()
@@ -291,8 +278,7 @@ def ERA(graph_reader_fn, opt):
             nx.write_gexf(glay, "%s.gexf"%(str(t)))    
         
         
-        # keep track of prev snaphost graph and labelDict for computing T_dict
-        # and VI
+        # keep track of prev snaphost graph and labelDict
         g0 = g1
         prev_label_dict = label_dict
         
@@ -316,14 +302,6 @@ def ERA(graph_reader_fn, opt):
 
     with open("summary.log", 'w') as summary_file:
         summary_file.write(str(summary_dict))
-
-
-    with open("node_appearances.log", 'w') as freq_file:
-        # write nodes appearing most first
-        freq_file.write(
-          str(sorted(node_appearances_dict.items(), key=operator.itemgetter(1),
-            reverse=True))
-        )
 
     return True
 
