@@ -20,13 +20,14 @@ import cProfile
 import pstats
 import logging
 import numpy
-import pprint
-import csv
-import math
-import re
+#import csv
+#import math
+#import re
+#import pprint
 
 import utils
 import visualoptions
+
 
 
 markers = [
@@ -271,7 +272,7 @@ def ChoosingDelta():
         listLinestyles=['bs--', 'ro-',],
         xlabel="$\delta$", ylabel='', title="")
 
-
+#SD: delete?
 def mit_dates():
     """ return dictionary from time number to version name """
     enddate_file_name = "../../../datasets/realitymining-xml/mitdata-weekly-snapshots-weighted-merged/enddate_dict.txt"
@@ -279,6 +280,7 @@ def mit_dates():
         snapshot_dict = eval(f.read())
     return snapshot_dict
 
+#SD: delete?
 def senator_info():
     """ return info about senators from icpsr codes """
     icpsr_dict = {} # key = (congress, icpsr_id), val = list of info about the member
@@ -288,11 +290,13 @@ def senator_info():
             icpsr_dict[int(cols[1])] = ','.join(cols[4:])
     return icpsr_dict    
 
+#SD: delete?
 def congress_years():
     with open("../../../datasets/voteview/congress_to_years.txt", 'r') as f:
         snapshot_dict = eval(f.read())
     return snapshot_dict
 
+#SD: delete?
 def state_names():
     """ return info about senators from icpsr codes """
     state_icpsr_dict = {} # key = state_icpsr_id, val = name
