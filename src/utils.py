@@ -89,7 +89,7 @@ def node_graph_distance(g0, g1):
     
     return graph_distance
 
-def Estrangement1(G, label_dict, Zgraph, gap_proof):
+def Estrangement(G, label_dict, Zgraph, gap_proof):
     """Return the Estrangement between G and Zgraph
 
     Compute Q-tauE for the given input parameters
