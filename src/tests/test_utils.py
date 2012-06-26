@@ -40,13 +40,13 @@ class test_utils:
                 assert utils.node_graph_distance(self.g0, self.g4) == 0.4
                    
 	def test_Estrangement(self):
-		assert utils.Estrangement1(self.g0, self.label_dict1, self.g2, True) == 0     # one common edge, same community
-		assert utils.Estrangement1(self.g0, self.label_dict2, self.g2, True) == 0.5   # one common edge, diff community
-		assert utils.Estrangement1(self.g0, self.label_dict4, self.g5, True) == 0     # all common edge, same community
-		assert utils.Estrangement1(self.g0, self.label_dict3, self.g5, True) == 1     # all common edge, all diff community
-		assert utils.Estrangement1(self.g0, self.label_dict1, self.g2, False) == 0.25 # one edge between community
-		assert utils.Estrangement1(self.g0, self.label_dict4, self.g2, False) == 0    # zero edge between community
-		assert utils.Estrangement1(self.g0, self.label_dict3, self.g2, False) == 1    # all edges between community
+		assert utils.Estrangement(self.g0, self.label_dict1, self.g2, True) == 0     # one common edge, same community
+		assert utils.Estrangement(self.g0, self.label_dict2, self.g2, True) == 0.5   # one common edge, diff community
+		assert utils.Estrangement(self.g0, self.label_dict4, self.g5, True) == 0     # all common edge, same community
+		assert utils.Estrangement(self.g0, self.label_dict3, self.g5, True) == 1     # all common edge, all diff community
+		assert utils.Estrangement(self.g0, self.label_dict1, self.g2, False) == 0.25 # one edge between community
+		assert utils.Estrangement(self.g0, self.label_dict4, self.g2, False) == 0    # zero edge between community
+		assert utils.Estrangement(self.g0, self.label_dict3, self.g2, False) == 1    # all edges between community
 
 	def test_match_labels(self):
 		assert utils.match_labels(self.label_dict1, self.label_dict1) == self.label_dict1  # snapshots are the same
