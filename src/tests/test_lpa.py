@@ -36,4 +36,4 @@ class test_utils:
 
 		out_label_dict = lpa.lpa(self.g0,opt,1,self.label_dict3)  # b---b---a    b---a---a     a---a---a
 		out_label_dict2 = lpa.lpa(self.g1,opt,1,out_label_dict)   #     | \ | =>     | \ | =>      | \ |
-		assert out_label_dict2 == self.label_dict             	  #     a---a        a---a         a---a
+		assert out_label_dict2 == self.label_dict1             	  #     a---a        a---a         a---a
