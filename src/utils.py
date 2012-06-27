@@ -89,7 +89,7 @@ def node_graph_distance(g0, g1):
     
     return graph_distance
 
-def Estrangement(G, label_dict, Zgraph, gap_proof):
+def Estrangement(G, label_dict, Zgraph):
     """Return the Estrangement between G and Zgraph
 
     Compute Q-tauE for the given input parameters
@@ -102,10 +102,7 @@ def Estrangement(G, label_dict, Zgraph, gap_proof):
 	key = node_identifier, value = community label
     ZGraph: graph
 	A networkx graph object (old graph)
-    gap_proof: boolean
-	If True, consider only edges common to G and ZGraph
-	else consider all edges in ZGraph
-
+  
     Returns
     -------
     estrangement: float
@@ -122,12 +119,8 @@ def Estrangement(G, label_dict, Zgraph, gap_proof):
     if len(consort_edge_set) == 0:
         estrangement = 0
     else:    
-        if gap_proof is True:
-            estrangement = sum([ math.sqrt(float(Zgraph[e[0]][e[1]]["weight"]) * G[e[0]][e[1]]['weight']) 
-                for e in consort_edge_set if label_dict[e[0]] != label_dict[e[1]]]) / float(G.size(weight='weight'))
-        else:    
-            estrangement = sum([e[2]['weight'] for e in Zgraph.edges(data=True) if label_dict[e[0]] !=
-            label_dict[e[1]]]) / float(G.size(weight='weight'))
+        estrangement = sum([e[2]['weight'] for e in Zgraph.edges(data=True) if label_dict[e[0]] !=
+        label_dict[e[1]]]) / float(G.size(weight='weight'))
     return estrangement
 
 

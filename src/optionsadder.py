@@ -11,22 +11,6 @@ def add_options(parser, reader_functions={}):
             config='true'
     )
 
-    parser.add_option("--record_matched_labels",
-            dest="record_matched_labels", 
-            help="record_matched_labels, [default: %default]",
-            action="store_true",
-            default=True,
-            config='true'
-    )
-    
-    parser.add_option("--gap_proof_estrangement",
-            dest="gap_proof_estrangement", 
-            help="gap_proof_estrangement, [default: %default]",
-            action="store_true",
-            default=False,
-            config='true'
-    )
-
 
     parser.add_option("-e", "--precedence_tiebreaking",
             dest="precedence_tiebreaking", 
@@ -36,13 +20,6 @@ def add_options(parser, reader_functions={}):
             config='true'
     )
 
-#    parser.add_option("--exclude_own_label",
-#            dest="exclude_own_label", 
-#            help="Exclude node's own label when taking the majority vote at each iteration [default: %default]",
-#            action="store_true",
-#            default=False,
-#            config='true'
-#    )
  
     parser.add_option("--tolerance",
             dest="tolerance", 
@@ -69,14 +46,6 @@ def add_options(parser, reader_functions={}):
     )
 
 
-    parser.add_option("--resolution",
-            dest="resolution", 
-            help="the resolution parameter [default: %default]",
-            type="float",
-            default=1.0,
-            config='true'
-    )
-
     parser.add_option("--delta",
             dest="delta", 
             help="constraint on estrangement [default: %default]",
@@ -85,14 +54,7 @@ def add_options(parser, reader_functions={}):
             config='true'
     )
     
-    parser.add_option("--run",
-            dest="run", 
-            help="run number [default: %default]",
-            type="int",
-            default=0,
-            config='true'
-    )
-
+    
     parser.add_option("--minrepeats",
             dest="minrepeats", 
             help="min number of repeats for each snapshot [default: %default]",
@@ -125,17 +87,6 @@ def add_options(parser, reader_functions={}):
             default="",
             config='true')
 
-
-    #algorithm_choices = ['ImpressionPropagation', 'RollerCoaster', 'FreeEnergy',
-    #    'ConstrainedModularity', 'Overlapping', 'Estrangement']
-    algorithm_choices = ['Estrangement',]
-    parser.add_option("--algorithm",
-            dest="algorithm",
-            type="choice",
-            choices=algorithm_choices,
-            help="Algorithm to run; Choices are " + str(algorithm_choices) + " [default: %default]",
-            default="Estrangement",
-            config='true')
 
 
     parser.add_option("--profiler_on",

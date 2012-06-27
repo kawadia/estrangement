@@ -236,14 +236,6 @@ def add_options(parser):
     )
 
     
-    parser.add_option("--label_with_country_names",
-            dest="label_with_country_names", 
-            help="use COW copuntry names for nodenames [default: %default]",
-            action="store_true",
-            default=False,
-            config='true'
-    )
-
     parser.add_option("--loglevel",
             dest="loglevel",
             type="choice",

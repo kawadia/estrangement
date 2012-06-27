@@ -104,7 +104,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
     term3_dict = collections.defaultdict(float) 	# key = label, value = ??
     for v in G.nodes_iter():
         label_volume_dict[label_dict[v]] += G.degree(v, weight='weight')
-        term3_dict[v] = opt.resolution*(degree_dict[v]**2)/two_m		
+        term3_dict[v] = degree_dict[v]**2/two_m		
 
     logging.debug("initial_labels: %s", str(label_dict)) 
     logging.debug("degree_dict: %s", str(degree_dict))
@@ -115,7 +115,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
 
     # The Quality function, Q, is modularity    
     Q = agglomerate.modularity(label_dict, G)
-    E = utils.Estrangement(G, label_dict, Z, opt.gap_proof_estrangement)
+    E = utils.Estrangement(G, label_dict, Z)
     F = Q - lambduh*E + lambduh*opt.delta
     logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
         iteration, len(communities), Q, E, F)
@@ -146,15 +146,11 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
             
             if v in Z.nodes():
                 for nbr,eattr in Z[v].items():
-                    if opt.gap_proof_estrangement is False:
-                        if nbr != v:
-                            obj_fn_dict[label_dict[nbr]] += lambduh*float(eattr["weight"]) 
-                    else:        
-                        if nbr != v and G.has_edge(v,nbr):
-                            obj_fn_dict[label_dict[nbr]] += lambduh*math.sqrt(float(eattr["weight"]) * G[v][nbr]['weight']) 
-                            
+                    if nbr != v:
+                        obj_fn_dict[label_dict[nbr]] += lambduh*float(eattr["weight"]) 
+                                                
             for l in obj_fn_dict.keys():
-                obj_fn_dict[l] -= opt.resolution * degree_dict[v]*label_volume_dict[l]/two_m
+                obj_fn_dict[l] -= degree_dict[v]*label_volume_dict[l]/two_m
                 if l == label_dict[v]:
                     obj_fn_dict[l] += term3_dict[v]
                     
@@ -196,7 +192,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
 
         communities = set((label_dict.values()))
         Q = agglomerate.modularity(label_dict, G)
-        E = utils.Estrangement(G, label_dict, Z, opt.gap_proof_estrangement)
+        E = utils.Estrangement(G, label_dict, Z)
         F = Q - lambduh*E + lambduh*opt.delta
         logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
             iteration, len(communities), Q, E, F)

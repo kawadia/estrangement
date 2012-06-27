@@ -67,50 +67,6 @@ def make_Zgraph(g0, g1, g0_label_dict):
 
     return Z 
 
-#SD: I think g1 can be removed from here
-def update_Zgraph(Zgraph, g0, g1, g0_label_dict):
-    """ Returns a new graph Z, which consists of all consort edges upto to time t
-   
-    Parameters
-    ----------
-    Zgraph: graph
-	The current Zgraph
-    g0: graph
-	The latest snaphot
-    g1: graph
-	<>
-    g0_label_dict: dictionary
-	{node:label} denoting the community label assigned to each node in g0
-
-    Returns
-    -------
-    Z: graphs
-	The updated Zgraph
-
-    Note
-    ---- 
-    This Zgraph may have edges which are not in g1
-    The weight on the consort edges has also not been averaged
-    
-    """
-    # add consort edges from g0 to Zgraph, this also updates the weights
-    # note: consrot edges are edges joining nodes with the same community label
-    Zgraph.add_weighted_edges_from([(e[0], e[1], e[2]['weight']) for e in g0.edges(data=True) 
-      if g0_label_dict[e[0]] == g0_label_dict[e[1]] ])
-
-    # remove non-consort edges in g0 from Zgraph
-    Zgraph.remove_edges_from([e for e in g0.edges()
-      if g0_label_dict[e[0]] != g0_label_dict[e[1]] ])
-
-
-    # further remove edges (u, v) Zgraph, if both u and v are present in g0 but
-    # are not connected by an edge
-    #@todo assumes that there are no zero weight edges
-    extra_Zgraph_edges = set(Zgraph.edges()) - set(g0.edges())
-    Zgraph.remove_edges_from([e for e in list(extra_Zgraph_edges)
-      if e[0] in g0.nodes() and e[1] in g0.nodes() ])
-
-    return Zgraph
 
 def repeated_runs(g1, opt, lambduh, Zgraph, repeats):
     """ do repeated call to agglomerate lpa to optimize F
@@ -129,7 +85,7 @@ def repeated_runs(g1, opt, lambduh, Zgraph, repeats):
         r_partition = agglomerate.best_partition(g1, opt, lambduh, Zgraph)
         dictPartition[r] = r_partition
         dictQ[r] = agglomerate.modularity(r_partition, g1)
-        dictE[r] = utils.Estrangement(g1, r_partition, Zgraph, opt.gap_proof_estrangement)
+        dictE[r] = utils.Estrangement(g1, r_partition, Zgraph)
         dictF[r] = dictQ[r] - lambduh*dictE[r] + lambduh*opt.delta
         
     #logging.info("selected Best F among repeats; F = %s, and Q=%s, E=%s, lambduh=%f",
@@ -181,10 +137,7 @@ def ERA(graph_reader_fn, opt):
             Zgraph = nx.Graph() 
             beginning = False
         else:
-            if opt.gap_proof_estrangement is True:
-                update_Zgraph(Zgraph, g0, g1, prev_label_dict)
-            else:    
-                Zgraph = make_Zgraph(g0, g1, prev_label_dict)
+            Zgraph = make_Zgraph(g0, g1, prev_label_dict)
 
             ## Record Q* for comparison only
             dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, opt, 0.0, Zgraph, opt.minrepeats)
@@ -294,9 +247,8 @@ def ERA(graph_reader_fn, opt):
         for n in label_dict:
             label_dict[n] += 1000000*snapshot_number
 
-        if opt.record_matched_labels is True:
-            matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
-            matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
+        matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
+        matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
 
 
         label_file.write("{%d:%s}\n" % (t,str(label_dict)))
@@ -333,8 +285,7 @@ def ERA(graph_reader_fn, opt):
         g0 = g1
         prev_label_dict = label_dict
         
-        if opt.record_matched_labels is True:
-            prev_matched_label_dict = matched_label_dict
+        prev_matched_label_dict = matched_label_dict
         snapshot_number += 1
 
         # end for t, g1 in ......

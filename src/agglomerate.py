@@ -255,7 +255,7 @@ def generate_dendogram(graph, opt, lambduh, Zgraph, part_init = None) :
         # @todo: prove formally.
 
         mod = modularity(partition, current_graph)
-        E = utils.Estrangement(current_graph, partition, current_Zgraph, opt.gap_proof_estrangement)
+        E = utils.Estrangement(current_graph, partition, current_Zgraph)
         new_F = mod - lambduh*E + lambduh*opt.delta
         logging.info("level=%d, Q=%f, E=%f, F=%f -----------", len(partition_list), mod, E, new_F)
 
@@ -313,24 +313,14 @@ def induced_graph(partition, graph, zgraph, opt) :
         w_prec = ret.get_edge_data(com1, com2, {"weight":0}).get("weight", 1)
         ret.add_edge(com1, com2, weight = w_prec + weight)
         
-    if opt.gap_proof_estrangement is False:
-        # do the same induce operation on the zgraph    
-        for node1, node2, datas in zgraph.edges_iter(data = True) :
-            weight = datas.get("weight", 1)
-            com1 = partition[node1]
-            com2 = partition[node2]
-            w_prec = zret.get_edge_data(com1, com2, {"weight":0}).get("weight", 1)
-            zret.add_edge(com1, com2, weight = w_prec + weight)
-    else:   # if gap_proof is True than Z graph may may consort edges from the
-            # past not in graph whose weight we cannot include when forming communities     
-        for node1, node2, datas in zgraph.edges_iter(data = True) :
-            weight = datas.get("weight", 1)
-            if graph.has_edge(node1, node2):
-                com1 = partition[node1]
-                com2 = partition[node2]
-                w_prec = zret.get_edge_data(com1, com2, {"weight":0}).get("weight", 1)
-                zret.add_edge(com1, com2, weight = w_prec + weight)
-
+    # do the same induce operation on the zgraph    
+    for node1, node2, datas in zgraph.edges_iter(data = True) :
+        weight = datas.get("weight", 1)
+        com1 = partition[node1]
+        com2 = partition[node2]
+        w_prec = zret.get_edge_data(com1, com2, {"weight":0}).get("weight", 1)
+        zret.add_edge(com1, com2, weight = w_prec + weight)
+    
  
     logging.debug("ret nodes: %s", str(ret.nodes()))
     logging.debug("zret nodes: %s", str(zret.nodes()))
