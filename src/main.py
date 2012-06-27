@@ -5,7 +5,6 @@ import random
 import sys
 import math
 import os
-import configparse
 import datetime
 import inspect
 import logging
@@ -16,22 +15,23 @@ import pdb
 import estrangement
 import agglomerate
 import optionsadder
-
+import argparse
 
 def parse_args(reader_functions={}):
     """@brief parse cmd line and conf file options 
-    @retval (opt, args) as returned by configparse.OptionParser.parse_args"""
+    @returns opt  as returned by argsparse.parse_args"""
     # read in options from cmdline and conffile
     usage="""usage: %prog [options] (--help for help)\n"""
 
-    parser = configparse.OptionParser(description="Estrangement Confinement Algorithm",
-         usage=usage)
+    parser = argparse.ArgumentParser(description="Estrangement Confinement Algorithm",
+         fromfile_prefix_chars='@')
 
 
     optionsadder.add_options(parser, reader_functions=reader_functions)
-    (opt, args) = parser.parse_args(files=['./simulation.conf'])
+    opt = parser.parse_args(['@simulation.conf'])
+#    opt = parser.parse_args()
     #check_options(opt, parser)
-    return (opt, args)
+    return opt
 
 
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     all_functions = inspect.getmembers(sys.modules[__name__], inspect.isfunction)
     reader_functions = dict([ t for t in all_functions if t[0].startswith("read") ])
 
-    (opt, args) = parse_args(reader_functions)
+    opt = parse_args(reader_functions)
     print(opt)
 
     # Write all option settings to the log file
