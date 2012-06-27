@@ -78,6 +78,6 @@ if __name__ == '__main__':
         taskDir = getTaskDir(conflist, params_dict)
         confile = open(taskDir + '/simulation.conf', 'w')
         for param in conflist:
-            confile.write("%s = %s\n" % param) 
+            confile.write("--%s=%s\n" % param) 
         confile.close()
 

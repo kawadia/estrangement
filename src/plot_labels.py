@@ -6,7 +6,7 @@ matplotlib.use('Agg')
 from matplotlib import pyplot
 import networkx as nx
 import pylab
-import configparse
+import argparse
 import os
 import random
 import numpy
@@ -22,12 +22,11 @@ def parse_args():
     # read in options from cmdline and conffile
     usage="""usage: %prog [options] (--help for help)\n"""
 
-    parser = configparse.OptionParser(description="Analysis and visualization of Estrangement Confinement Algorithm",
-         usage=usage)
+    parser = argparse.ArgumentParser(description="Analysis and visualization of Estrangement Confinement Algorithm", fromfile_prefix_chars='@')
     visualoptions.add_options(parser)
-    (opt, args) = parser.parse_args(files=['./analysis.conf'])
+    opt = parser.parse_args(['@analysis.conf'])
     #check_options(opt, parser)
-    return (opt, args)
+    return opt
 
 
 
@@ -136,7 +135,7 @@ def plot_with_lambdas():
 
 if __name__ == '__main__':
 
-    (opt, args) = parse_args()
+    opt = parse_args()
 
     print opt
     

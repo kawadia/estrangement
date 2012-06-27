@@ -55,22 +55,22 @@ class test_estrangement:
   		GM = nx.isomorphism.GraphMatcher(self.g6,self.g3)
 		assert GM.is_isomorphic()
 			
-	def test_update_Zgraph(self):
-		self.g6 = estrangement.update_Zgraph(self.g0,self.g0,self.g0,self.label_dict4)	# input is same a Zgraph
-		GM = nx.isomorphism.GraphMatcher(self.g0,self.g6)	
-		assert GM.is_isomorphic()  		
-                self.g6 = estrangement.update_Zgraph(self.g3,self.g0,self.g0,self.label_dict4)  # Zgraph is a subgraph of input
-                GM = nx.isomorphism.GraphMatcher(self.g0,self.g6)
-                assert GM.is_isomorphic()	
-                self.g6 = estrangement.update_Zgraph(self.g0,self.g1,self.g0,self.label_dict4)  # Zgraph has no edge in common with input
-                GM = nx.isomorphism.GraphMatcher(self.g1,self.g6)
-                assert GM.is_isomorphic()
-                self.g6 = estrangement.update_Zgraph(self.g0,self.g0,self.g0,self.label_dict3)  # input has no two ends in same community
-                assert len(self.g6.edges()) == 0
-		self.g6 = estrangement.update_Zgraph(self.g5,self.g2,self.g0,self.label_dict1)  # more complicated example
-		print(self.g6.edges())
-                GM = nx.isomorphism.GraphMatcher(self.g4,self.g6)
-                assert GM.is_isomorphic()
+#	def test_update_Zgraph(self):
+#		self.g6 = estrangement.update_Zgraph(self.g0,self.g0,self.g0,self.label_dict4)	# input is same a Zgraph
+#		GM = nx.isomorphism.GraphMatcher(self.g0,self.g6)	
+#		assert GM.is_isomorphic()  		
+#                self.g6 = estrangement.update_Zgraph(self.g3,self.g0,self.g0,self.label_dict4)  # Zgraph is a subgraph of input
+#                GM = nx.isomorphism.GraphMatcher(self.g0,self.g6)
+#                assert GM.is_isomorphic()	
+#                self.g6 = estrangement.update_Zgraph(self.g0,self.g1,self.g0,self.label_dict4)  # Zgraph has no edge in common with input
+#                GM = nx.isomorphism.GraphMatcher(self.g1,self.g6)
+#                assert GM.is_isomorphic()
+#                self.g6 = estrangement.update_Zgraph(self.g0,self.g0,self.g0,self.label_dict3)  # input has no two ends in same community
+#                assert len(self.g6.edges()) == 0
+#		self.g6 = estrangement.update_Zgraph(self.g5,self.g2,self.g0,self.label_dict1)  # more complicated example
+#		print(self.g6.edges())
+#                GM = nx.isomorphism.GraphMatcher(self.g4,self.g6)
+#                assert GM.is_isomorphic()
 
 	def test_repeated_runs(self):
 		dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(self.g8,opt,1,self.g8,3)

@@ -64,7 +64,7 @@ class test_utils:
 		print(partition_list[0])
 		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6,opt)	
 		gret2,zret2 = agglomerate.induced_graph(partition_list[0],self.g6,self.g6,opt)	
-		# partition list1 should be such that all nodes have the same label and
+		# partition list should be such that all nodes have the same label and
 		# should therefore induce the same graph as label_dict1
 	        GM = nx.isomorphism.GraphMatcher(gret1,gret2)
 		assert GM.is_isomorphic()	

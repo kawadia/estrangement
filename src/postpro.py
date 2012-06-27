@@ -8,7 +8,8 @@ from matplotlib import pyplot
 from matplotlib.ticker import MultipleLocator
 import pylab
 import sys
-import configparse
+#import configparse
+import argparse
 import os
 import numpy
 import collections
@@ -56,16 +57,15 @@ markers = [
 
 def parse_args():
     """@brief parse cmd line and conf file options 
-    @retval (opt, args) as returned by configparse.OptionParser.parse_args"""
+    @retval opt as returned by argparseparse_args"""
     # read in options from cmdline and conffile
     usage="""usage: %prog [options] (--help for help)\n"""
 
-    parser = configparse.OptionParser(description="Analysis and visualization of Impression Propagation Algorithm",
-         usage=usage)
+    parser = argparse.ArgumentParser(description="Analysis and visualization of Impression Propagation Algorithm", fromfile_prefix_chars='@')
     visualoptions.add_options(parser)
-    (opt, args) = parser.parse_args(files=['./postpro.conf'])
+    opt = parser.parse_args(['@postpro.conf'])
     #check_options(opt, parser)
-    return (opt, args)
+    return opt
 
 
 def parseOptions():
@@ -694,7 +694,7 @@ if __name__ == '__main__':
 
     global opt
 
-    (opt, args) = parse_args()
+    opt = parse_args()
 
     print opt
     
