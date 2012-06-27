@@ -6,18 +6,11 @@ matplotlib.use('Agg')
 from matplotlib import pyplot
 import networkx as nx
 import pylab
-import sys
 import configparse
 import os
 import random
 import numpy
-import color_list
 import collections
-import itertools
-import logging
-import pprint
-import csv
-import utils
 import visualoptions
 import postpro
 import math
@@ -29,7 +22,7 @@ def parse_args():
     # read in options from cmdline and conffile
     usage="""usage: %prog [options] (--help for help)\n"""
 
-    parser = configparse.OptionParser(description="Analysis and visualization of Impression Propagation Algorithm",
+    parser = configparse.OptionParser(description="Analysis and visualization of Estrangement Confinement Algorithm",
          usage=usage)
     visualoptions.add_options(parser)
     (opt, args) = parser.parse_args(files=['./analysis.conf'])
@@ -147,8 +140,6 @@ if __name__ == '__main__':
 
     print opt
     
-    logging.basicConfig(level=getattr(logging, opt.loglevel.upper(), None))
-
     summary_file = open("summary.log", 'r')
     summary_dict = eval(summary_file.read())
     print "summary_dict: ", summary_dict

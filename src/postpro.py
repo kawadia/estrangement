@@ -11,7 +11,6 @@ import sys
 import configparse
 import os
 import numpy
-import color_list
 import collections
 import itertools
 import random
