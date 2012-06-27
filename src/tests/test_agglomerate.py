@@ -12,7 +12,7 @@ class opt:
         tolerance = 0.4
         precedence_tiebreaking = True
 
-class test_utils:
+class test_agglomerate:
 	def setUp(self):
                 self.g0 = nx.Graph()
                 self.g1 = nx.Graph()
@@ -35,13 +35,13 @@ class test_utils:
 		
 
 	def test_induced_graph(self):
-		gret,zret = agglomerate.induced_graph(self.label_dict1,self.g0,self.g1,opt)	# if all the nodes belong to the same community
+		gret,zret = agglomerate.induced_graph(self.label_dict1,self.g0,self.g1)	# if all the nodes belong to the same community
 		assert len(gret.nodes()) == 1		# there will only be one node in the induced graph
 		assert len(zret.nodes()) == 1		# likewise for the induced zgraph
 		GM = nx.isomorphism.GraphMatcher(gret,zret)
                 assert GM.is_isomorphic()		# if graph and zgraph are equal, the induced graph is the same
 		
-		gret,zret = agglomerate.induced_graph(self.label_dict3,self.g1,self.g5,opt)
+		gret,zret = agglomerate.induced_graph(self.label_dict3,self.g1,self.g5)
 		# graph:    b---b---a  	   induced graph:	   2
 		#		| \ |  => 		     1 [ b------a ] 3
                 #		a---a
@@ -54,7 +54,7 @@ class test_utils:
 		assert GM.is_isomorphic()
 
 	def test_generate_dendogram(self):
-		partition_list = agglomerate.generate_dendogram(self.g6,opt,1,nx.Graph())
+		partition_list = agglomerate.generate_dendogram(self.g6, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,nx.Graph())
 		#	a			    e
 		#	|			    |	
 		#   b---e---c   => lpa =>	e---e---e  => induced graph => e
@@ -62,8 +62,8 @@ class test_utils:
 		#	d			    e	
 		assert len(partition_list) == 1		
 		print(partition_list[0])
-		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6,opt)	
-		gret2,zret2 = agglomerate.induced_graph(partition_list[0],self.g6,self.g6,opt)	
+		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6)	
+		gret2,zret2 = agglomerate.induced_graph(partition_list[0],self.g6,self.g6)	
 		# partition list should be such that all nodes have the same label and
 		# should therefore induce the same graph as label_dict1
 	        GM = nx.isomorphism.GraphMatcher(gret1,gret2)
@@ -79,9 +79,9 @@ class test_utils:
 		assert True
 
 	def test_best_partition(self):
-		partition = agglomerate.best_partition(self.g6,opt,1,self.g6)
-		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6,opt)
-		gret2,zret2 = agglomerate.induced_graph(partition,self.g6,self.g6,opt)
+		partition = agglomerate.best_partition(self.g6, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.g6)
+		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6)
+		gret2,zret2 = agglomerate.induced_graph(partition,self.g6,self.g6)
 		GM = nx.isomorphism.GraphMatcher(gret1,gret2)
 		assert GM.is_isomorphic()
 

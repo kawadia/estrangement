@@ -29,11 +29,17 @@ class test_utils:
 		self.label_dict3 = {1:'b',2:'b',3:'a',4:'a',5:'a'}
 
 	def test_lpa(self):
-		out_label_dict = lpa.lpa(self.g0,opt,1,self.label_dict1)  # all are in the same community => no change
+		out_label_dict = lpa.lpa(self.g0, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict1)  # all are in the same community => no change
 		assert out_label_dict == self.label_dict1 
-		out_label_dict = lpa.lpa(self.g0,opt,1,self.label_dict2)  # 1 in 'a', others in 'b' => no change
+		out_label_dict = lpa.lpa(self.g0,opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict2)  # 1 in 'a', others in 'b' => no change
+		print(out_label_dict)
+                print(self.label_dict1)
 		assert out_label_dict == self.label_dict1 
-
-		out_label_dict = lpa.lpa(self.g0,opt,1,self.label_dict3)  # b---b---a    b---a---a     a---a---a
-		out_label_dict2 = lpa.lpa(self.g1,opt,1,out_label_dict)   #     | \ | =>     | \ | =>      | \ |
-		assert out_label_dict2 == self.label_dict1             	  #     a---a        a---a         a---a
+		# b---b---a    b---a---a     a---a---a
+		#     | \ | =>     | \ | =>      | \ |
+		#     a---a        a---a         a---a
+		out_label_dict = lpa.lpa(self.g0,opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict3)  
+		out_label_dict2 = lpa.lpa(self.g1,opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,out_label_dict)  
+	        print(out_label_dict2)
+	        print(self.label_dict1)
+		assert out_label_dict2 == self.label_dict1             	 

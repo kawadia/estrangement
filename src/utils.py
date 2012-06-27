@@ -118,7 +118,8 @@ def Estrangement(G, label_dict, Zgraph):
     logging.info("Estrangement(): consort_edge_set: %s", str(consort_edge_set))   
     if len(consort_edge_set) == 0:
         estrangement = 0
-    else:    
+    else:   
+	print("hash overlapping edges: %s", len(consort_edge_set)) 
         estrangement = sum([e[2]['weight'] for e in Zgraph.edges(data=True) if label_dict[e[0]] !=
         label_dict[e[1]]]) / float(G.size(weight='weight'))
     return estrangement
