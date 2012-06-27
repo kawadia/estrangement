@@ -31,7 +31,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 
 __all__ = ['lpa']
 
-def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
+def lpa(G, delta, tolerance, tiebreaking, lambduh, initial_label_dict=None, Z=nx.Graph()):
 
     """
     Returns a graph with fewer distinct labels than the input graph.  
@@ -77,9 +77,9 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
 
     Examples
     --------
-    >>> labeling = lpa.lpa(current_graph, opt, lambduh, Z=current_Zgraph)
-    >>> new_labeling = lpa.lpa(current_graph, opt, lambduh, labelling, Z=current_Zgraph)
-    >>> list(lpa.lpa(current_graph, opt, lambduh, Z=current_Zgraph))
+    >>> labeling = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
+    >>> new_labeling = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, labelling, Z=current_Zgraph)
+    >>> list(lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
     [(0,1),(1,1),(2,2),(3,1)]
 
 
@@ -116,7 +116,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
     # The Quality function, Q, is modularity    
     Q = agglomerate.modularity(label_dict, G)
     E = utils.Estrangement(G, label_dict, Z)
-    F = Q - lambduh*E + lambduh*opt.delta
+    F = Q - lambduh*E + lambduh*delta
     logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
         iteration, len(communities), Q, E, F)
 
@@ -163,13 +163,13 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
 	
 	    # record only those labels with weight sufficiently close the maxwt	
             dominant_labels = [ l for l in obj_fn_dict.keys()
-                if abs(obj_fn_dict[l] - maxwt) < opt.tolerance ]
+                if abs(obj_fn_dict[l] - maxwt) < tolerance ]
             
             logging.debug("node:%s, dominant_labels: %s", str(v), str(dominant_labels))
             
             if len(dominant_labels) == 1:        
                 the_dominant_label = dominant_labels[0]
-            elif label_dict[v] in dominant_labels and opt.precedence_tiebreaking is True:
+            elif label_dict[v] in dominant_labels and tiebreaking is True:
                 the_dominant_label = label_dict[v]
             else:    
                 # ties are broken randomly to pick THE dominant_label
@@ -193,7 +193,7 @@ def lpa(G, opt, lambduh, initial_label_dict=None, Z=nx.Graph()):
         communities = set((label_dict.values()))
         Q = agglomerate.modularity(label_dict, G)
         E = utils.Estrangement(G, label_dict, Z)
-        F = Q - lambduh*E + lambduh*opt.delta
+        F = Q - lambduh*E + lambduh*delta
         logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
             iteration, len(communities), Q, E, F)
 

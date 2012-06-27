@@ -130,7 +130,7 @@ def modularity(partition, graph) :
     return res
 
 
-def best_partition(graph, opt, lambduh, Zgraph, partition = None) :
+def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None) :
     """Compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices
 
@@ -191,11 +191,11 @@ def best_partition(graph, opt, lambduh, Zgraph, partition = None) :
     >>> nx.draw_networkx_edges(G,pos, alpha=0.5)
     >>> plt.show()
     """
-    dendo = generate_dendogram(graph, opt, lambduh, Zgraph, partition)
+    dendo = generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition)
     return partition_at_level(dendo, len(dendo) - 1 )
 
 
-def generate_dendogram(graph, opt, lambduh, Zgraph, part_init = None) :
+def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, part_init = None) :
     """Find communities in the graph and return the associated dendogram
 
     A dendogram is a tree and each level is a partition of the graph nodes.  Level 0 is the first partition, which contains the smallest communities, and the best is len(dendogram) - 1. The higher the level is, the bigger are the communities
@@ -246,7 +246,7 @@ def generate_dendogram(graph, opt, lambduh, Zgraph, part_init = None) :
     F = -99999999.0
 
     while True :
-        partition = lpa.lpa(current_graph, opt, lambduh, Z=current_Zgraph)
+        partition = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
 
         # why/how is modularity computed on the induced subgraph
         # hypothesis: if loops are included then modularity is preserved when
@@ -256,18 +256,18 @@ def generate_dendogram(graph, opt, lambduh, Zgraph, part_init = None) :
 
         mod = modularity(partition, current_graph)
         E = utils.Estrangement(current_graph, partition, current_Zgraph)
-        new_F = mod - lambduh*E + lambduh*opt.delta
+        new_F = mod - lambduh*E + lambduh*delta
         logging.info("level=%d, Q=%f, E=%f, F=%f -----------", len(partition_list), mod, E, new_F)
 
         if new_F - F < __MIN :
             break
         partition_list.append(partition)
         F = new_F
-        current_graph, current_Zgraph = induced_graph(partition, current_graph, current_Zgraph, opt)
+        current_graph, current_Zgraph = induced_graph(partition, current_graph, current_Zgraph)
     return partition_list
 
 
-def induced_graph(partition, graph, zgraph, opt) :
+def induced_graph(partition, graph, zgraph) :
     """Produce the graph where nodes are the communities
 
     there is a link of weight w between communities if the sum of the weights of the links between their elements is w

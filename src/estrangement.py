@@ -68,7 +68,7 @@ def make_Zgraph(g0, g1, g0_label_dict):
     return Z 
 
 
-def repeated_runs(g1, opt, lambduh, Zgraph, repeats):
+def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     """ do repeated call to agglomerate lpa to optimize F
     return the label_dict and Q value to help searching for lambduh
     """
@@ -82,11 +82,11 @@ def repeated_runs(g1, opt, lambduh, Zgraph, repeats):
     for r in range(repeats):
         logging.info('########## [repeat %d] #############', r)
         # best_partition calls agglomerative lpa
-        r_partition = agglomerate.best_partition(g1, opt, lambduh, Zgraph)
+        r_partition = agglomerate.best_partition(g1, delta, tolerance, tiebreaking, lambduh, Zgraph)
         dictPartition[r] = r_partition
         dictQ[r] = agglomerate.modularity(r_partition, g1)
         dictE[r] = utils.Estrangement(g1, r_partition, Zgraph)
-        dictF[r] = dictQ[r] - lambduh*dictE[r] + lambduh*opt.delta
+        dictF[r] = dictQ[r] - lambduh*dictE[r] + lambduh*delta
         
     #logging.info("selected Best F among repeats; F = %s, and Q=%s, E=%s, lambduh=%f",
     #    str(best_F), str(best_Q), str(best_E), lambduh)
@@ -140,7 +140,7 @@ def ERA(graph_reader_fn, opt):
             Zgraph = make_Zgraph(g0, g1, prev_label_dict)
 
             ## Record Q* for comparison only
-            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, opt, 0.0, Zgraph, opt.minrepeats)
+            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, opt.delta, opt.tolerance, opt.precedence_tiebreaking, 0.0, Zgraph, opt.minrepeats)
             snapstats.Qstar[t] = max(dictQ0.values())
 
 
@@ -158,8 +158,7 @@ def ERA(graph_reader_fn, opt):
                 returns a scalar, so make a function like that"""
                 global itrepeats
                 logging.info("itrepeats: %d", itrepeats)
-                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, opt, lambduh,
-                    Zgraph, itrepeats)
+                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, opt.delta, opt.tolerance, opt.precedence_tiebreaking, lambduh, Zgraph, itrepeats)
 
                 label_dict_lam[lambduh] = dictPartition
                 Qlam[lambduh] = dictQ
