@@ -16,19 +16,7 @@ import estrangement
 
 
 opt = main.parse_args()
-print(opt)
-opts = str(opt)
-opts = string.replace(opts,'Namespace(','{')
-opts = string.replace(opts,'convergence_tolerance',"'convergence_tolerance")
-opts = string.replace(opts,'=',"':")
-opts = string.replace(opts,' '," '")
-opts = string.replace(opts,')','}')
-print(opts)
-print(" whereisthisgoing")
-with open("options.log", 'w') as optf:
-	optf.write(opts)
-
-estrangement.ERA(opt)
+estrangement.ERA(delta=opt.delta,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
 
 
 

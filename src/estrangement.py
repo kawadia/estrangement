@@ -35,11 +35,30 @@ import lpa
 import snapshot_stats
 import utils
 import agglomerate
+import string
 #import louvainorig
 #local modules
 
 #have to make this global for access inside g_of_lambda
 itrepeats = 0
+
+def parse_args(reader_functions={'read_general':True}):
+    """@brief parse cmd line and conf file options 
+    @returns opt  as returned by argsparse.parse_args"""
+    # read in options from cmdline and conffile
+    usage="""usage: %prog [options] (--help for help)\n"""
+
+    parser = argparse.ArgumentParser(description="Estrangement Confinement Algorithm",
+         fromfile_prefix_chars='@')
+
+
+    optionsadder.add_options(parser, reader_functions=reader_functions)
+    opt = parser.parse_args(['@simulation.conf'])
+    return opt
+
+
+
+
 
 def read_general(datadir):
     """ generator function to read many datasets including mit and random_with_stable_core"""
@@ -92,7 +111,7 @@ def maxQ(g1):
     lambduh = 0.0
     Zgraph = nx.Graph()
     # do 100 runs and pick the best
-    for r in range(10*opt.minrepeats):
+    for r in range(10*minrepeats):
         # best_partition calls agglomerative lpa
         dictPartition[r] = agglomerate.best_partition(g1, opt, lambduh, Zgraph)
         dictQ[r] = agglomerate.modularity(dictPartition[r], g1)
@@ -129,7 +148,7 @@ def make_Zgraph(g0, g1, g0_label_dict):
     return Z 
 
 
-def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
+def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats,maxfun=500):
     """ do repeated call to agglomerate lpa to optimize F
     return the label_dict and Q value to help searching for lambduh
     """
@@ -155,7 +174,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     return (dictPartition, dictQ, dictE, dictF)
 
 
-def ERA(opt):
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,savefor_layouts=False):
     """
     Estrangement reduction algorithm
 
@@ -164,7 +183,20 @@ def ERA(opt):
 
     opt is the options parser opt object
     """
-    
+
+    #write the options to log for later reference
+    # todo doublecheck this
+#    print(opt)
+#    opts = str(opt)
+#    opts = string.replace(opts,'Namespace(','{')
+#    opts = string.replace(opts,'convergence_tolerance',"'convergence_tolerance")
+#    opts = string.replace(opts,'=',"':")
+#    opts = string.replace(opts,' '," '")
+#    opts = string.replace(opts,')','}')
+    with open("options.log", 'w') as optf:
+        optf.write("{'delta':" + str(delta) + "}")
+
+ 
     #open files to log results
     label_file = open("labels.log", 'w')
     matched_label_file = open("matched_labels.log", 'w')
@@ -177,7 +209,7 @@ def ERA(opt):
 
     beginning = True
     snapshot_number = 0
-    for t, g1, initial_label_dict in read_general(opt.data_dir):
+    for t, g1, initial_label_dict in read_general(dataset_dir):
         # initial_label_dict label dict is non None only for the first call to # graph_reader_fn
         
         logging.info("############# snapshot: %d #################", t)
@@ -201,7 +233,7 @@ def ERA(opt):
             Zgraph = make_Zgraph(g0, g1, prev_label_dict)
 
             ## Record Q* for comparison only
-            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, opt.delta, opt.tolerance, opt.precedence_tiebreaking, 0.0, Zgraph, opt.minrepeats)
+            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, delta, tolerance, precedence_tiebreaking, 0.0, Zgraph, minrepeats)
             snapstats.Qstar[t] = max(dictQ0.values())
 
 
@@ -219,23 +251,23 @@ def ERA(opt):
                 returns a scalar, so make a function like that"""
                 global itrepeats
                 logging.info("itrepeats: %d", itrepeats)
-                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, opt.delta, opt.tolerance, opt.precedence_tiebreaking, lambduh, Zgraph, itrepeats)
+                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, delta, tolerance, precedence_tiebreaking, lambduh, Zgraph, itrepeats)
 
                 label_dict_lam[lambduh] = dictPartition
                 Qlam[lambduh] = dictQ
                 Elam[lambduh] = dictE
                 Flam[lambduh] = dictF
-                itrepeats += opt.increpeats
+                itrepeats += increpeats
                 
                 return max(dictF.values())
             
             global itrepeats
-            itrepeats = opt.minrepeats
+            itrepeats = minrepeats
                     
             lambdaopt, fval, ierr, numfunc = optimize.fminbound(
                 g_of_lambda,
-                0.0, 10.0, args=(), xtol=opt.convergence_tolerance,
-                maxfun=opt.maxfun, full_output=True, disp=2)  
+                0.0, 10.0, args=(), xtol=convergence_tolerance,
+                maxfun=maxfun, full_output=True, disp=2)  
             
             if ierr is 0:
                 logging.info("[%d] best lambduh = %f, found in %d function calls", t,
@@ -329,7 +361,7 @@ def ERA(opt):
 
         
         # save graph for layout
-        if opt.savefor_layouts:
+        if savefor_layouts:
             glay = g1.copy()
             for n in glay.nodes():
                 glay.add_node(n, comlabel=matched_label_dict[n])

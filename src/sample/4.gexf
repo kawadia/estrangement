@@ -59,67 +59,67 @@
       </node>
       <node id="10" label="10">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="11" label="11">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="12" label="12">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="13" label="13">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="14" label="14">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="15" label="15">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="16" label="16">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="17" label="17">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="36" />
         </attvalues>
       </node>
       <node id="18" label="18">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="19" label="19">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="20" label="20">
         <attvalues>
-          <attvalue for="0" value="4000029" />
+          <attvalue for="0" value="26" />
         </attvalues>
       </node>
       <node id="21" label="21">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="22" label="22">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="36" />
         </attvalues>
       </node>
       <node id="23" label="23">
@@ -134,27 +134,27 @@
       </node>
       <node id="25" label="25">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="26" label="26">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="27" label="27">
         <attvalues>
-          <attvalue for="0" value="4000029" />
+          <attvalue for="0" value="26" />
         </attvalues>
       </node>
       <node id="28" label="28">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="29" label="29">
         <attvalues>
-          <attvalue for="0" value="4000029" />
+          <attvalue for="0" value="26" />
         </attvalues>
       </node>
       <node id="30" label="30">
@@ -164,54 +164,54 @@
       </node>
       <node id="31" label="31">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="32" label="32">
         <attvalues>
-          <attvalue for="0" value="36" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="33" label="33">
         <attvalues>
-          <attvalue for="0" value="4000029" />
+          <attvalue for="0" value="26" />
         </attvalues>
       </node>
       <node id="34" label="34">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="35" label="35">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="36" label="36">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
       <node id="37" label="37">
         <attvalues>
-          <attvalue for="0" value="3000022" />
+          <attvalue for="0" value="3000013" />
         </attvalues>
       </node>
       <node id="38" label="38">
         <attvalues>
-          <attvalue for="0" value="4000022" />
+          <attvalue for="0" value="4000026" />
         </attvalues>
       </node>
       <node id="39" label="39">
         <attvalues>
-          <attvalue for="0" value="26" />
+          <attvalue for="0" value="3000029" />
         </attvalues>
       </node>
     </nodes>
     <edges>
       <edge id="0" source="0" target="32" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="0" />
+          <attvalue for="1" value="1" />
         </attvalues>
       </edge>
       <edge id="1" source="0" target="3" weight="1.0">
@@ -231,7 +231,7 @@
       </edge>
       <edge id="4" source="0" target="17" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="0" />
         </attvalues>
       </edge>
       <edge id="5" source="0" target="18" weight="1.0">
@@ -396,7 +396,7 @@
       </edge>
       <edge id="37" source="5" target="22" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="0" />
         </attvalues>
       </edge>
       <edge id="38" source="6" target="35" weight="1.0">
@@ -456,7 +456,7 @@
       </edge>
       <edge id="49" source="7" target="22" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="0" />
         </attvalues>
       </edge>
       <edge id="50" source="8" target="9" weight="1.0">
@@ -476,12 +476,12 @@
       </edge>
       <edge id="53" source="9" target="32" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="0" />
+          <attvalue for="1" value="1" />
         </attvalues>
       </edge>
       <edge id="54" source="9" target="22" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="0" />
         </attvalues>
       </edge>
       <edge id="55" source="9" target="29" weight="1.0">
@@ -601,12 +601,12 @@
       </edge>
       <edge id="78" source="22" target="38" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="0" />
+          <attvalue for="1" value="1" />
         </attvalues>
       </edge>
       <edge id="79" source="23" target="32" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="0" />
+          <attvalue for="1" value="1" />
         </attvalues>
       </edge>
       <edge id="80" source="23" target="34" weight="1.0">
@@ -641,7 +641,7 @@
       </edge>
       <edge id="86" source="26" target="32" weight="1.0">
         <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="0" />
         </attvalues>
       </edge>
       <edge id="87" source="26" target="38" weight="1.0">
