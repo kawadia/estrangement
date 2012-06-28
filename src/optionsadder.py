@@ -18,6 +18,13 @@ def add_options(parser):
             default=False
     )
 
+    parser.add_argument("--maxfun",
+            dest="maxfun", 
+            help="max number of iterations allowed for scipy optimize [default: %default]",
+            type=int,
+            default=500
+    )
+
  
     parser.add_argument("--tolerance",
             dest="tolerance", 
