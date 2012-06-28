@@ -42,23 +42,6 @@ import string
 #have to make this global for access inside g_of_lambda
 itrepeats = 0
 
-def parse_args(reader_functions={'read_general':True}):
-    """@brief parse cmd line and conf file options 
-    @returns opt  as returned by argsparse.parse_args"""
-    # read in options from cmdline and conffile
-    usage="""usage: %prog [options] (--help for help)\n"""
-
-    parser = argparse.ArgumentParser(description="Estrangement Confinement Algorithm",
-         fromfile_prefix_chars='@')
-
-
-    optionsadder.add_options(parser, reader_functions=reader_functions)
-    opt = parser.parse_args(['@simulation.conf'])
-    return opt
-
-
-
-
 
 def read_general(datadir):
     """ generator function to read many datasets including mit and random_with_stable_core"""
@@ -148,7 +131,7 @@ def make_Zgraph(g0, g1, g0_label_dict):
     return Z 
 
 
-def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats,maxfun=500):
+def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     """ do repeated call to agglomerate lpa to optimize F
     return the label_dict and Q value to help searching for lambduh
     """
@@ -174,7 +157,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats,ma
     return (dictPartition, dictQ, dictE, dictF)
 
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,savefor_layouts=False):
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,savefor_layouts=False,maxfun=500):
     """
     Estrangement reduction algorithm
 

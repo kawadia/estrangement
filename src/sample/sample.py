@@ -15,7 +15,7 @@ import string
 import estrangement
 
 
-opt = main.parse_args()
+opt = optionsadder.parse_args()
 estrangement.ERA(delta=opt.delta,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
 
 

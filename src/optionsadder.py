@@ -1,5 +1,23 @@
 import os
+import argparse
 
+
+def parse_args():
+    """@brief parse cmd line and conf file options 
+    @returns opt  as returned by argsparse.parse_args"""
+    # read in options from cmdline and conffile
+    usage="""usage: %prog [options] (--help for help)\n"""
+
+    parser = argparse.ArgumentParser(description="Estrangement Confinement Algorithm",
+         fromfile_prefix_chars='@')
+
+
+    add_options(parser)
+    if(os.path.isfile('./simulation.conf')):
+    	opt = parser.parse_args(['@simulation.conf'])
+    else:
+	opt = parser.parse_args()
+    return opt
 
 def add_options(parser):
     """define all the program options here"""
