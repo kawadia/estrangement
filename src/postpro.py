@@ -387,10 +387,8 @@ def preprocess_temporal_communities(nodes_of_interest=[]):
             f.write(repr(matched_temporal_label_dict))
 
         # keep track of all the labels taken over time by nodes_of_interest 
+
         if nodes_of_interest:
-	  if len(nodes_of_interest) > 2:		#SD: temp hack fix
-	    print(nodes_of_interest)
-	    print(len(nodes_of_interest))
             for (n,t), l in matched_temporal_label_dict.items():
                 if n in nodes_of_interest:
                     labels_of_interest_dict[delta].add(l)
