@@ -678,7 +678,7 @@ def main():
 
     dictOptions = parseOptions()
     for nodes_of_interest in opt.nodes_of_interest:
-        plot_temporal_communities(eval(nodes_of_interest))
+        plot_temporal_communities(nodes_of_interest)
     ChoosingDelta()
     plot_function(['Q', 'F',])
     plot_function(['ierr', 'feasible'])

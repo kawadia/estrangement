@@ -16,6 +16,7 @@ import estrangement
 import agglomerate
 import optionsadder
 import argparse
+import string
 
 def parse_args(reader_functions={}):
     """@brief parse cmd line and conf file options 
@@ -112,8 +113,16 @@ if __name__ == '__main__':
 
     # Write all option settings to the log file
     #opt_dict = eval(str(opt))
+    opts = str(opt)
+    opts = string.replace(opts,'Namespace(','{')
+    opts = string.replace(opts,'convergence_tolerance',"'convergence_tolerance")
+    opts = string.replace(opts,'=',"':")
+    opts = string.replace(opts,' '," '")
+    opts = string.replace(opts,')','}')
+    print(opts)
+    print(" whereisthisgoing")
     with open("options.log", 'w') as optf:
-       optf.write(str(opt))
+       optf.write(opts)
     
     logging.basicConfig(level=getattr(logging, opt.loglevel.upper(), None))
 

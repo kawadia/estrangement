@@ -242,7 +242,7 @@ def add_options(parser):
     parser.add_argument("--nodes_of_interest",
             dest="nodes_of_interest", 
             help="only show labels ever taken by the node in this list, can be specified multiple times[default: %default]",
-            type=str,
+            type=list,
             action="append"
     )
 
