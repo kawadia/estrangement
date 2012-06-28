@@ -388,6 +388,9 @@ def preprocess_temporal_communities(nodes_of_interest=[]):
 
         # keep track of all the labels taken over time by nodes_of_interest 
         if nodes_of_interest:
+	  if len(nodes_of_interest) > 2:		#SD: temp hack fix
+	    print(nodes_of_interest)
+	    print(len(nodes_of_interest))
             for (n,t), l in matched_temporal_label_dict.items():
                 if n in nodes_of_interest:
                     labels_of_interest_dict[delta].add(l)
@@ -601,7 +604,7 @@ def plot_temporal_communities(nodes_of_interest=[]):
         #pylab.pcolor(x, y, Labels_masked, cmap=pylab.cm.get_cmap(opt.label_cmap), alpha=opt.alpha)
         
         if opt.colorbar is True:
-            levels = numpy.unique1d(Labels_masked)
+            levels = numpy.unique(Labels_masked)
             cb = pylab.colorbar(ticks=levels)
             reverse_label_index_dict = dict([(v,k) for (k,v) in label_index_dict.items()])
             level_labels = [ reverse_label_index_dict[l] for l in levels.compressed() ]
