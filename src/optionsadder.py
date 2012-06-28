@@ -63,18 +63,24 @@ def add_options(parser, reader_functions={}):
             default=10
     )
 
-    parser.add_argument("--graph_reader_fn",
-            dest="graph_reader_fn",
-            choices=reader_functions.keys(),
-            help="generator fcn to read graph snapshots. Choices are " + str(reader_functions.keys()) + " [default: %default]",
-            default="read_general"
-    ) 
+#    parser.add_argument("--graph_reader_fn",
+#            dest="graph_reader_fn",
+#            choices=reader_functions.keys(),
+#            help="generator fcn to read graph snapshots. Choices are " + str(reader_functions.keys()) + " [default: %default]",
+#            default="read_general"
+#    ) 
     
-    parser.add_argument("--graph_reader_fn_arg",
-            dest="graph_reader_fn_arg",
-            type=str,
-            help="string argument for graph_reader_fn [default: %default]",
-            default=""
+#    parser.add_argument("--graph_reader_fn_arg",
+#            dest="graph_reader_fn_arg",
+#            type=str,
+#            help="string argument for graph_reader_fn [default: %default]",
+#            default=""
+#    )
+    parser.add_argument("--data_dir",
+	     dest="data_dir",
+	     type=str,
+	     help="location of the data set",
+	     default="./data"
     )
 
     parser.add_argument("--profiler_on",

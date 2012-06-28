@@ -1,0 +1,1 @@
+{'convergence_tolerance':0.01, 'data_dir':'./data', 'dataset_dir':'/home/sdabideen/datasets', 'delta':0.01, 'increpeats':0, 'loglevel':'INFO', 'maxfun':500, 'minrepeats':2, 'precedence_tiebreaking':False, 'profiler_on':True, 'savefor_layouts':True, 'tolerance':1e-05}

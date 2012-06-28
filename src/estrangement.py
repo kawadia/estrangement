@@ -41,6 +41,67 @@ import agglomerate
 #have to make this global for access inside g_of_lambda
 itrepeats = 0
 
+def read_general(datadir):
+    """ generator function to read many datasets including mit and random_with_stable_core"""
+    # passed in datadir can be one of these
+#    repo_datadir = "./data/"
+    #datadir = "random_with_stable_core"
+    #datadir = os.path.join(repo_datadir, datadir)
+#    datadir = repo_datadir
+    print "datadir: ", datadir
+
+    raw_file_list = os.listdir(datadir)
+    timestamps = sorted([int(f.rstrip(".ncol")) for f in raw_file_list if f.endswith(".ncol")])
+
+    initial_label_dict_filename = os.path.join(datadir, 'initial_label_dict.txt')
+
+    beginning = True
+    for t in timestamps:
+        f = str(t) + ".ncol"
+
+        fpath = os.path.join(datadir,f)
+
+        # skip empty files but increment timestamp
+        if os.path.getsize(fpath) == 0:
+            continue
+
+        g1 = nx.read_edgelist(fpath, nodetype=int, data=(('weight',float),))
+
+#        summary(g1)
+
+        if beginning is True:
+            # when called for the first time just return initial_label_dict
+            if not os.path.exists(initial_label_dict_filename):
+                initial_label_dict = maxQ(g1)
+                with open(initial_label_dict_filename, 'w') as lf:
+                    lf.write(repr(initial_label_dict))
+
+            with open(initial_label_dict_filename, 'r') as lf:
+                initial_label_dict = eval(lf.read())
+            yield (t, g1, initial_label_dict)
+            beginning = False
+        else:
+            yield (t, g1, None)
+
+
+def maxQ(g1):
+    """ a convenenience function to do plain Q maximization"""
+    dictPartition = {}
+    dictQ = {}
+    # set params to do pure Q maximization
+    lambduh = 0.0
+    Zgraph = nx.Graph()
+    # do 100 runs and pick the best
+    for r in range(10*opt.minrepeats):
+        # best_partition calls agglomerative lpa
+        dictPartition[r] = agglomerate.best_partition(g1, opt, lambduh, Zgraph)
+        dictQ[r] = agglomerate.modularity(dictPartition[r], g1)
+    logging.info("dictQ = %s", str(dictQ))
+    bestr = max(dictQ, key=dictQ.get)
+    return dictPartition[bestr]
+
+
+
 def make_Zgraph(g0, g1, g0_label_dict):
     """Constructs and returns  a graphs which consists of only edges that appear
     in both input graphs and the endpoints have the same label (i.e. both end
@@ -94,7 +155,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     return (dictPartition, dictQ, dictE, dictF)
 
 
-def ERA(graph_reader_fn, opt):
+def ERA(opt):
     """
     Estrangement reduction algorithm
 
@@ -116,7 +177,7 @@ def ERA(graph_reader_fn, opt):
 
     beginning = True
     snapshot_number = 0
-    for t, g1, initial_label_dict in graph_reader_fn(opt.graph_reader_fn_arg):
+    for t, g1, initial_label_dict in read_general(opt.data_dir):
         # initial_label_dict label dict is non None only for the first call to # graph_reader_fn
         
         logging.info("############# snapshot: %d #################", t)

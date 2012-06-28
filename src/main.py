@@ -18,7 +18,7 @@ import optionsadder
 import argparse
 import string
 
-def parse_args(reader_functions={}):
+def parse_args(reader_functions={'read_general':True}):
     """@brief parse cmd line and conf file options 
     @returns opt  as returned by argsparse.parse_args"""
     # read in options from cmdline and conffile
