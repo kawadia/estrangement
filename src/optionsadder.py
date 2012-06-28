@@ -1,11 +1,11 @@
 import os
 
 
-def add_options(parser, reader_functions={}):
+def add_options(parser):
     """define all the program options here"""
     parser.add_argument("-d", "--dataset_dir",
             dest="dataset_dir", 
-            help="dir where all the datasets are stored, passed to the graph_reader_fcns. [default: %default]",
+            help="dir where all the datasets are stored [default: %default]",
             type=str,
             default=os.path.join(os.path.expanduser("~"), "datasets")
     )
@@ -33,14 +33,6 @@ def add_options(parser, reader_functions={}):
             default=0.01
     )
 
-    parser.add_argument("--maxfun",
-            dest="maxfun", 
-            help="max number of iterations allowed for scipy optimize [default: %default]",
-            type=int,
-            default=500
-    )
-
-
     parser.add_argument("--delta",
             dest="delta", 
             help="constraint on estrangement [default: %default]",
@@ -63,32 +55,6 @@ def add_options(parser, reader_functions={}):
             default=10
     )
 
-#    parser.add_argument("--graph_reader_fn",
-#            dest="graph_reader_fn",
-#            choices=reader_functions.keys(),
-#            help="generator fcn to read graph snapshots. Choices are " + str(reader_functions.keys()) + " [default: %default]",
-#            default="read_general"
-#    ) 
-    
-#    parser.add_argument("--graph_reader_fn_arg",
-#            dest="graph_reader_fn_arg",
-#            type=str,
-#            help="string argument for graph_reader_fn [default: %default]",
-#            default=""
-#    )
-    parser.add_argument("--data_dir",
-	     dest="data_dir",
-	     type=str,
-	     help="location of the data set",
-	     default="./data"
-    )
-
-    parser.add_argument("--profiler_on",
-            dest="profiler_on",
-            type=bool,
-            help="Turn on profiling [default: %default]",
-            default=False
-    )
 
     parser.add_argument("--savefor_layouts",
             dest="savefor_layouts",
@@ -96,12 +62,4 @@ def add_options(parser, reader_functions={}):
             help="Save gexf for layouts [default: %default]",
             default=False
     )
-
-    parser.add_argument("--loglevel",
-            dest="loglevel",
-            choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"], 
-            help="Set console logging level to LEVEL [default: %default]",
-            metavar="LEVEL",
-            default="DEBUG" 
-    ) 
 
