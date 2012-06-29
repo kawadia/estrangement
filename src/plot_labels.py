@@ -11,26 +11,12 @@ import os
 import random
 import numpy
 import collections
-import visualoptions
 import postpro
 import math
 
 
-def parse_args():
-    """@brief parse cmd line and conf file options 
-    @retval (opt, args) as returned by configparse.OptionParser.parse_args"""
-    # read in options from cmdline and conffile
-    usage="""usage: %prog [options] (--help for help)\n"""
 
-    parser = argparse.ArgumentParser(description="Analysis and visualization of Estrangement Confinement Algorithm", fromfile_prefix_chars='@')
-    visualoptions.add_options(parser)
-    opt = parser.parse_args(['@analysis.conf'])
-    #check_options(opt, parser)
-    return opt
-
-
-
-def layout():
+def layout(image_extension='svg'):
     """ produce layouts from .gexfs saved while simulation"""
 
     for t in summary_dict['snapshots_list']:
@@ -49,7 +35,7 @@ def layout():
         nx.draw_networkx(glay, node_color=nodecolors, edge_color=edgecolors,)
         #    cmap=pylab.cm.get_cmap(opt.label_cmap))
         pyplot.axis('off')
-        pyplot.savefig('layout_t%s.%s'%(str(t),opt.image_extension))
+        pyplot.savefig('layout_t%s.%s'%(str(t),image_extension))
 
 
 def confidence_interval(nums):
@@ -59,7 +45,7 @@ def confidence_interval(nums):
     return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
 
 
-def plot_with_lambdas():
+def plot_with_lambdas(opt_linewidth=2.0,image_extension='svg'):
     """ plot F with lambdas for various snapshots """
 
     with open("Fdetails.log", 'r') as Fdetails_file:
@@ -109,39 +95,39 @@ def plot_with_lambdas():
             dictY['F'].append(max(Flam[l].values()))
             dictErr['F'].append( confidence_interval(Flam[l].values()) )
 
-        ax2 = postpro.plot_by_param(dictX, dictY, opt,
-            listLinestyles=['b-', 'g-', 'r-',], 
+	#SD: todo, these can take args from opt
+        ax2 = postpro.plot_by_param(dictX, dictY, listLinestyles=['b-', 'g-', 'r-',], 
             xlabel="$\lambda$", ylabel="Dual function", title="Dual function at t=%s"%(str(t)), 
             dictErr=dictErr)
 
-        ax2.axvline(x=lambdaopt_dict[t], color='m', linewidth=opt.linewidth,
+        ax2.axvline(x=lambdaopt_dict[t], color='m', linewidth=opt_linewidth,
             linestyle='--', label="$\lambda_{opt}$")
         
-        ax2.axvline(x=best_feasible_lambda_dict[t], color='k', linewidth=opt.linewidth,
+        ax2.axvline(x=best_feasible_lambda_dict[t], color='k', linewidth=opt_linewidth,
             linestyle='--', label="best feasible $\lambda$")
 
         
-        ax2.axhline(F_dict[t], color='b', linewidth=opt.linewidth,
+        ax2.axhline(F_dict[t], color='b', linewidth=opt_linewidth,
             linestyle='--', label="best feasible F")
 
-        ax2.axhline(Q_dict[t], color='g', linewidth=opt.linewidth,
+        ax2.axhline(Q_dict[t], color='g', linewidth=opt_linewidth,
             linestyle='--', label="best feasible Q")
 
         pyplot.legend()
 
-        pyplot.savefig('with_lambda_at_t%s.%s'%(str(t), opt.image_extension))
+        pyplot.savefig('with_lambda_at_t%s.%s'%(str(t), image_extension))
 
 
 
-if __name__ == '__main__':
-
-    opt = parse_args()
-
-    print opt
+#if __name__ == '__main__':
+#
+#    opt = parse_args()
+#
+#    print opt
     
-    summary_file = open("summary.log", 'r')
-    summary_dict = eval(summary_file.read())
-    print "summary_dict: ", summary_dict
-
+#    summary_file = open("summary.log", 'r')
+#    summary_dict = eval(summary_file.read())
+#    print "summary_dict: ", summary_dict
+#
     #plot_with_lambdas()
     #layout()
