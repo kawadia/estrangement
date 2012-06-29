@@ -167,6 +167,15 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     opt is the options parser opt object
     """
 
+    # set up directory structure for this delta
+    dir_name = 'task_delta_' + str(delta)
+    if(not os.path.exists(dir_name)):
+    	os.mkdir(dir_name)
+    os.chdir(dir_name)
+
+
+
+
     #write the options to log for later reference
     # todo doublecheck this
 #    print(opt)
@@ -380,6 +389,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     with open("summary.log", 'w') as summary_file:
         summary_file.write(str(summary_dict))
 
+    os.chdir('../')
     return True
 
 
