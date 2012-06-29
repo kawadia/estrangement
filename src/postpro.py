@@ -277,6 +277,8 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
                 # reading dict with key=time t and val = label_dict (key=node_name, val=label
                 # at time t
                 line_dict = eval(l)
+		print(delta)
+		print(str(line_dict))
                 time = line_dict.keys()[0]
                 label_dict = line_dict[time]
 
@@ -289,7 +291,9 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
                     for n,l in label_dict.items():
                         label_time_series_dict[n].append(l)
                         appearances_dict[n].append(time) 
-        
+       
+
+ 
         #align temporal communities for various deltas for sensible visualization
         matched_temporal_label_dict = utils.match_labels(temporal_label_dict, prev_temporal_label_dict)
         prev_temporal_label_dict = matched_temporal_label_dict 
@@ -319,13 +323,17 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
 
         logging.info("delta=%f, labels_of_interest_dict=%s", delta, str(labels_of_interest_dict))
         
+    if(len(appearances_dict) == 0):
+	raise ValueError("The 'delta_to_use_for_node_ordering' parameter must be one of the deltas used in simulation")	
+
     if nodeorder is not None:
         ordered_nodes = eval(nodeorder)
+	print("ordered")
     else:    
         # node_index_dict,  key = nodename, val=index to use for plotting that node
         # on the y axis using pcolor
         # use the temporal communities for delta=1.0 to get a node ordering for plotting  
- 
+	print("not ordered") 
         label_count_dict = {} # key = node, val = tuple of labels, ordered by freq
         for n , label_list in label_time_series_dict.items():
             label_freq = collections.defaultdict(int) # key = label, val = freq
@@ -352,6 +360,8 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
     else:
         filtered_ordered_nodes = ordered_nodes
     node_index_dict =  dict(zip(filtered_ordered_nodes, range(len(filtered_ordered_nodes))))
+    print("filtered:")
+    print(filtered_ordered_nodes)
 
     logging.info("num_nodes=%d, node_index_dict : %s ", len(node_index_dict), str(node_index_dict))        
     # label_index_dict,  key = label, val=index to use for plotting that label using pcolor
@@ -370,11 +380,14 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
 
     logging.debug("unique_labels_list:%s", str(unique_labels_list))
     label_index_dict = dict(zip(unique_labels_list, range(len(unique_labels_list))))
+    print("unique")
+    print(unique_labels_list)  
 
     
     # t_index_dict,  key = time/snapshot, val=index to use for plotting that # snapshot using pcolor
     t_index_dict = dict(zip(sorted(all_times_set), range(len(all_times_set))))
-
+    print("node index dict:")
+    print(str(node_index_dict))
     return node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict
 
 
