@@ -204,3 +204,11 @@ def match_labels(label_dict, prev_label_dict):
     return matched_label_dict
 
 
+def confidence_interval(nums):
+    """Return (half) the 95% confidence interval around the mean for nums:
+    1.96 * std_deviation / sqrt(len(nums)).
+    """
+    return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
+
+
+
