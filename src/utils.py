@@ -4,8 +4,9 @@
 This module implements various functions used to compute and plot temporal communities.
 """
 
+__all__ = ['graph_distance','node_graph_distance','estrangement','match_labels','confidence_interval']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                                    'Sameet Sreenivasan <sreens@rpi.edu>'])
+                            'Sameet Sreenivasan <sreens@rpi.edu>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
@@ -13,23 +14,18 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   All rights reserved. 
 #   BSD license. 
 
-__all__ = ['graph_distance','node_graph_distance','estrangement','match_labels']
-
-
 import networkx as nx
 import collections
-import random
 import math
 import operator
+import numpy
 import logging
-import sys
-
 
 def graph_distance(g0, g1, weighted=True):
     """Return the Tanimoto distance between the two input graphs.
 
     Tanimoto distance between the set of edges is defined as    
-    (a.b - aUb)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
+    (aUb 0 a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
 
     Parameters
     ----------
@@ -42,10 +38,13 @@ def graph_distance(g0, g1, weighted=True):
     -------
     graph_distance: float
 	The Tanimoto distance between the nodes of g0 and g1
-	
-    Note
-    ----
-    Used only in snapstats to plot. 
+
+    Example
+    -------
+    >>> g0 = nx.complete_graph(5)
+    >>> g1 = nx.complete_graph(5)
+    >>> print(graph_distance(g0,g1,False)
+    0
     """
 
     intersection = set(g1.edges_iter()) & set(g0.edges_iter())
@@ -78,9 +77,12 @@ def node_graph_distance(g0, g1):
     node_graph_distance: float
         The Jaccard distance between the nodes of g0 and g1
         
-    Note
-    ----
-    Used only in snapstats to plot. 
+    Example
+    -------
+    >>> g0 = nx.path_graph(2)
+    >>> g1 = nx.path_graph(4)
+    >>> print(node_graph_distance(g0,g1)
+    0.5
     """
 
     g1_nodes = set(g1.nodes())
@@ -97,11 +99,11 @@ def Estrangement(G, label_dict, Zgraph):
     Parameters
     -----------
     G: graph
-	A networkx graph object (new graph)
+	A networkx graph object (current snapshot)
     label_dict: dictionary
 	key = node_identifier, value = community label
     ZGraph: graph
-	A networkx graph object (old graph)
+	A networkx graph object (compliation of overlapping edges from previous snapshots)
   
     Returns
     -------
@@ -110,7 +112,17 @@ def Estrangement(G, label_dict, Zgraph):
  
     Note
     ----
-    Used in LPA and Agglomerate"""
+    Used in LPA and Agglomerate
+
+    Examples
+    --------
+    >>> g0 = nx.Graph()
+    >>> g0.add_edges_from([(1,2,{'weight':2}),(1,3,{'weight':1}),(2,3,{'weight':1})])
+    >>> g1.add_edges_from([(1,2,{'weight':2})])
+    >>> communities = {1:'a',2:'a',3:'b'}
+    >>> print(Estrangement(g0,communities,g1)
+    0.333333333333
+    """
 
     consort_edge_set =  set(Zgraph.edges()) & set(G.edges())
     logging.info("Estrangement(): Z edges: %s", str(Zgraph.edges(data=True)))   
@@ -119,7 +131,6 @@ def Estrangement(G, label_dict, Zgraph):
     if len(consort_edge_set) == 0:
         estrangement = 0
     else:   
-	print("hash overlapping edges: %s", len(consort_edge_set)) 
         estrangement = sum([e[2]['weight'] for e in Zgraph.edges(data=True) if label_dict[e[0]] !=
         label_dict[e[1]]]) / float(G.size(weight='weight'))
     return estrangement
@@ -151,6 +162,13 @@ def match_labels(label_dict, prev_label_dict):
     -------
     matched_label_dict: dictionary
   	{node:community} new labelling
+
+    Example
+    -------
+    >>> label_dict_a = {1:'a',2:'a',3:'a',4:'a',5:'a',6:'a'}
+    >>> label_dict_b = {1:'b',2:'b',3:'b',4:'b',5:'b',6:'b'}
+    >>> print(match_labels(label_dict_a,label_dict_b)
+    {1:'a',2:'a',3:'a',4:'a',5:'a',6:'a'}
     """
     
     # corner case for the first snapshot
@@ -159,19 +177,20 @@ def match_labels(label_dict, prev_label_dict):
 
     nodesets_per_label_t = collections.defaultdict(set) 
     nodesets_per_label_t_minus_1 = collections.defaultdict(set) 
-    # key = label, val = set of nodes with that label
-    
+
+    # count the number of nodes with each label in each snapshot and store in a dictionary
+    # key = label, val = set of nodes with that label 
     for n,l in label_dict.items():
         nodesets_per_label_t[l].add(n)
 
     for n,l in prev_label_dict.items():
         nodesets_per_label_t_minus_1[l].add(n)
 
-    overlap_dict = {} # key = (prev_label, new_label), value = jaccard overlap
-
+    overlap_dict = {} 
     overlap_graph = nx.Graph() 
     # Undirected bi-partite graph with the vertices being the labels and
     # the weight being the jaccard distance between them in t and (t-1) 
+    # key = (prev_label, new_label), value = jaccard overlap
 
     for l_t, nodeset_t in nodesets_per_label_t.items():
         for l_t_minus_1, nodeset_t_minus_1 in nodesets_per_label_t_minus_1.items():
@@ -180,11 +199,10 @@ def match_labels(label_dict, prev_label_dict):
 
 
     max_overlap_digraph = nx.DiGraph() 
-        # each label at t-1  and at t is a vertex in this bi-partite graph and 
-	# a directed edge implies the max overlap with the other side. 
+    # each label at t-1  and at t is a vertex in this bi-partite graph and 
+    # a directed edge implies the max overlap with the other side. 
 
-    for v in overlap_graph.nodes():
-        # find the nbr with max weight
+    for v in overlap_graph.nodes():    # find the nbr with max weight
         maxwt_nbr = max([(nbrs[0],nbrs[1]['weight']) for nbrs in overlap_graph[v].items()],
             key=operator.itemgetter(1))[0]
         max_overlap_digraph.add_edge(v, maxwt_nbr)
@@ -207,6 +225,21 @@ def match_labels(label_dict, prev_label_dict):
 def confidence_interval(nums):
     """Return (half) the 95% confidence interval around the mean for nums:
     1.96 * std_deviation / sqrt(len(nums)).
+    
+    Parameters
+    ----------
+    nums: list of numbers
+
+    Returns
+    -------
+    half the range of the 95% confidence interval
+
+    Examples
+    --------
+    >>> print(confidence_interval([2,2,2,2]))
+    0
+    >>> print(confidence_interval([2,2,4,4]))
+    0.98
     """
     return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
 
