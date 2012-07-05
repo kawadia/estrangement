@@ -15,8 +15,8 @@ import estrangement
 
 
 opt = optionsadder.parse_args()
-deltas = [0.01,0.025,0.05,0.10]
-
+#deltas = [0.01,0.025,0.05,1.0]
+deltas = [1.0]
 
 print(opt.maxfun)
 print(opt.increpeats)

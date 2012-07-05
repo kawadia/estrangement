@@ -11,7 +11,7 @@ class opt:
         delta = 0
         tolerance = 0.4
         precedence_tiebreaking = True
-
+        lambduh = 0.0
 
 class test_estrangement:
 	def setUp(self):
@@ -24,6 +24,7 @@ class test_estrangement:
 		self.g6 = nx.Graph()
 		self.g7 = nx.Graph()
 		self.g8 = nx.Graph()
+		self.g9 = nx.path_graph(4)
         	self.g0.add_edges_from([(1,2,{'weight':2}),(1,3,{'weight':1}),(2,4,{'weight':1})])
         	self.g1.add_edges_from([(1,4,{'weight':1}),(2,3,{'weight':1}),(3,4,{'weight':1})])
         	self.g2.add_edges_from([(1,2,{'weight':2}),(2,3,{'weight':1}),(3,4,{'weight':1})])
@@ -38,6 +39,11 @@ class test_estrangement:
 		self.label_dict3 = {1:'a',2:'b',3:'c',4:'d',5:'e',6:'f'}	
 		self.label_dict4 = {1:'a',2:'a',3:'a',4:'a',5:'a',6:'a'}	
 		self.label_dict5 = {1:'b',2:'b',3:'b',4:'b',5:'b',6:'b'}
+
+	def test_maxQ(self):	
+		labels = estrangement.maxQ(self.g0,opt.delta,opt.precedence_tiebreaking,opt.tolerance)
+		assert labels[1] == labels[3]
+		assert labels[2] == labels[4]
 
 	def test_make_Zgraph(self):
 		self.g6  = estrangement.make_Zgraph(self.g0,self.g2,self.label_dict4)  # Just the edge [1,2]

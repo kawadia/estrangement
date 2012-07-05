@@ -16,12 +16,11 @@ import itertools
 import numpy
 import pylab
 import utils
-import snapshot_stats
 import pprint			# << might not need
 import agglomerate
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-	                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+	                    'Sameet Sreenivasan <sreens@rpi.edu>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>

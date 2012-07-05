@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-This module implements community detection.
+This module implements static community detection.
 """
 # Downloaded from http://perso.crans.org/aynaud/communities/
 # modified by vkawadia to do agglomerative lpam
@@ -17,13 +17,10 @@ __PASS_MAX = -1
 __MIN = 0.0000001
 
 import networkx as nx
-import sys
 import types
-import array
 import lpa
 import logging
 import utils
-
 
 def partition_at_level(dendogram, level) :
     """Return the partition of the nodes at the given level
@@ -326,15 +323,5 @@ def induced_graph(partition, graph, zgraph) :
     logging.debug("zret nodes: %s", str(zret.nodes()))
 
     return ret, zret
-
-
-
-
-
-
-
-
-
-
 
 
