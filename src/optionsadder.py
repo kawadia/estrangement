@@ -1,6 +1,20 @@
 import os
 import argparse
 
+""" OptionsAdder: Helper function for parsing arguments from the command line or a config file"""
+
+__all__ = ['parse_args','add_options']
+__author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
+                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+
+#   Copyright (C) 2012 by 
+#   Vikas Kawadia <vkawadia@bbn.com>
+#   Sameet Sreenivasan <sreens@rpi.edu>
+#   All rights reserved. 
+#   BSD license. 
+
+ 
+
 
 def parse_args():
     """@brief parse cmd line and conf file options 
