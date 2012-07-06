@@ -1,10 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-Estrangement functions.
+The Estrangement Reduction Algorithm (ERA) and various functions necessary and read the input snapshots,
+process information and output the results to file. 
+
+For a desciption of ERA reference [1]:
+[1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities in evolving networks by 
+				    estrangement confinement", http://arxiv.org/abs/1203.5126.
+
 """
 
-__all__ = ['make_Zgraph','read_general','maxQ']
+__all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>'])
 
@@ -170,14 +176,20 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     g1: networkx graph
 	The input graph
     delta: float
-	<>
+	A measure allowed distance between the past community and the present community if
+        it is to be considered the same community. A smaller value of delta allows greater
+        differences in the graphs in order to preserve the communities of the previous snapshot.
     tolerance: float
-	<>
+	For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller the value of tolerance, the fewer dominant 
+	labels there will be.
     tiebreaking: boolean
- 	<>
+ 	This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Zgraph: networkx graph
 	Graph in each edges join nodes belonging to the same community over
-     	all previous snapshots
+     	previous snapshots
     repeats: integer
 	The number of calls to be made to the LPA. 	
 
@@ -187,6 +199,12 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
  	dictQ: List of values of Q corresponding to the above labeling
  	dictE: List of values of E corresponding to the above labeling
  	dictF: List of values of F corresponding to the above labeling
+	
+    Example
+    -------
+    >>> g0 = nx.Graph()
+    >>> g0.add_edges_from([(1,2,{'weight':1}),(2,3,{'weight':1}),(1,3,{'weight':1}),(3,4,{'weight':1}),(4,5,{'weight':1}),(4,6,{'weight':1}),(5,7,{'weight':1}),(6,7,{'weight':1}),(8,9,{'weight':1}),(8,10,{'weight':1}),(9,10,{'weight':1})])
+    >>> dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(g0, delta=0.05, tolerance=0.01, precedence_tiebreaking=False,lambduh=1,g0,repeats = 3)
     """
 
     dictPartition = {} 	# key = run number, val = label_dict
@@ -215,23 +233,24 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     ----------
     dataset_dir: string
 	Path to the relevant dataset files
-     precedence_tiebreaking: boolean
+     precedence_tiebreaking: boolean,optional
 	This is only relevant when there are multiple dominant labels while running the LPA.
 	If it is set to 'True', the dominant label is set dominant label most recently seen. 
 	If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
-    tolerance: float
+    tolerance: float,optional
 	For a label to be considered a dominant label, it must be within this much of the maximum
 	value found for the quality function. The smaller it is, the fewer dominant labels there 
 	will be. 
-    convergence_tolerance: float
+    convergence_tolerance: float,optional
 	The convergence tolerance used in optimizing the value of lambda.
-    delta: float
-	The maximum allowed distance between the past community and the present community if
-	it is to be considered the same community.  
-    minrepeats: integer
+    delta: float,optional
+	A measure allowed distance between the past community and the present community if
+	it is to be considered the same community. A smaller value of delta allows greater
+	differences in the graphs in order to preserve the communities of the previous snapshot. 
+    minrepeats: integer,optional
 	The number of times to call LPA. Each call increases the likilhood of finding the optimal
 	partition, however, such a partition may be found with few calls depending on the graph. 
-    increpeats: integer
+    increpeats: integer,optional
 	The size of a step in the LPA.
     maxfun: integer, optional
 	The maximum number of function calls made to optimize lambda.
@@ -241,6 +260,10 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     Returns
     -------
 	Nothing, the important results are writtent to file.  
+
+    Example
+    -------
+    >>> ERA(dataset_dir='tests/sample_data',delta=0.001)
     """
 
     # set up directory structure for this delta
@@ -339,13 +362,13 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             logging.info("listLambduhs: %s,", str(listLambduhs))
             current_index = listLambduhs.index(lambdaopt)
 
-            while len(dictFeasibleFs) == 0 and current_index < len(listLambduhs) - 1:4
+            while len(dictFeasibleFs) == 0 and current_index < len(listLambduhs) - 1:
                 logging.error("No feasible Fs found at current_lambduh=%f, increasing search range of lambduhs",
                     listLambduhs[current_index])
 
                 # get next highest lambda
                 next_highest_lambduh = listLambduhs[current_index + 1]
-	        if(current_index + 1 > len(listLambduh))
+	        if(current_index + 1 > len(listLambduhs)):
 			raise nx.NetworkXError("Ran out of values for lambduh")	
 
                 # add those to dictFeasibleFs 
@@ -450,23 +473,24 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     return True
 
 class SnapshotStatistics():
+  """ Helper class used to aggregate results. """
   def __init__(self):
-      self.VI = {}  # key = time t, val = VI between partitions t and t-1
-      self.VL = {}  # key = time t, val = Variation of labels between partitions t and t-1
-      self.GD = {}  # key = time t, val = Graph distance between graphs t and t-1
-      self.Node_GD = {}  # key = time t, val = Node graph distance between graphs t and t-1
-      self.NumComm = {}  # key = time t, val = Number of communities at time t
-      self.Q = {}  # key = time t, val = Modularity of partition at t
-      self.Qstar = {}  # key = time t, val = Modularity of partition at t with tau=0
-      self.F = {}  # key = time t, val = F of partition at t
-      self.StrengthConsorts = {} # key = time t, val = strength of consorts at time t
-      self.NumConsorts = {} # key = time t, val = Num of conorts at time t
-      self.Estrangement = {} # key = time t, val = number of estranged edges at time t
-      self.lambdaopt = {} # key = time t, lambdaopt found via solving the dual problem
+      self.VI = {}  	# key = time t, val = VI between partitions t and t-1
+      self.VL = {} 	# key = time t, val = Variation of labels between partitions t and t-1
+      self.GD = {}  	# key = time t, val = Graph distance between graphs t and t-1
+      self.Node_GD = {}	# key = time t, val = Node graph distance between graphs t and t-1
+      self.NumComm = {}	# key = time t, val = Number of communities at time t
+      self.Q = {}  	# key = time t, val = Modularity of partition at t
+      self.Qstar = {}  	# key = time t, val = Modularity of partition at t with tau=0
+      self.F = {}  	# key = time t, val = F of partition at t
+      self.StrengthConsorts = {}# key = time t, val = strength of consorts at time t
+      self.NumConsorts = {} 	# key = time t, val = Num of conorts at time t
+      self.Estrangement = {} 	# key = time t, val = number of estranged edges at time t
+      self.lambdaopt = {} 	# key = time t, lambdaopt found via solving the dual problem
       self.best_feasible_lambda = {} # key = time t, lambdaopt found via solving the dual problem
-      self.numfunc = {} # key = time t, Number of function evaluations needed for solving the dual
-      self.ierr = {} # key = time t, convergence of the dual
-      self.feasible = {} # key = time t, convergence of the dual
+      self.numfunc = {} 	# key = time t, Number of function evaluations needed for solving the dual
+      self.ierr = {} 		# key = time t, convergence of the dual
+      self.feasible = {} 	# key = time t, convergence of the dual
       self.NumNodes = {}
       self.NumEdges = {}
       self.Size = {}
