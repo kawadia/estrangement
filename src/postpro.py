@@ -1,35 +1,28 @@
 #!/usr/bin/env python
 
+""" This module implements functions to plot graphs based on file output from ERA. """
+
+__all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas','layout']
+__author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
+                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+
+#   Copyright (C) 2012 by 
+#   Vikas Kawadia <vkawadia@bbn.com>
+#   Sameet Sreenivasan <sreens@rpi.edu>
+#   All rights reserved. 
+#   BSD license. 
+
+
 import matplotlib
-#matplotlib.use('SVG')
-#matplotlib.use('WXAgg')
 matplotlib.use('Agg')
 from matplotlib import pyplot
-from matplotlib.ticker import MultipleLocator
 import pylab
-import sys
-#import configparse
-import argparse
 import os
 import numpy
 import collections
-import itertools
 import random
-import operator
-import cProfile
-import pstats
 import logging
-import numpy
-import re
-#import csv
-#import math
-#import re
-#import pprint
-
 import utils
-import visualoptions
-
-
 
 markers = [
   'o'	,
@@ -56,6 +49,23 @@ markers = [
 
 
 def GetDeltas():
+    """ Function to scan the folders and read the values of delta used in ERA.
+
+    The ERA function creates a folder specific to the value of delta used. Within
+    each of these folders, a config file specifies the value of delta, and this 
+    function reads the value of delta from each such config file. 
+
+    Returns
+    -------
+    deltas : list
+	each member of the list is a float denoting a value of delta used in ERA
+
+    Example
+    -------
+    >>> deltas = GetDeltas()
+    >>> print(deltas)
+    """
+
     deltas = []
     dictOptions = {}
     for dirname in os.listdir(os.getcwd()):
@@ -63,14 +73,12 @@ def GetDeltas():
             continue
         if not dirname.startswith("task"):
             continue
-	print(dirname)
 	infile = open(os.path.join(dirname, "options.log"), 'r')
 	for l in infile:
 		dictOptions = eval(l)
 		delta = dictOptions['delta']
 	deltas.append(delta)
     deltas.sort()
-    print(deltas)
     return(deltas)
 
 
@@ -78,7 +86,49 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
     """
     Given dicts, dictX with key=label, val = iterable of X values, 
     dictY with key=label, val = iterable of Y values, 
-    plots lines for all the labels on the same plot.  """
+    plots lines for all the labels on the same plot.  
+
+    Parameters
+    ----------
+    dictX : dictionary {string : iterable}
+	The X values of a set of lines to be plotted and their respective label
+    dictY : dictionary {string : iterable}
+	The Y values of a set of lines to be plotted and their respective label
+    deltas : list of floats
+	The values of delta used for ERA for which there are results
+    linewidth : float, optional
+	The desired font size of the lines to be plotted
+    markersize : float, optional
+	The size of the markers used on each line
+    label_fontsize : integer, optional
+	The size of the font used for the labels
+    xfigsize : float, optional
+	The desired length of the x-axis
+    yfigsize : float, optional
+	The desired length of the y-axis
+    fontsize : integer, optional
+	The size of the font to be used in the figure
+    fname : string, optional
+	The name to be labeled on the figure
+    listLinesstyles : list of strings, optional
+	A list consisting of the line styles to be used in the figures
+    xlabel : string, optional
+	The label to appear on the x-axis
+    ylabel : string, optional 
+	The label to appear on the y-axis
+    title : string, optional
+	The title of the figure
+    xscale : string, optional
+	The type of scale to be used on the x-axis 
+    yscale : string, optional
+	The type of scale to be used on the y-axis	
+    dictErr : Dictionary {string : iterable}
+	Dictionary containing the Error Bars to be plotted on each line
+    display_on : boolean
+ 	If True, the graph is shown on the screen	
+
+    """
+
     pyplot.clf()
     fig2 = pyplot.figure(figsize=(xfigsize,yfigsize))
     ax2 = fig2.add_subplot(111)
@@ -436,7 +486,7 @@ def plot_temporal_communities(nodes_of_interest=[],deltas=[],tiled_figsize='(36,
             logging.error("Error: Length of manual_colormap does not match that of label_index_dict")
             logging.error("manual_color_map = %s, len=%d", str(manual_colormap), len(manual_colormap))
             logging.error("label_index_dict = %s, len=%d", str(label_index_dict), len(label_index_dict))
-            sys.exit("Error: Length of manual_colormap does not match that of label_index_dict")
+	    raise nx.NetworkXError("Error: Length of manual_colormap does not match that of label_index_dict")
 
         cmap = matplotlib.colors.ListedColormap([manual_colormap[l] for l in sorted(manual_colormap.keys())],
             name='custom_cmap', N=None)
