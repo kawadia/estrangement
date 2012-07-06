@@ -6,19 +6,12 @@ Link Propagation Algorithm (LPA).
 
 import networkx as nx
 import random
-import sys
-import math
-import os
-import operator
 import collections
 import logging
-import itertools
-import numpy
-import pylab
 import utils
-import pprint			# << might not need
 import agglomerate
 
+__all__ = ['lpa']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 	                    'Sameet Sreenivasan <sreens@rpi.edu>'])
 
@@ -28,9 +21,8 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   All rights reserved. 
 #   BSD license. 
 
-__all__ = ['lpa']
 
-def lpa(G, delta, tolerance, tiebreaking, lambduh, initial_label_dict=None, Z=nx.Graph()):
+def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh, initial_label_dict=None, Z=nx.Graph()):
 
     """
     Returns a graph with fewer distinct labels than the input graph.  
@@ -45,14 +37,25 @@ def lpa(G, delta, tolerance, tiebreaking, lambduh, initial_label_dict=None, Z=nx
     ----------
     G : graph
 	Input NetworkX Graph.
-    opt: 
-	Options parsed from command line and config file
+    delta : float
+	A measure allowed distance between the past community and the present community if
+        it is to be considered the same community. A smaller value of delta allows greater
+        differences in the graphs in order to preserve the communities of the previous snapshot.
+    tolerance: float, optional
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller the value of tolerance, the fewer dominant 
+        labels there will be.
+    tiebreaking: boolean, optional
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
+    Z: networkx graph, optional
+        Graph in each edges join nodes belonging to the same community over
+        previous snapshots
     lambduh: 
 	Lagrange multiplier.
-    initial_label_dict : dictionary  {node_identifier:label,....}
+    initial_label_dict : dictionary  {node_identifier:label,....}, optional
 	Initial labeling of the nodes in G.
-    Z : graph
- 	<>
 
     Returns
     -------
@@ -118,7 +121,6 @@ def lpa(G, delta, tolerance, tiebreaking, lambduh, initial_label_dict=None, Z=nx
     F = Q - lambduh*E + lambduh*delta
     logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
         iteration, len(communities), Q, E, F)
-
 
     # For multiple orderings of node visitations, calculate the value of
     # the objective function, equation (6) in reference [1]. 
@@ -199,8 +201,7 @@ def lpa(G, delta, tolerance, tiebreaking, lambduh, initial_label_dict=None, Z=nx
 
         logging.debug("the communities are : %s", str(communities))
         if iteration > 4*G.number_of_edges():
-            sys.exit("Too many iterations: %d" % iteration)
+	    raise nx.NetworkXError("Too many iterations: %d" % iteration)
     
-
     return label_dict
 
