@@ -22,6 +22,7 @@ import numpy
 import logging
 
 def graph_distance(g0, g1, weighted=True):
+
     """Return the Tanimoto distance between the two input graphs.
 
     Tanimoto distance between the set of edges is defined as    
@@ -62,6 +63,7 @@ def graph_distance(g0, g1, weighted=True):
     return graph_distance
 
 def node_graph_distance(g0, g1):
+
     """Return the Jaccard distance between the two input graphs.
 
     Jaccard distance between the set of nodes is defined as    
@@ -92,6 +94,7 @@ def node_graph_distance(g0, g1):
     return graph_distance
 
 def Estrangement(G, label_dict, Zgraph):
+
     """Return the Estrangement between G and Zgraph
 
     Compute Q-tauE for the given input parameters
@@ -137,6 +140,7 @@ def Estrangement(G, label_dict, Zgraph):
 
 
 def match_labels(label_dict, prev_label_dict):
+
     """Returns a list of community labels to be preserved representing the 
     communities that remain mostly intact between snapshots.
 
@@ -223,6 +227,7 @@ def match_labels(label_dict, prev_label_dict):
 
 
 def confidence_interval(nums):
+
     """Return (half) the 95% confidence interval around the mean for nums:
     1.96 * std_deviation / sqrt(len(nums)).
     
@@ -241,6 +246,7 @@ def confidence_interval(nums):
     >>> print(confidence_interval([2,2,4,4]))
     0.98
     """
+
     return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
 
 

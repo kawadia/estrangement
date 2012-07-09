@@ -35,6 +35,7 @@ itrepeats = 0
 
 
 def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
+
     """ Generator function to read datasets from file.
    
     Each file represents a graph for a particular timestamp. 
@@ -90,6 +91,7 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
 
 
 def maxQ(g1,delta=0.05,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
+
     """ Returns a partitioning of the input graph into communities 
     which maximizes the value of the quality function Q.
 
@@ -128,6 +130,7 @@ def maxQ(g1,delta=0.05,precedence_tiebreaking=False,tolerance=0.00001,minrepeats
 
 
 def make_Zgraph(g0, g1, g0_label_dict):
+
     """Constructs and returns  a graphs which consists of only edges that appear
     in both input graphs and the endpoints have the same label (i.e. both end
     points are in the same community). 
@@ -165,6 +168,7 @@ def make_Zgraph(g0, g1, g0_label_dict):
 
 
 def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
+
     """ Makes repeated calls to the Link Propagation Algorithm (LPA) and
     store the values of Q, E and F, as well as the corresponding partition
     for later use. 
@@ -224,9 +228,9 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,savefor_layouts=False,maxfun=500):
-    """
-    The Estrangement Reduction Algorithm.
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500):
+
+    """ The Estrangement Reduction Algorithm.
     Detects temporal communities and output the results to file for further processing. 
 
     Parameters
@@ -254,8 +258,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 	The size of a step in the LPA.
     maxfun: integer, optional
 	The maximum number of function calls made to optimize lambda.
-    savefor_layouts: boolean, optional
-	Save the  graph layout to file if true.
 
     Returns
     -------
@@ -411,7 +413,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             # end else of if beginning is True:
 
         # increment the labels by some huge offset each snapshot and let alignment do the work
-        # @todo: shoud use the number of nodes to automatically increment labels
         for n in label_dict:
             label_dict[n] += 1000000*snapshot_number
 
@@ -432,19 +433,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
         else:
             snapstats.LargestComponentsize[t] = 0
 
-        # save graph for layout
-        if savefor_layouts:
-            glay = g1.copy()
-            for n in glay.nodes():
-                glay.add_node(n, comlabel=matched_label_dict[n])
-            for e in glay.edges(data=True):
-                if label_dict[e[1]] == label_dict[e[0]]:
-                    e[2]['estranged'] = 0
-                else:    
-                    e[2]['estranged'] = 1
-            nx.write_gexf(glay, "%s.gexf"%(str(t)))    
-        
-        
         # keep track of prev snaphost graph and labelDict
         g0 = g1
         prev_label_dict = label_dict

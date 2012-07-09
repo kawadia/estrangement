@@ -22,10 +22,9 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   BSD license. 
 
 
-def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh, initial_label_dict=None, Z=nx.Graph()):
+def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
 
-    """
-    Returns a graph with fewer distinct labels than the input graph.  
+    """Returns a graph with fewer distinct labels than the input graph.  
 
     Each node examines the labels of its neighbors and determines
     which of their label maximizes a specified objective function.
@@ -84,10 +83,6 @@ def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh, initial_label_d
     >>> list(lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
     [(0,1),(1,1),(2,2),(3,1)]
 
-
-    Notes
-    -----
-    <>
     """
 
     # If not specifed, each node's initial label is the node's identifier
