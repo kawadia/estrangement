@@ -317,28 +317,26 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
 
 
-def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_file="matched_labels.log",delta_to_use_for_node_ordering=1.0,label_sorting_keyfunc="random",nodeorder=None):
+def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[],partition_file="matched_labels.log",delta_to_use_for_node_ordering=1.0,label_sorting_keyfunc="random",nodeorder=None):
 
     """ Function to perform the necessary preprocessing before plotting 
     the tiled plots for all simulation parameters. 
 
     Parameters
     ----------
+    matched_labels : dictionary {delta:{time: {node:label}}}
+        The labelling of each node for each snapshot
     deltas : list of floats,optional
 	The values of delta used in the simulation. 
-
     nodes of interest : list of integers, optional
 	If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
-   
     partition_file : string, optional
 	Name of the file which contains the community labels of each node at each
 	timestamp in the simulation. There will be one such file in each task folder.
-
     delta_to_use_for_node_ordering : float, optional
 	The value of delta used to order nodes for all temporal community plots
-
     label_sorting_keyfunc : string, optional
         Method used to order the labels to be plotted
 
@@ -346,13 +344,10 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
     -------
     node_index_dict : dictionary {nodename:index_value}
 	A dictionary mapping nodenames to index values, which are to be plotted 
-
     t_index_dict : dictionary {timestamp : index_value)
 	A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted
- 
     label_index_dict : dictionary {label : index_value}
 	A dictionary mapping community labels to an index value, which are to be plotted
-  	
     labels_of_interest_dict : dictionary {delta : labels}
 	Dictionary mapping delta to the labels of 'nodes_of_interest' for that delta 
 
@@ -387,12 +382,13 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
         taskdir = "task_delta_" + str(delta)
         temporal_label_dict = {}  # key = (node, time) val, = label
        
-	# populate 'temporal_label_dict' based on 'matched_labels.log' in each taskdir  
-        with open(os.path.join(taskdir,partition_file), 'r') as label_file:
-            for l in label_file:
-                line_dict = eval(l)
+	# populate 'temporal_label_dict' based on 'matched_labels' 
+        for labelling in matched_labels[delta]:
+                line_dict = eval(labelling)
                 time = line_dict.keys()[0]
+		print("time: %s"%time)
                 label_dict = line_dict.values()[0]
+		print("labelling: %s"%label_dict)
 
                 all_times_set.add(time) 
                 
@@ -471,7 +467,7 @@ def preprocess_temporal_communities(deltas=[],nodes_of_interest=[],partition_fil
     return node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict
 
 
-def plot_temporal_communities(nodes_of_interest=[],deltas=[],tiled_figsize='(36,16)',manual_colormap=None,label_cmap='Paired',frameon=True,xlabel="Time",ylabel="Node ID",label_fontsize=20,show_title=True,fontsize=28,colorbar=True,show_yticklabels=False,nodelabel_func=None,xtick_separation=5,snapshotlabel_func=None,wspace=0.2,bottom=0.1,image_extension="svg",dpi=200,display_on=True):
+def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tiled_figsize='(36,16)',manual_colormap=None,label_cmap='Paired',frameon=True,xlabel="Time",ylabel="Node ID",label_fontsize=20,show_title=True,fontsize=28,colorbar=True,show_yticklabels=False,nodelabel_func=None,xtick_separation=5,snapshotlabel_func=None,wspace=0.2,bottom=0.1,image_extension="svg",dpi=200,display_on=True):
     """ Module to create tiled plots for different values of paramters.
 
     Parameters
@@ -538,7 +534,7 @@ def plot_temporal_communities(nodes_of_interest=[],deltas=[],tiled_figsize='(36,
     	deltas = GetDeltas()    
 
     node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict = preprocess_temporal_communities(
-        nodes_of_interest=nodes_of_interest)
+        matched_labels, nodes_of_interest=nodes_of_interest)
 
     t_index_to_label_dict = dict([(v,k) for (k,v) in t_index_dict.items()])
 

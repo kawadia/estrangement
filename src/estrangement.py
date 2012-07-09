@@ -261,8 +261,9 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
     Returns
     -------
-	Nothing, the important results are writtent to file.  
-
+    matched_labels : dictionary {time: {node:label}}
+	The labelling of each node for each snapshot
+	
     Example
     -------
     >>> ERA(dataset_dir='tests/sample_data',delta=0.001)
@@ -284,6 +285,8 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     #open files to log results
     label_file = open("labels.log", 'w')
     matched_label_file = open("matched_labels.log", 'w')
+    
+    matched_labels = {}
 
     snapstats = SnapshotStatistics()
 
@@ -417,6 +420,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             label_dict[n] += 1000000*snapshot_number
 
         matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
+        matched_labels.update({t:matched_label_dict})
         matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
         label_file.write("{%d:%s}\n" % (t,str(label_dict)))
 
@@ -458,7 +462,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
         summary_file.write(str(summary_dict))
 
     os.chdir('../')
-    return True
+    return matched_labels
 
 class SnapshotStatistics():
   """ Helper class used to aggregate results. """
