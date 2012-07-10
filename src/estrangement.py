@@ -49,6 +49,20 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
     ----------
     datadir: string
 	path to the directory containing the dataset
+    delta: float
+	The temporal divergence. Smaller values imply greater emphasis on temporal
+	contiguity whereas larger values place greater emphasis on finding better
+	instanteous communities.
+    precedence_tiebreaking: boolean
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
+    tolerance: float,optional
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller it is, the fewer dominant labels there 
+        will be. 
+    minrepeats: integer
+        The number of variations to try before returning the best partition.	 	
 
     Returns 
     ------- 
@@ -100,8 +114,21 @@ def maxQ(g1,delta,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     ----------
     g1: networkx graph
 	The input graph.
+    delta: float
+        The temporal divergence. Smaller values imply greater emphasis on temporal
+        contiguity whereas larger values place greater emphasis on finding better
+        instanteous communities.
     minrepeats: integer
 	The number of variations to try before returning the best partition. 
+    precedence_tiebreaking: boolean, optional
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
+    tolerance: float,optional
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller it is, the fewer dominant labels there 
+        will be. 
+
 
     Returns
     -------
@@ -181,9 +208,9 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     g1: networkx graph
 	The input graph
     delta: float
-	A measure allowed distance between the past community and the present community if
-        it is to be considered the same community. A smaller value of delta allows greater
-        differences in the graphs in order to preserve the communities of the previous snapshot.
+        The temporal divergence. Smaller values imply greater emphasis on temporal
+        contiguity whereas larger values place greater emphasis on finding better
+        instanteous communities.
     tolerance: float
 	For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
@@ -248,10 +275,10 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 	will be. 
     convergence_tolerance: float,optional
 	The convergence tolerance used in optimizing the value of lambda.
-    delta: float,optional
-	A measure allowed distance between the past community and the present community if
-	it is to be considered the same community. A smaller value of delta allows greater
-	differences in the graphs in order to preserve the communities of the previous snapshot. 
+    delta: float
+        The temporal divergence. Smaller values imply greater emphasis on temporal
+        contiguity whereas larger values place greater emphasis on finding better
+        instanteous communities.
     minrepeats: integer,optional
 	The number of times to call LPA. Each call increases the likilhood of finding the optimal
 	partition, however, such a partition may be found with few calls depending on the graph. 
