@@ -3,6 +3,7 @@
 import sys
 import os
 sys.path.append(os.getcwd() + "/..")
+sys.path.append(os.getcwd() + "../..")
 import utils
 import agglomerate
 import optionsadder
@@ -14,8 +15,17 @@ import estrangement
 
 opt = optionsadder.parse_args()
 deltas = [0.01,0.025,0.05,1.0]
-#deltas = [0.5]
+
 matched_labels_dict = {}
+
+exp_name = raw_input("Please enter experiment name:")
+if(not os.path.exists(exp_name)):
+    os.mkdir(exp_name)
+os.chdir(exp_name)
+
+path_to_data=raw_input("Please enter path to data:")
+if(not os.path.isdir(path_to_data)):
+     sys.exit("data folder %s does not exist"%path_to_data)
 
 for d in deltas:
 	# check if the matched_labels.log file file exists, and prompt the user if it does 
@@ -28,7 +38,7 @@ for d in deltas:
 #			print(matched_labels)
 			continue
 	# run the simulation if the matched_labels.log file does not exist or the user specifies this is desired
-	matched_labels = estrangement.ERA(dataset_dir='/home/sdabideen/estrangement/datasets/mit-realitymining/mitdata-weekly-snapshots-weighted-merged',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+	matched_labels = estrangement.ERA(dataset_dir=path_to_data,delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
         matched_labels_dict[str(d)] = matched_labels
 	matched_label_file = open("task_delta_" + str(d) +"/matched_labels.log", 'w')
         matched_label_file.write(str(matched_labels))
@@ -37,21 +47,7 @@ for d in deltas:
 
  
 postpro.plot_temporal_communities(matched_labels_dict)
-
-exit()
-
-#postpro.ChoosingDelta()
-#postpro.plot_function(['Q', 'F',])
-postpro.plot_function(['Estrangement'])
-exit()
-postpro.plot_function(['ierr', 'feasible'])
-postpro.plot_function(['best_feasible_lambda', 'lambdaopt'])
-postpro.plot_function(['numfunc'])
-postpro.plot_function(['GD', 'Node_GD'])
-postpro.plot_function(['NumConsorts', 'NumEdges', ])
-postpro.plot_function(['StrengthConsorts', 'Size'])
-postpro.plot_function(['NumComm', 'NumComponents'])
-postpro.plot_function(['NumNodes', 'LargestComponentsize'])
+os.chdir("..")
 
 
 
