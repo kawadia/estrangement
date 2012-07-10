@@ -12,7 +12,7 @@ More details in http://arxiv.org/abs/1203.5126
 * python-matplotlib
 
 ### Pip
-* networks (Note: Ubuntu's python-networkx package is out of date and will not work)
+* networkx (Note: Ubuntu's python-networkx package is out of date and will not work)
 
 ### Standard Python Library
 * types
