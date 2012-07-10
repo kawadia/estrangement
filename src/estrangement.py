@@ -262,6 +262,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     write_stats, optional
 	If 'True', the stats are written to files named <stat>.log
 
+
     Returns
     -------
     matched_labels : dictionary {time: {node:label}}
