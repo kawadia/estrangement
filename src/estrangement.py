@@ -261,7 +261,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 	The maximum number of function calls made to optimize lambda.
     write_stats, optional
 	If 'True', the stats are written to files named <stat>.log
-
+ 	These logs are not needed to plot temporal communities but are needed to plot other stats. 
 
     Returns
     -------
