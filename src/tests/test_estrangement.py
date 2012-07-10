@@ -42,7 +42,7 @@ class test_estrangement:
 		self.label_dict5 = {1:'b',2:'b',3:'b',4:'b',5:'b',6:'b'}
 
 	def test_maxQ(self):	
-		labels = estrangement.maxQ(self.g0,opt.delta,opt.precedence_tiebreaking,opt.tolerance)
+		labels = estrangement.maxQ(self.g0,opt.precedence_tiebreaking,opt.tolerance)
 		assert labels[1] == labels[3]
 		assert labels[2] == labels[4]
 
@@ -90,12 +90,12 @@ class test_estrangement:
 
 
 		label_dict = {}
-		estrangement.ERA(dataset_dir='../sample_data',delta=0.001)
-		with open(os.path.join("task_delta_0.001/matched_labels.log"), 'r') as label_file:
-                        for l in label_file:
-                                line_dict = eval(l)
-                                time = line_dict.keys()[0]
-                                label_dict[time] = line_dict[time]
+		label_dict = estrangement.ERA(dataset_dir='../sample_data',delta=0.001)
+#		with open(os.path.join("task_delta_0.001/matched_labels.log"), 'r') as label_file:
+#                        for l in label_file:
+#                                line_dict = eval(l)
+ #                               time = line_dict.keys()[0]
+  #                              label_dict[time] = line_dict[time]
 
 
 
@@ -125,73 +125,74 @@ class test_estrangement:
 # Example 1 from: [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities 
 #           in evolving networks by estrangement confinement", http://arxiv.org/abs/1203.5126.
 
-		estrangement.ERA(dataset_dir='../sample_data2',delta=0.2)
-		estrangement.ERA(dataset_dir='../sample_data2',delta=0.01)
+		label_dict1 = estrangement.ERA(dataset_dir='../sample_data2',delta=0.2)
+		label_dict2 = estrangement.ERA(dataset_dir='../sample_data2',delta=0.01)
 		
-		with open(os.path.join("task_delta_0.2/matched_labels.log"), 'r') as label_file:
-            		for l in label_file:
-                		line_dict = eval(l)
-                		time = line_dict.keys()[0]
-                		label_dict[time] = line_dict[time]
-		with open(os.path.join("task_delta_0.01/matched_labels.log"), 'r') as label_file2:
-                        for l in label_file2:
-                                line_dict = eval(l)
-                                time = line_dict.keys()[0]
-                                label_dict[2] = line_dict[time]
+
+#		with open(os.path.join("task_delta_0.2/matched_labels.log"), 'r') as label_file:
+ #           		for l in label_file:
+#                		line_dict = eval(l)
+  #              		time = line_dict.keys()[0]
+ #               		label_dict[time] = line_dict[time]
+#		with open(os.path.join("task_delta_0.01/matched_labels.log"), 'r') as label_file2:
+ #                       for l in label_file2:
+  #                              line_dict = eval(l)
+   #                             time = line_dict.keys()[0]
+    #                            label_dict[2] = line_dict[time]
 
 		# check that there are three communities in snapshot 0
-		assert label_dict[0][1] == label_dict[0][2]
-		assert label_dict[0][1] == label_dict[0][5]
-		assert label_dict[0][6] == label_dict[0][7]
-		assert label_dict[0][6] == label_dict[0][7]
-		assert label_dict[0][11] == label_dict[0][12]
-		assert label_dict[0][11] == label_dict[0][13]
-		assert label_dict[0][16] == label_dict[0][17]
-		assert label_dict[0][16] == label_dict[0][18]
-		assert label_dict[0][1] != label_dict[0][6]
-		assert label_dict[0][1] != label_dict[0][11]
-		assert label_dict[0][1] != label_dict[0][16]
-		assert label_dict[0][6] != label_dict[0][11]
-		assert label_dict[0][6] != label_dict[0][16]
-		assert label_dict[0][11] == label_dict[0][16]
-		assert label_dict[0][11] == label_dict[0][18]
-		assert label_dict[0][11] == label_dict[0][20]
+		assert label_dict1[0][1] == label_dict1[0][2]
+		assert label_dict1[0][1] == label_dict1[0][5]
+		assert label_dict1[0][6] == label_dict1[0][7]
+		assert label_dict1[0][6] == label_dict1[0][7]
+		assert label_dict1[0][11] == label_dict1[0][12]
+		assert label_dict1[0][11] == label_dict1[0][13]
+		assert label_dict1[0][16] == label_dict1[0][17]
+		assert label_dict1[0][16] == label_dict1[0][18]
+		assert label_dict1[0][1] != label_dict1[0][6]
+		assert label_dict1[0][1] != label_dict1[0][11]
+		assert label_dict1[0][1] != label_dict1[0][16]
+		assert label_dict1[0][6] != label_dict1[0][11]
+		assert label_dict1[0][6] != label_dict1[0][16]
+		assert label_dict1[0][11] == label_dict1[0][16]
+		assert label_dict1[0][11] == label_dict1[0][18]
+		assert label_dict1[0][11] == label_dict1[0][20]
 
 		#check that there are four communities in snapshot 1, if delta is 0.2
-		assert label_dict[1][1] == label_dict[1][2]
-                assert label_dict[1][1] == label_dict[1][5]
-                assert label_dict[1][6] == label_dict[1][7]
-                assert label_dict[1][6] == label_dict[1][7]
-                assert label_dict[1][11] == label_dict[1][12]
-                assert label_dict[1][11] == label_dict[1][13]
-                assert label_dict[1][16] == label_dict[1][17]
-                assert label_dict[1][16] == label_dict[1][18]
-                assert label_dict[1][1] != label_dict[1][6]
-                assert label_dict[1][1] != label_dict[1][11]
-                assert label_dict[1][1] != label_dict[1][16]
-                assert label_dict[1][6] != label_dict[1][11]
-                assert label_dict[1][6] != label_dict[1][16]
-                assert label_dict[1][11] != label_dict[1][16]
-                assert label_dict[1][11] != label_dict[1][18]
-                assert label_dict[1][11] != label_dict[1][20]
+		assert label_dict1[1][1] == label_dict1[1][2]
+                assert label_dict1[1][1] == label_dict1[1][5]
+                assert label_dict1[1][6] == label_dict1[1][7]
+                assert label_dict1[1][6] == label_dict1[1][7]
+                assert label_dict1[1][11] == label_dict1[1][12]
+                assert label_dict1[1][11] == label_dict1[1][13]
+                assert label_dict1[1][16] == label_dict1[1][17]
+                assert label_dict1[1][16] == label_dict1[1][18]
+                assert label_dict1[1][1] != label_dict1[1][6]
+                assert label_dict1[1][1] != label_dict1[1][11]
+                assert label_dict1[1][1] != label_dict1[1][16]
+                assert label_dict1[1][6] != label_dict1[1][11]
+                assert label_dict1[1][6] != label_dict1[1][16]
+                assert label_dict1[1][11] != label_dict1[1][16]
+                assert label_dict1[1][11] != label_dict1[1][18]
+                assert label_dict1[1][11] != label_dict1[1][20]
 
 		#check that there are three communities in snapshop 1, if delta is 0.01
-                assert label_dict[2][1] == label_dict[2][2]
-                assert label_dict[2][1] == label_dict[2][5]
-                assert label_dict[2][6] == label_dict[2][7]
-                assert label_dict[2][6] == label_dict[2][7]
-                assert label_dict[2][11] == label_dict[2][12]
-                assert label_dict[2][11] == label_dict[2][13]
-                assert label_dict[2][16] == label_dict[2][17]
-                assert label_dict[2][16] == label_dict[2][18]
-                assert label_dict[2][1] != label_dict[2][6]
-                assert label_dict[2][1] != label_dict[2][11]
-                assert label_dict[2][1] != label_dict[2][16]
-                assert label_dict[2][6] != label_dict[2][11]
-                assert label_dict[2][6] != label_dict[2][16]
-                assert label_dict[2][11] == label_dict[2][16]
-                assert label_dict[2][11] == label_dict[2][18]
-                assert label_dict[2][11] == label_dict[2][20] 
+                assert label_dict2[1][1] == label_dict2[1][2]
+                assert label_dict2[1][1] == label_dict2[1][5]
+                assert label_dict2[1][6] == label_dict2[1][7]
+                assert label_dict2[1][6] == label_dict2[1][7]
+                assert label_dict2[1][11] == label_dict2[1][12]
+                assert label_dict2[1][11] == label_dict2[1][13]
+                assert label_dict2[1][16] == label_dict2[1][17]
+                assert label_dict2[1][16] == label_dict2[1][18]
+                assert label_dict2[1][1] != label_dict2[1][6]
+                assert label_dict2[1][1] != label_dict2[1][11]
+                assert label_dict2[1][1] != label_dict2[1][16]
+                assert label_dict2[1][6] != label_dict2[1][11]
+                assert label_dict2[1][6] != label_dict2[1][16]
+                assert label_dict2[1][11] == label_dict2[1][16]
+                assert label_dict2[1][11] == label_dict2[1][18]
+                assert label_dict2[1][11] == label_dict2[1][20] 
 
 		os.system("rm -r task_delta_0.01")
 		os.system("rm -r task_delta_0.2")
