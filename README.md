@@ -7,11 +7,12 @@ More details in http://arxiv.org/abs/1203.5126
 ## Dependencies
 
 ### Ubuntu
-* python-networkx
 * python-scipy
 * python-numpy
 * python-matplotlib
 
+### Pip
+* networks (Note: Ubuntu's python-networkx package is out of date and will not work)
 
 ### Standard Python Library
 * types
