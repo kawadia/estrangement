@@ -6,7 +6,8 @@ This module implements various functions used to compute and plot temporal commu
 
 __all__ = ['graph_distance','node_graph_distance','estrangement','match_labels','confidence_interval']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+                            'Sameet Sreenivasan <sreens@rpi.edu>',
+                            'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>

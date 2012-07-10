@@ -5,7 +5,8 @@ import argparse
 
 __all__ = ['parse_args','add_options']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+                            'Sameet Sreenivasan <sreens@rpi.edu>',
+                            'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>

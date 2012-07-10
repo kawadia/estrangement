@@ -4,7 +4,8 @@
 
 __all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas','layout']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+                            'Sameet Sreenivasan <sreens@rpi.edu>',
+                            'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
@@ -247,9 +248,6 @@ def plot_function(listNames,image_extension="svg"):
             for k in sorted(concat_datadict[label].keys(),key=int):
                 dictX[label].append(int(k))
                 dictY[label].append(concat_datadict[label][k])
-    print("dicts:")
-    print(dictX)
-    print(dictY)
 
     plot_by_param(dictX, dictY, fname='%s.%s'%('-'.join(listNames), image_extension),
         listLinestyles=['bo-', 'ro-', 'go-', 'mo-', 'ko-', 'yo-', 'co-',
@@ -317,7 +315,7 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
 
 
-def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[],partition_file="matched_labels.log",delta_to_use_for_node_ordering=1.0,label_sorting_keyfunc="random",nodeorder=None):
+def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[],delta_to_use_for_node_ordering=1.0,label_sorting_keyfunc="random",nodeorder=None):
 
     """ Function to perform the necessary preprocessing before plotting 
     the tiled plots for all simulation parameters. 
@@ -332,9 +330,6 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
 	If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
-    partition_file : string, optional
-	Name of the file which contains the community labels of each node at each
-	timestamp in the simulation. There will be one such file in each task folder.
     delta_to_use_for_node_ordering : float, optional
 	The value of delta used to order nodes for all temporal community plots
     label_sorting_keyfunc : string, optional
@@ -381,22 +376,20 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
 
         taskdir = "task_delta_" + str(delta)
         temporal_label_dict = {}  # key = (node, time) val, = label
-       
+
+ 
 	# populate 'temporal_label_dict' based on 'matched_labels' 
-        for labelling in matched_labels[delta]:
-                line_dict = eval(labelling)
-                time = line_dict.keys()[0]
-		print("time: %s"%time)
-                label_dict = line_dict.values()[0]
-		print("labelling: %s"%label_dict)
+      
+	for time in matched_labels[str(delta)].keys():
+		labelling = matched_labels[str(delta)][time]
 
                 all_times_set.add(time) 
                 
-                for n,l in label_dict.items():
+                for n,l in labelling.items():
                     temporal_label_dict[(n,time)] = l
 
                 if delta == delta_to_use_for_node_ordering :
-                    for n,l in label_dict.items():
+                    for n,l in labelling.items():
                         label_time_series_dict[n].append(l)
                         appearances_dict[n].append(time) 
        
@@ -467,11 +460,13 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     return node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict
 
 
-def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tiled_figsize='(36,16)',manual_colormap=None,label_cmap='Paired',frameon=True,xlabel="Time",ylabel="Node ID",label_fontsize=20,show_title=True,fontsize=28,colorbar=True,show_yticklabels=False,nodelabel_func=None,xtick_separation=5,snapshotlabel_func=None,wspace=0.2,bottom=0.1,image_extension="svg",dpi=200,display_on=True):
+def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tiled_figsize='(36,16)',manual_colormap=None,label_cmap='Paired',frameon=True,xlabel="Time",ylabel="Node ID",label_fontsize=20,show_title=True,fontsize=28,colorbar=False,show_yticklabels=False,nodelabel_func=None,xtick_separation=5,snapshotlabel_func=None,wspace=0.2,bottom=0.1,image_extension="svg",dpi=200,display_on=True):
     """ Module to create tiled plots for different values of paramters.
 
     Parameters
     ----------
+    matched_labels : dictionary {delta : {time : {node : label}}}
+	Dictionary containing the labelling of each node, at each snapshot for each value of delta.
     nodes of interest : list of integers, optional
         If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node

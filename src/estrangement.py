@@ -12,7 +12,8 @@ For a desciption of ERA reference [1]:
 
 __all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                            'Sameet Sreenivasan <sreens@rpi.edu>'])
+                            'Sameet Sreenivasan <sreens@rpi.edu>',
+			    'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
@@ -228,7 +229,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500):
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
 
     """ The Estrangement Reduction Algorithm.
     Detects temporal communities and output the results to file for further processing. 
@@ -258,6 +259,8 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 	The size of a step in the LPA.
     maxfun: integer, optional
 	The maximum number of function calls made to optimize lambda.
+    write_stats, optional
+	If 'True', the stats are written to files named <stat>.log
 
     Returns
     -------
@@ -281,11 +284,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     with open("options.log", 'w') as optf:
         optf.write("{'delta':" + str(delta) + "}")
 
- 
-    #open files to log results
-    label_file = open("labels.log", 'w')
-#    matched_label_file = open("matched_labels.log", 'w')
-    
     matched_labels = {}
 
     snapstats = SnapshotStatistics()
@@ -323,7 +321,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             snapstats.Qstar[t] = max(dictQ0.values())
 
             # store some stats for optimization over lambda for a given snapshot this is 
-	    # kept for analysis purposes, not strictly required for solvin the problem
+	    # kept for analysis purposes, not strictly required for solving the problem
             label_dict_lam = {} # key = lambduh, val = dictPartition where key = run number val = label_dict
             Qlam = {} # key = lambduh, val = dictQ where key = run number val = Q
             Elam = {} # key = lambduh, val = dictE where key = run number val = E
@@ -421,8 +419,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
         matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
         matched_labels.update({t:matched_label_dict})
-#        matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
-        label_file.write("{%d:%s}\n" % (t,str(label_dict)))
 
         snapstats.GD[t] = utils.graph_distance(g0, g1, True)
         snapstats.Node_GD[t] = utils.node_graph_distance(g0, g1)
@@ -445,21 +441,11 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
         snapshot_number += 1
 
         # end for t, g1 in ......
-
-    for statname, statobj in vars(snapstats).items():
-        with open('%s.log'%statname, 'w') as fout:
-            pprint.pprint(statobj, stream=fout) 
-
-    label_file.close()
-#    matched_label_file.close()
-    
-    summary_dict = { 
-      'num_nodes': len(nodename_set),
-      'snapshots_list': snapshots_list,
-    }  
-
-    with open("summary.log", 'w') as summary_file:
-        summary_file.write(str(summary_dict))
+	
+    if write_stats: 
+    	for statname, statobj in vars(snapstats).items():
+            with open('%s.log'%statname, 'w') as fout:
+            	pprint.pprint(statobj, stream=fout) 
 
     os.chdir('../')
     return matched_labels
@@ -467,8 +453,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 class SnapshotStatistics():
   """ Helper class used to aggregate results. """
   def __init__(self):
-      self.VI = {}  	# key = time t, val = VI between partitions t and t-1
-      self.VL = {} 	# key = time t, val = Variation of labels between partitions t and t-1
       self.GD = {}  	# key = time t, val = Graph distance between graphs t and t-1
       self.Node_GD = {}	# key = time t, val = Node graph distance between graphs t and t-1
       self.NumComm = {}	# key = time t, val = Number of communities at time t

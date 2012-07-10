@@ -13,32 +13,30 @@ import estrangement
 
 
 opt = optionsadder.parse_args()
-#deltas = [0.01,0.025]
-deltas = [0.5]
+deltas = [0.01,0.025,0.05,1.0]
+#deltas = [0.5]
 matched_labels_dict = {}
-
-print(opt.maxfun)
-print(opt.increpeats)
 
 for d in deltas:
 	# check if the matched_labels.log file file exists, and prompt the user if it does 
         if(os.path.isfile("task_delta_" + str(d) + "/matched_labels.log")):
-	    use_log = raw_input("Do you wish to use the existing log files? [Y/n]")
+	    use_log = raw_input("Do you wish to use the existing log files for delta=%s? [Y/n]"%d)
 	    if(use_log != 'n'):
 		with open("task_delta_" + str(d) + "/matched_labels.log", 'r') as ml:
                 	matched_labels = ml.read()
-			print(matched_labels)
-			break
+			matched_labels_dict[str(d)] = eval(matched_labels)
+#			print(matched_labels)
+			continue
 	# run the simulation if the matched_labels.log file does not exist or the user specifies this is desired
-	matched_labels = estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
-        matched_labels_dict[d] = matched_labels
+	matched_labels = estrangement.ERA(dataset_dir='/home/sdabideen/estrangement/datasets/mit-realitymining/mitdata-weekly-snapshots-weighted-merged',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+        matched_labels_dict[str(d)] = matched_labels
 	matched_label_file = open("task_delta_" + str(d) +"/matched_labels.log", 'w')
         matched_label_file.write(str(matched_labels))
-	print(str(matched_labels))
+#	print(str(matched_labels))
 	matched_label_file.close()
 
  
-postpro.plot_temporal_communities(matched_labels)
+postpro.plot_temporal_communities(matched_labels_dict)
 
 exit()
 
