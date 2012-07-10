@@ -78,7 +78,7 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
         if beginning is True:
             # when called for the first time just return initial_label_dict
             if not os.path.exists(initial_label_dict_filename):
-                initial_label_dict = maxQ(g1,delta=delta,precedence_tiebreaking=precedence_tiebreaking,tolerance=tolerance,minrepeats=minrepeats)
+                initial_label_dict = maxQ(g1,precedence_tiebreaking=precedence_tiebreaking,tolerance=tolerance,minrepeats=minrepeats)
                 with open(initial_label_dict_filename, 'w') as lf:
                     lf.write(repr(initial_label_dict))
 
@@ -90,7 +90,7 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
             yield (t, g1, None)
 
 
-def maxQ(g1,delta=0.05,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
+def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
     """ Returns a partitioning of the input graph into communities 
     which maximizes the value of the quality function Q.
@@ -284,7 +284,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
  
     #open files to log results
     label_file = open("labels.log", 'w')
-    matched_label_file = open("matched_labels.log", 'w')
+#    matched_label_file = open("matched_labels.log", 'w')
     
     matched_labels = {}
 
@@ -421,7 +421,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
         matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
         matched_labels.update({t:matched_label_dict})
-        matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
+#        matched_label_file.write("{%d:%s}\n" % (t,str(matched_label_dict)))
         label_file.write("{%d:%s}\n" % (t,str(label_dict)))
 
         snapstats.GD[t] = utils.graph_distance(g0, g1, True)
@@ -451,7 +451,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             pprint.pprint(statobj, stream=fout) 
 
     label_file.close()
-    matched_label_file.close()
+#    matched_label_file.close()
     
     summary_dict = { 
       'num_nodes': len(nodename_set),

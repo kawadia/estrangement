@@ -22,7 +22,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   BSD license. 
 
 
-def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
+def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
 
     """Returns a graph with fewer distinct labels than the input graph.  
 
@@ -36,10 +36,6 @@ def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_lab
     ----------
     G : graph
 	Input NetworkX Graph.
-    delta : float
-	A measure allowed distance between the past community and the present community if
-        it is to be considered the same community. A smaller value of delta allows greater
-        differences in the graphs in order to preserve the communities of the previous snapshot.
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
@@ -78,9 +74,9 @@ def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_lab
 
     Examples
     --------
-    >>> labeling = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
-    >>> new_labeling = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, labelling, Z=current_Zgraph)
-    >>> list(lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
+    >>> labeling = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
+    >>> new_labeling = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, labelling, Z=current_Zgraph)
+    >>> list(lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
     [(0,1),(1,1),(2,2),(3,1)]
 
     """
@@ -110,12 +106,6 @@ def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_lab
     iteration = 0
     communities = set((label_dict.values()))
 
-    # The Quality function, Q, is modularity    
-    Q = agglomerate.modularity(label_dict, G)
-    E = utils.Estrangement(G, label_dict, Z)
-    F = Q - lambduh*E + lambduh*delta
-    logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
-        iteration, len(communities), Q, E, F)
 
     # For multiple orderings of node visitations, calculate the value of
     # the objective function, equation (6) in reference [1]. 
@@ -187,12 +177,6 @@ def lpa(G, delta, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_lab
             obj_fn_dict.clear()
 
         communities = set((label_dict.values()))
-        Q = agglomerate.modularity(label_dict, G)
-        E = utils.Estrangement(G, label_dict, Z)
-        F = Q - lambduh*E + lambduh*delta
-        logging.info("iteration=%d, num communities=%d, Q=%f, E=%f, F=%f ",
-            iteration, len(communities), Q, E, F)
-
 
         logging.debug("the communities are : %s", str(communities))
         if iteration > 4*G.number_of_edges():

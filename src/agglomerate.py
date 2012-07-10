@@ -257,7 +257,7 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
     F = -99999999.0
 
     while True :
-        partition = lpa.lpa(current_graph, delta, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
+        partition = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
 
         mod = modularity(partition, current_graph)
         E = utils.Estrangement(current_graph, partition, current_Zgraph)
