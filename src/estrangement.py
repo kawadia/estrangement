@@ -93,7 +93,7 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
         if beginning is True:
             # when called for the first time just return initial_label_dict
             if not os.path.exists(initial_label_dict_filename):
-                initial_label_dict = maxQ(g1,delta,precedence_tiebreaking=precedence_tiebreaking,tolerance=tolerance,minrepeats=minrepeats)
+                initial_label_dict = maxQ(g1,precedence_tiebreaking=precedence_tiebreaking,tolerance=tolerance,minrepeats=minrepeats)
                 with open(initial_label_dict_filename, 'w') as lf:
                     lf.write(repr(initial_label_dict))
 
@@ -105,7 +105,7 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
             yield (t, g1, None)
 
 
-def maxQ(g1,delta,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
+def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
     """ Returns a partitioning of the input graph into communities 
     which maximizes the value of the quality function Q.
@@ -114,10 +114,6 @@ def maxQ(g1,delta,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     ----------
     g1: networkx graph
 	The input graph.
-    delta: float
-        The temporal divergence. Smaller values imply greater emphasis on temporal
-        contiguity whereas larger values place greater emphasis on finding better
-        instanteous communities.
     minrepeats: integer
 	The number of variations to try before returning the best partition. 
     precedence_tiebreaking: boolean, optional
@@ -150,7 +146,7 @@ def maxQ(g1,delta,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     # do multiple runs and pick the best
     for r in range(10*minrepeats):
         # best_partition calls agglomerative lpa
-        dictPartition[r] = agglomerate.best_partition(g1,delta,tolerance,precedence_tiebreaking,lambduh, Zgraph)  # I removed an opt here
+        dictPartition[r] = agglomerate.best_partition(g1,delta=1.0,tolerance,precedence_tiebreaking,lambduh, Zgraph)  # I removed an opt here
         dictQ[r] = agglomerate.modularity(dictPartition[r], g1)
     logging.info("dictQ = %s", str(dictQ))
     bestr = max(dictQ, key=dictQ.get)
