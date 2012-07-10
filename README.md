@@ -1,5 +1,4 @@
-estrangement
-============
+# Estrangement
 
 Method to detect temporal communities in time-varying complex networks
 
