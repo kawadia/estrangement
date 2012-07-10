@@ -1,5 +1,5 @@
-estrangement_confinement
-========================
+estrangement
+============
 
 Method to detect temporal communities in time-varying complex networks
 
