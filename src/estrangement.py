@@ -123,7 +123,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     # do multiple runs and pick the best
     for r in range(10*minrepeats):
         # best_partition calls agglomerative lpa
-        dictPartition[r] = agglomerate.best_partition(g1,delta,tolerance,precedence_tiebreaking,lambduh, Zgraph)  # I removed an opt here
+        dictPartition[r] = agglomerate.best_partition(g1,tolerance,precedence_tiebreaking,lambduh, Zgraph)  # I removed an opt here
         dictQ[r] = agglomerate.modularity(dictPartition[r], g1)
     logging.info("dictQ = %s", str(dictQ))
     bestr = max(dictQ, key=dictQ.get)
