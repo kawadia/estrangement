@@ -34,14 +34,14 @@ def graph_distance(g0, g1, weighted=True):
     Parameters
     ----------
     g0,g1: graph
-	Input networkx graphs to be compared
+        Input networkx graphs to be compared
     weighted: bool
-	True if the edges of the graph are weighted, False otherwise
+        True if the edges of the graph are weighted, False otherwise
 
     Returns
     -------
     graph_distance: float
-	The Tanimoto distance between the nodes of g0 and g1
+        The Tanimoto distance between the nodes of g0 and g1
 
     Example
     -------
@@ -105,16 +105,16 @@ def Estrangement(G, label_dict, Zgraph):
     Parameters
     -----------
     G: graph
-	A networkx graph object (current snapshot)
+        A networkx graph object (current snapshot)
     label_dict: dictionary
-	key = node_identifier, value = community label
+        key = node_identifier, value = community label
     Zgraph: networkx.Graph
-	A graph containing edges between nodes of the same community in all previous snapshots
+        A graph containing edges between nodes of the same community in all previous snapshots
   
     Returns
     -------
     estrangement: float
-	the value of Q-tauE for the given input
+        the value of Q-tauE for the given input
  
     Note
     ----
@@ -161,14 +161,14 @@ def match_labels(label_dict, prev_label_dict):
     Parameters
     ----------
     label_dict: dictionary
-	{node:community} at time t
+        {node:community} at time t
     prev_label_dict: dictionary
-	{node:community} at time (t - 1)
+        {node:community} at time (t - 1)
 
     Returns
     -------
     matched_label_dict: dictionar {node:community} 
-	The new community labelling.
+        The new community labelling.
 
     Example
     -------

@@ -12,7 +12,7 @@ import agglomerate
 
 __all__ = ['lpa']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-	                    'Sameet Sreenivasan <sreens@rpi.edu>',
+                            'Sameet Sreenivasan <sreens@rpi.edu>',
                             'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
@@ -35,7 +35,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
     Parameters
     ----------
     G : graph
-	Input NetworkX Graph.
+        Input NetworkX Graph.
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
@@ -48,20 +48,20 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         Graph in each edges join nodes belonging to the same community over
         previous snapshots
     lambduh: 
-	The Lagrange multiplier.
+        The Lagrange multiplier.
     initial_label_dict : dictionary  {node_identifier:label,....}, optional
-	Initial labeling of the nodes in G.
+        Initial labeling of the nodes in G.
 
     Returns
     -------
     label_dict : dictionary  {node_identifier:label,....}
-	Modified labeling after running LPA on G and the initial labeling.
+        Modified labeling after running LPA on G and the initial labeling.
 
     Raises
     ------
     NetworkXError
-	If the keys in the initial labelling does not match the nodes of the graph. 
-	If the number of iterations is greater than 4 times the number of edges in the graph.
+        If the keys in the initial labelling does not match the nodes of the graph. 
+        If the number of iterations is greater than 4 times the number of edges in the graph.
 
     See Also
     --------
@@ -69,7 +69,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
 
 
     References
-    ----------  		
+    ----------                  
     .. [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities 
     in evolving networks by estrangement confinement", http://arxiv.org/abs/1203.5126.
 
@@ -87,18 +87,18 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         initial_label_dict = dict(zip(G.nodes(), G.nodes()))
     
     if sorted(initial_label_dict.keys()) != sorted(G.nodes()):
-	raise nx.NetworkXError("Invalid initial_label_dict")
+        raise nx.NetworkXError("Invalid initial_label_dict")
  
     two_m = float(2*G.size(weight='weight'))
 
     nodes = G.nodes()
-    label_dict = initial_label_dict.copy()		# key = nodeId, value = label 
-    degree_dict = G.degree(weight='weight')		# key = nodeId, value = degree of node
-    label_volume_dict = collections.defaultdict(float) 	# key = label, value = volume of that label (K_l)
-    term3_dict = collections.defaultdict(float) 	# key = label, value = ??
+    label_dict = initial_label_dict.copy()              # key = nodeId, value = label 
+    degree_dict = G.degree(weight='weight')             # key = nodeId, value = degree of node
+    label_volume_dict = collections.defaultdict(float)  # key = label, value = volume of that label (K_l)
+    term3_dict = collections.defaultdict(float)         # key = label, value = ??
     for v in G.nodes_iter():
         label_volume_dict[label_dict[v]] += G.degree(v, weight='weight')
-        term3_dict[v] = degree_dict[v]**2/two_m		
+        term3_dict[v] = degree_dict[v]**2/two_m         
 
     logging.debug("initial_labels: %s", str(label_dict)) 
     logging.debug("degree_dict: %s", str(degree_dict))
@@ -122,7 +122,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
                 continue
 
             obj_fn_dict = collections.defaultdict(float) 
-	    # key = label, value = objective function to maximize
+            # key = label, value = objective function to maximize
 
             for nbr,eattr in G[v].items():
                 # self loops are not included in the N_vl term
@@ -143,12 +143,12 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
                     
             logging.debug("node:%s, obj_fn_dict: %s", v, repr(obj_fn_dict))
             
-	    # get the highest weighted label
+            # get the highest weighted label
             maxwt = 0
             maxwt = max(obj_fn_dict.values())
             logging.debug("node:%s, maxwt: %f", str(v), maxwt)
-	
-	    # record only those labels with weight sufficiently close the maxwt	
+        
+            # record only those labels with weight sufficiently close the maxwt 
             dominant_labels = [ l for l in obj_fn_dict.keys()
                 if abs(obj_fn_dict[l] - maxwt) < tolerance ]
             
@@ -162,7 +162,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
                 # ties are broken randomly to pick THE dominant_label
                 the_dominant_label = random.choice(dominant_labels)
 
-	    # change the node's label to the dominant label if it is not already
+            # change the node's label to the dominant label if it is not already
             if label_dict[v] != the_dominant_label :
                 my_prev_label = label_dict[v]
                 label_dict[v] = the_dominant_label
@@ -181,7 +181,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
 
         logging.debug("the communities are : %s", str(communities))
         if iteration > 4*G.number_of_edges():
-	    raise nx.NetworkXError("Too many iterations: %d" % iteration)
+            raise nx.NetworkXError("Too many iterations: %d" % iteration)
     
     return label_dict
 

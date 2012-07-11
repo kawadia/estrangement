@@ -6,14 +6,14 @@ process information and output the results to file.
 
 For a desciption of ERA reference [1]:
 [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities in evolving networks by 
-				    estrangement confinement", http://arxiv.org/abs/1203.5126.
+                                    estrangement confinement", http://arxiv.org/abs/1203.5126.
 """
 
 __all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
-			    'Stephen Dabideen <dabideen@bbn.com>'])
+                            'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
@@ -31,7 +31,7 @@ import lpa
 import estrangement_utils
 import agglomerate
 import logging
-from multiprocessing import Queue,Process
+import multiprocessing
 
 
 itrepeats = 0
@@ -50,7 +50,7 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
     Parameters
     ----------
     datadir: string
-	path to the directory containing the dataset
+        path to the directory containing the dataset
     precedence_tiebreaking: boolean
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
@@ -60,16 +60,16 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
         value found for the quality function. The smaller it is, the fewer dominant labels there 
         will be. 
     minrepeats: integer
-        The number of variations to try before returning the best partition.	 	
+        The number of variations to try before returning the best partition.            
 
     Returns 
     ------- 
     t: list
-	an array of timestamps, each representing a snapshot of the communities
+        an array of timestamps, each representing a snapshot of the communities
     g1: networkx graph
-	the last graph to be read from file
+        the last graph to be read from file
     initial_label_dictionary: dictionary { node: community}
-	The community labels if it is the first snapshot, otherwise None
+        The community labels if it is the first snapshot, otherwise None
     """
 
     raw_file_list = os.listdir(datadir)
@@ -111,9 +111,9 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     Parameters
     ----------
     g1: networkx graph
-	The input graph.
+        The input graph.
     minrepeats: integer, optional
-	The number of variations to try before returning the best partition. 
+        The number of variations to try before returning the best partition. 
     precedence_tiebreaking: boolean, optional
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
@@ -127,7 +127,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     Returns
     -------
     dictPartition: dictionary {node:communitu}
-	The partitioning which results in the best value of the quality function: Q (which is modularity in this case)
+        The partitioning which results in the best value of the quality function: Q (which is modularity in this case)
 
     Example
     -------
@@ -160,14 +160,14 @@ def make_Zgraph(g0, g1, g0_label_dict):
     Parameters
     ----------
     g0, g1: networkx graphs
-	Graph of the current snapshop and previous Zgraph respectively
+        Graph of the current snapshop and previous Zgraph respectively
     g0_label_dict: dictionary
-	{node:community} for the nodes in g0
+        {node:community} for the nodes in g0
 
     Returns
     -------
     Z: graph
-	A Zgraph incoorperating the current snapshot into the previous Zgraph 
+        A Zgraph incoorperating the current snapshot into the previous Zgraph 
 
     Example
     -------
@@ -200,32 +200,32 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     Parameters
     ----------
     g1: networkx graph
-	The input graph
+        The input graph
     delta: float
         The temporal divergence. Smaller values imply greater emphasis on temporal
         contiguity whereas larger values place greater emphasis on finding better
         instanteous communities.
     tolerance: float
-	For a label to be considered a dominant label, it must be within this much of the maximum
+        For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
-	labels there will be.
+        labels there will be.
     tiebreaking: boolean
- 	This is only relevant when there are multiple dominant labels while running the LPA.
+        This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Zgraph: networkx graph
-	Graph in each edges join nodes belonging to the same community over
-     	previous snapshots
+        Graph in each edges join nodes belonging to the same community over
+        previous snapshots
     repeats: integer
-	The number of calls to be made to the LPA. 	
+        The number of calls to be made to the LPA.      
 
     Returns
     -------
-	dictPartition: List of dictionaries representing community labeling
- 	dictQ: List of values of Q corresponding to the above labeling
- 	dictE: List of values of E corresponding to the above labeling
- 	dictF: List of values of F corresponding to the above labeling
-	
+        dictPartition: List of dictionaries representing community labeling
+        dictQ: List of values of Q corresponding to the above labeling
+        dictE: List of values of E corresponding to the above labeling
+        dictF: List of values of F corresponding to the above labeling
+        
     Example
     -------
     >>> g0 = nx.Graph()
@@ -233,17 +233,17 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     >>> dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(g0, delta=0.05, tolerance=0.01, precedence_tiebreaking=False,lambduh=1,g0,repeats = 3)
     """
 
-    dictPartition = {} 	# key = run number, val = label_dict
-    dictQ = {} 		# key = run number, val = Q for that run
-    dictE = {} 		# key = run number, val = E for that run
-    dictF = {} 		# key = run number, val = F for that run
+    dictPartition = {}  # key = run number, val = label_dict
+    dictQ = {}          # key = run number, val = Q for that run
+    dictE = {}          # key = run number, val = E for that run
+    dictF = {}          # key = run number, val = F for that run
     q = Queue() 
     # the for loop below does repeat number of runs to find the best F using
     # agglomerate lpa. Node visitation order is randomized in the LPA thus
     # giving potentially different results each run. 
     for r in range(repeats):
-        p = Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
-	p.start()
+        p = multiprocessing.Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
+        p.start()
 
     for r in range(repeats):
         r_partition = q.get()
@@ -254,7 +254,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=Queue()):
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
 
     """ The Estrangement Reduction Algorithm.
     Detects temporal communities and output the results to file for further processing. 
@@ -262,39 +262,39 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     Parameters
     ----------
     dataset_dir: string
-	Path to the relevant dataset files
+        Path to the relevant dataset files
      precedence_tiebreaking: boolean,optional
-	This is only relevant when there are multiple dominant labels while running the LPA.
-	If it is set to 'True', the dominant label is set dominant label most recently seen. 
-	If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     tolerance: float,optional
-	For a label to be considered a dominant label, it must be within this much of the maximum
-	value found for the quality function. The smaller it is, the fewer dominant labels there 
-	will be. 
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller it is, the fewer dominant labels there 
+        will be. 
     convergence_tolerance: float,optional
-	The convergence tolerance used in optimizing the value of lambda.
+        The convergence tolerance used in optimizing the value of lambda.
     delta: float
         The temporal divergence. Smaller values imply greater emphasis on temporal
         contiguity whereas larger values place greater emphasis on finding better
         instanteous communities.
     minrepeats: integer,optional
-	The number of times to call LPA. Each call increases the likilhood of finding the optimal
-	partition, however, such a partition may be found with few calls depending on the graph. 
+        The number of times to call LPA. Each call increases the likilhood of finding the optimal
+        partition, however, such a partition may be found with few calls depending on the graph. 
     increpeats: integer,optional
-	The size of a step in the LPA.
+        The size of a step in the LPA.
     maxfun: integer, optional
-	The maximum number of function calls made to optimize lambda.
+        The maximum number of function calls made to optimize lambda.
     write_stats, optional
-	If 'True', the stats are written to files named <stat>.log
- 	These logs are not needed to plot temporal communities but are needed to plot other stats. 
+        If 'True', the stats are written to files named <stat>.log
+        These logs are not needed to plot temporal communities but are needed to plot other stats. 
     q : multiprocessing.Queue
-	Queue to store the results, to be shared across all threads
+        Queue to store the results, to be shared across all threads
 
     Returns
     -------
     matched_labels : dictionary {time: {node:label}}
-	The labelling of each node for each snapshot
-	
+        The labelling of each node for each snapshot
+        
     Example
     -------
     >>> ERA(dataset_dir='tests/sample_data',delta=0.001)
@@ -303,7 +303,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     # set up directory structure for this delta
     dir_name = 'task_delta_' + str(delta)
     if(not os.path.exists(dir_name)):
-    	os.mkdir(dir_name)
+        os.mkdir(dir_name)
     os.chdir(dir_name)
 
     # The results from each set of parameters are written to a unique folder,
@@ -323,8 +323,8 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     beginning = True
     snapshot_number = 0
     for t, g1, initial_label_dict in read_general(dataset_dir, 
-			precedence_tiebreaking=precedence_tiebreaking,
-			tolerance=tolerance,minrepeats=minrepeats):
+                        precedence_tiebreaking=precedence_tiebreaking,
+                        tolerance=tolerance,minrepeats=minrepeats):
         
         snapshots_list.append(t)
         nodename_set.update(g1.nodes())
@@ -349,7 +349,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             snapstats.Qstar[t] = max(dictQ0.values())
 
             # store some stats for optimization over lambda for a given snapshot this is 
-	    # kept for analysis purposes, not strictly required for solving the problem
+            # kept for analysis purposes, not strictly required for solving the problem
             label_dict_lam = {} # key = lambduh, val = dictPartition where key = run number val = label_dict
             Qlam = {} # key = lambduh, val = dictQ where key = run number val = Q
             Elam = {} # key = lambduh, val = dictE where key = run number val = E
@@ -399,8 +399,8 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
                 # get next highest lambda
                 next_highest_lambduh = listLambduhs[current_index + 1]
-	        if(current_index + 1 > len(listLambduhs)):
-			raise nx.NetworkXError("Ran out of values for lambduh")	
+                if(current_index + 1 > len(listLambduhs)):
+                        raise nx.NetworkXError("Ran out of values for lambduh") 
 
                 # add those to dictFeasibleFs 
                 dictFeasibleFs.update(dict([((next_highest_lambduh, r), F) 
@@ -469,11 +469,11 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
         snapshot_number += 1
 
         # end for t, g1 in ......
-	
+        
     if write_stats: 
-    	for statname, statobj in vars(snapstats).items():
+        for statname, statobj in vars(snapstats).items():
             with open('%s.log'%statname, 'w') as fout:
-            	pprint.pprint(statobj, stream=fout) 
+                pprint.pprint(statobj, stream=fout) 
 
     os.chdir('../')
     ret_dict = {}
@@ -484,24 +484,24 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 class SnapshotStatistics():
   """ Helper class used to aggregate results. """
   def __init__(self):
-      self.GD = {}  	# key = time t, val = Graph distance between graphs t and t-1
-      self.Node_GD = {}	# key = time t, val = Node graph distance between graphs t and t-1
-      self.NumComm = {}	# key = time t, val = Number of communities at time t
-      self.Q = {}  	# key = time t, val = Modularity of partition at t
-      self.Qstar = {}  	# key = time t, val = Modularity of partition at t with tau=0
-      self.F = {}  	# key = time t, val = F of partition at t
+      self.GD = {}      # key = time t, val = Graph distance between graphs t and t-1
+      self.Node_GD = {} # key = time t, val = Node graph distance between graphs t and t-1
+      self.NumComm = {} # key = time t, val = Number of communities at time t
+      self.Q = {}       # key = time t, val = Modularity of partition at t
+      self.Qstar = {}   # key = time t, val = Modularity of partition at t with tau=0
+      self.F = {}       # key = time t, val = F of partition at t
       self.StrengthConsorts = {}# key = time t, val = strength of consorts at time t
-      self.NumConsorts = {} 	# key = time t, val = Num of conorts at time t
-      self.Estrangement = {} 	# key = time t, val = number of estranged edges at time t
-      self.lambdaopt = {} 	# key = time t, lambdaopt found via solving the dual problem
+      self.NumConsorts = {}     # key = time t, val = Num of conorts at time t
+      self.Estrangement = {}    # key = time t, val = number of estranged edges at time t
+      self.lambdaopt = {}       # key = time t, lambdaopt found via solving the dual problem
       self.best_feasible_lambda = {} # key = time t, lambdaopt found via solving the dual problem
-      self.numfunc = {} 	# key = time t, Number of function evaluations needed for solving the dual
-      self.ierr = {} 		# key = time t, convergence of the dual
-      self.feasible = {} 	# key = time t, convergence of the dual
-      self.NumNodes = {}	# key = time t, val = number of nodes in the graph
-      self.NumEdges = {}	# key = time t, val = number of edges in the graph
-      self.Size = {}		# key = time t, val = sum of the weight of the edges in the graph 
-      self.NumComponents = {}	# key = time t, val = number of connected components in the graph 
+      self.numfunc = {}         # key = time t, Number of function evaluations needed for solving the dual
+      self.ierr = {}            # key = time t, convergence of the dual
+      self.feasible = {}        # key = time t, convergence of the dual
+      self.NumNodes = {}        # key = time t, val = number of nodes in the graph
+      self.NumEdges = {}        # key = time t, val = number of edges in the graph
+      self.Size = {}            # key = time t, val = sum of the weight of the edges in the graph 
+      self.NumComponents = {}   # key = time t, val = number of connected components in the graph 
       self.LargestComponentsize = {}  # key = time t, val = number of nodes in the largest component
       self.Qdetails = {} # {'time': {'lambduh': {'run_number': Q}}}
       self.Edetails = {} # {'time': {'lambduh': {'run_number': E}}}

@@ -22,7 +22,7 @@ import types
 import lpa
 import logging
 from estrangement_utils import Estrangement
-from multiprocessing import Queue
+import multiprocessing
 
 def partition_at_level(dendogram, level) :
 
@@ -134,7 +134,7 @@ def modularity(partition, graph) :
     return res
 
 
-def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None,q=Queue()) :
+def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None,q=multiprocessing.Queue()) :
 
     """Function to compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices.
@@ -158,13 +158,13 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
         value found for the quality function. The smaller it is, the fewer dominant labels there 
         will be. 
     lambduh: float
-	The Lagrange multiplier.
+    The Lagrange multiplier.
     Zgraph : networkx.Graph
-	A graph containing edges between nodes of the same community in all previous snapshots
+    A graph containing edges between nodes of the same community in all previous snapshots
     Partition: dictionary {node : community label}
-	The current labelling of the nodes in the graph
+    The current labelling of the nodes in the graph
     q : Queue (from multiprocessing)
-	A queue used to store the results from multiple processes
+    A queue used to store the results from multiple processes
 
     Returns
     -------
@@ -328,7 +328,7 @@ def induced_graph(partition, graph, zgraph) :
     Zgraph : networkx.Graph
         A graph containing edges between nodes of the same community in all previous snapshots
         The current labelling of the nodes in the graph
-	
+    
 
     Returns
     -------

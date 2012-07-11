@@ -29,26 +29,26 @@ import logging
 from estrangement_utils import match_labels
 
 markers = [
-  'o'	,
-  'v'	,
-  '^'	,
-  '<'	,
-  '>'	,
-  '1'	,
-  '2'	,
-  '3'	,
-  '4'	,
-  's'	,
-  'p'	,
-  '*'	,
-  'h'	,
-  'H'	,
-  '+'	,
-  'x'	,
-  'D'	,
-  'd'	,
-  '|'	,
-  '_'	,
+  'o'   ,
+  'v'   ,
+  '^'   ,
+  '<'   ,
+  '>'   ,
+  '1'   ,
+  '2'   ,
+  '3'   ,
+  '4'   ,
+  's'   ,
+  'p'   ,
+  '*'   ,
+  'h'   ,
+  'H'   ,
+  '+'   ,
+  'x'   ,
+  'D'   ,
+  'd'   ,
+  '|'   ,
+  '_'   ,
 ]
 
 
@@ -66,7 +66,7 @@ def GetDeltas():
     Returns
     -------
     deltas : list
-	each member of the list is a float denoting a value of delta used in ERA
+        each member of the list is a float denoting a value of delta used in ERA
 
     Example
     -------
@@ -81,11 +81,11 @@ def GetDeltas():
             continue
         if not dirname.startswith("task"):
             continue
-	infile = open(os.path.join(dirname, "options.log"), 'r')
-	for l in infile:
-		dictOptions = eval(l)
-		delta = dictOptions['delta']
-	deltas.append(delta)
+        infile = open(os.path.join(dirname, "options.log"), 'r')
+        for l in infile:
+                dictOptions = eval(l)
+                delta = dictOptions['delta']
+        deltas.append(delta)
     deltas.sort()
     return(deltas)
 
@@ -99,41 +99,41 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
     Parameters
     ----------
     dictX : dictionary {string : iterable}
-	The X values of a set of lines to be plotted and their respective label
+        The X values of a set of lines to be plotted and their respective label
     dictY : dictionary {string : iterable}
-	The Y values of a set of lines to be plotted and their respective label
+        The Y values of a set of lines to be plotted and their respective label
     deltas : list of floats
-	The values of delta used for ERA for which there are results
+        The values of delta used for ERA for which there are results
     linewidth : float, optional
-	The desired font size of the lines to be plotted
+        The desired font size of the lines to be plotted
     markersize : float, optional
-	The size of the markers used on each line
+        The size of the markers used on each line
     label_fontsize : integer, optional
-	The size of the font used for the labels
+        The size of the font used for the labels
     xfigsize : float, optional
-	The desired length of the x-axis
+        The desired length of the x-axis
     yfigsize : float, optional
-	The desired length of the y-axis
+        The desired length of the y-axis
     fontsize : integer, optional
-	The size of the font to be used in the figure
+        The size of the font to be used in the figure
     fname : string, optional
-	The file is saved with this name
+        The file is saved with this name
     listLinesstyles : list of strings, optional
-	A list consisting of the line styles to be used in the figures
+        A list consisting of the line styles to be used in the figures
     xlabel : string, optional
-	The label to appear on the x-axis
+        The label to appear on the x-axis
     ylabel : string, optional 
-	The label to appear on the y-axis
+        The label to appear on the y-axis
     title : string, optional
-	The title of the figure
+        The title of the figure
     xscale : string, optional
-	The type of scale to be used on the x-axis 
+        The type of scale to be used on the x-axis 
     yscale : string, optional
-	The type of scale to be used on the y-axis	
+        The type of scale to be used on the y-axis      
     dictErr : Dictionary {string : iterable}
-	Dictionary containing the Error Bars to be plotted on each line
+        Dictionary containing the Error Bars to be plotted on each line
     display_on : boolean
- 	If True, the graph is shown on the screen	
+        If True, the graph is shown on the screen       
 
     Example
     -------
@@ -202,9 +202,9 @@ def plot_function(listNames,image_extension="svg"):
     Parameters
     ----------
     listNames : list of strings
-	Each string is an attribute to be plotted e.g. 'Estrangement','Q','F' etc.
+        Each string is an attribute to be plotted e.g. 'Estrangement','Q','F' etc.
     image_extension : string, optional
-	The extension of the plot file to be saved.
+        The extension of the plot file to be saved.
 
     Returns
     ------- 
@@ -213,7 +213,7 @@ def plot_function(listNames,image_extension="svg"):
     Note
     ----
     The function reads the relevant input data from file and formats it. 
-    The actual plotting is done in 'plot_by_param'.	
+    The actual plotting is done in 'plot_by_param'.     
 
     Examples
     --------
@@ -226,11 +226,11 @@ def plot_function(listNames,image_extension="svg"):
    
     task_list = []
     for dirname in os.listdir(os.getcwd()):
-    	if not os.path.isdir(dirname):
-    	    continue
-    	if not dirname.startswith("task"):
-      	    continue
-    	task_list.append(dirname)
+        if not os.path.isdir(dirname):
+            continue
+        if not dirname.startswith("task"):
+            continue
+        task_list.append(dirname)
 
     dictX = collections.defaultdict(list)
     dictY = collections.defaultdict(list)
@@ -246,9 +246,9 @@ def plot_function(listNames,image_extension="svg"):
             avg_datadict[label] = collections.defaultdict(float)
 
             with open(os.path.join(task,"%s.log"%name), 'r') as infile:
-             	data_dict = eval(infile.read())
+                data_dict = eval(infile.read())
             for t in data_dict.keys():
-               	concat_datadict[label][t] = data_dict[t]
+                concat_datadict[label][t] = data_dict[t]
 
             for k in sorted(concat_datadict[label].keys(),key=int):
                 dictX[label].append(int(k))
@@ -266,14 +266,14 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
     """ Plots avg Q*-E vs delta to get insights into the best delta.
    
     This module merely processes the data, the plotting is done by 'plot_by_param'.
-	
+        
     Parameters
     ----------
     image_extension : string
-	The extension of the plot file to be saved
+        The extension of the plot file to be saved
     deltas : list of floats, optional
-	The values of deltas used in the simulation. If delta is not
- 	specifed, 'GetDeltas' is called to create the list. 
+        The values of deltas used in the simulation. If delta is not
+        specifed, 'GetDeltas' is called to create the list. 
 
     Returns
     -------
@@ -299,7 +299,7 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
     # Get the values of delta used in the simulations if it is not specified
     if(len(deltas) == 0): 
-    	deltas = GetDeltas()
+        deltas = GetDeltas()
 
     for delta in deltas:
         with open("./task_delta_" + str(delta) + "/Q.log", 'r') as f:
@@ -336,26 +336,26 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     matched_labels : dictionary {delta:{time: {node:label}}}
         The labelling of each node for each snapshot
     deltas : list of floats,optional
-	The values of delta used in the simulation. 
+        The values of delta used in the simulation. 
     nodes of interest : list of integers, optional
-	If nodes_of_interest is not an empty list then show egocentric view of the
+        If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
     delta_to_use_for_node_ordering : float, optional
-	The value of delta used to order nodes for all temporal community plots
+        The value of delta used to order nodes for all temporal community plots
     label_sorting_keyfunc : string, optional
         Method used to order the labels to be plotted
 
     Returns
     -------
     node_index_dict : dictionary {nodename:index_value}
-	A dictionary mapping nodenames to index values, which are to be plotted 
+        A dictionary mapping nodenames to index values, which are to be plotted 
     t_index_dict : dictionary {timestamp : index_value)
-	A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted
+        A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted
     label_index_dict : dictionary {label : index_value}
-	A dictionary mapping community labels to an index value, which are to be plotted
+        A dictionary mapping community labels to an index value, which are to be plotted
     labels_of_interest_dict : dictionary {delta : labels}
-	Dictionary mapping delta to the labels of 'nodes_of_interest' for that delta 
+        Dictionary mapping delta to the labels of 'nodes_of_interest' for that delta 
 
     Example
     -------
@@ -369,7 +369,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     """
 
     if(len(deltas) == 0):
-    	deltas = GetDeltas()
+        deltas = GetDeltas()
     
     all_labels_set = set()
     appearing_nodes_set = set()
@@ -389,10 +389,10 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
         temporal_label_dict = {}  # key = (node, time) val, = label
 
  
-	# populate 'temporal_label_dict' based on 'matched_labels' 
+        # populate 'temporal_label_dict' based on 'matched_labels' 
       
-	for time in matched_labels[str(delta)].keys():
-		labelling = matched_labels[str(delta)][time]
+        for time in matched_labels[str(delta)].keys():
+                labelling = matched_labels[str(delta)][time]
 
                 all_times_set.add(time) 
                 
@@ -409,13 +409,13 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
         prev_temporal_label_dict = matched_temporal_label_dict 
         all_labels_set.update(matched_temporal_label_dict.values()) 
 
-	# Write the temporal_labels and matched_temporal_labels to file
+        # Write the temporal_labels and matched_temporal_labels to file
         with open(os.path.join(taskdir,"temporal_labels.log"), 'w') as f:
             f.write(repr(temporal_label_dict)) 
         with open(os.path.join(taskdir,"matched_temporal_labels.log"), 'w') as f:
             f.write(repr(matched_temporal_label_dict))
 
-	# keep track of all the labels taken over time by nodes_of_interest 
+        # keep track of all the labels taken over time by nodes_of_interest 
         if nodes_of_interest:
             for (n,t), l in matched_temporal_label_dict.items():
                 if n in nodes_of_interest:
@@ -426,7 +426,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
 
     # safety check that there are simulation results for the delta value used in ordering        
     if(len(appearances_dict) == 0):
-	raise ValueError("The 'delta_to_use_for_node_ordering' parameter must be one of the deltas used in simulation")	
+        raise ValueError("The 'delta_to_use_for_node_ordering' parameter must be one of the deltas used in simulation") 
 
     if nodeorder is not None:
         ordered_nodes = eval(nodeorder)
@@ -477,52 +477,52 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     Parameters
     ----------
     matched_labels : dictionary {delta : {time : {node : label}}}
-	Dictionary containing the labelling of each node, at each snapshot for each value of delta.
+        Dictionary containing the labelling of each node, at each snapshot for each value of delta.
     nodes of interest : list of integers, optional
         If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
     deltas : list of floats, optional
         The values of delta used for ERA for which there are results. This list
-	can be derived from files created during simulation if it is not specified. 
+        can be derived from files created during simulation if it is not specified. 
     tiled_figsize : string, optional
-	Dimensions of the figure to be plotted.
+        Dimensions of the figure to be plotted.
     manual_colormap : dictionary, optional 
-	Maps labels to colors. If not specified, one is returned from 'matlibplot.cm.get_cmap'.
+        Maps labels to colors. If not specified, one is returned from 'matlibplot.cm.get_cmap'.
     label_cmap : string, optional
-	The name of a colors.Colormap instance, used by 'matlibplot.cm.get_cmap'.
+        The name of a colors.Colormap instance, used by 'matlibplot.cm.get_cmap'.
     frameon : boolean, optional
-  	If False, suppress drawing the figure frame in the subplots.
+        If False, suppress drawing the figure frame in the subplots.
     xlabel : string, optional
-	Label to appear on the x axis. This is set to 'Time' by default.
+        Label to appear on the x axis. This is set to 'Time' by default.
     ylabel : string, optional 
-	Label to appear on the y axis. This is set to 'Node ID' by default.
+        Label to appear on the y axis. This is set to 'Node ID' by default.
     label_fontsize : integer, optional
-	The size of the font used for the labels. This is set to 20 by default. 
+        The size of the font used for the labels. This is set to 20 by default. 
     show_title : boolean, optional
-	If False, the title of the figure is not displayed. 
+        If False, the title of the figure is not displayed. 
     fontsize : integer, optional
-	The font size of the title.
+        The font size of the title.
     colorbar : boolean, optional 
-	Includes a color in the figure
+        Includes a color in the figure
     show_y_ticklabels : boolean, False
-	If True, show tick labels on the y-axis
+        If True, show tick labels on the y-axis
     nodelabel_func : String, optional
-	The name of a function which maps node labels to indicies.    
+        The name of a function which maps node labels to indicies.    
     xtick_separation : integer, optional
-	The distance between ticks on the x-axis
+        The distance between ticks on the x-axis
     snapshotlabel_func : string, optional
- 	The name of a function to determine the ticks on the x-axis.	
+        The name of a function to determine the ticks on the x-axis.    
     wspace : float, optional
-	The amount of width reserved for blank space between subplots	
+        The amount of width reserved for blank space between subplots   
     bottom : float, optional
-	The bottom of the subplots for 'matlibplot.subplots_adjust'	
+        The bottom of the subplots for 'matlibplot.subplots_adjust'     
     image_extension : string, optional
-	The extension of plot file to be saved. This is "svg" by default.  
+        The extension of plot file to be saved. This is "svg" by default.  
     dpi : integer, optional
-	The resolution of the plot. This is set to 200 dpi by default.
+        The resolution of the plot. This is set to 200 dpi by default.
     display_on : boolean, optional
-	If this is set to False, the plot is not displayed on the screen. 
+        If this is set to False, the plot is not displayed on the screen. 
 
     Returns
     -------
@@ -537,7 +537,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     """
 
     if(len(deltas) == 0):
-    	deltas = GetDeltas()    
+        deltas = GetDeltas()    
 
     node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict = preprocess_temporal_communities(
         matched_labels, nodes_of_interest=nodes_of_interest)
@@ -559,7 +559,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
             logging.error("Error: Length of manual_colormap does not match that of label_index_dict")
             logging.error("manual_color_map = %s, len=%d", str(manual_colormap), len(manual_colormap))
             logging.error("label_index_dict = %s, len=%d", str(label_index_dict), len(label_index_dict))
-	    raise nx.NetworkXError("Error: Length of manual_colormap does not match that of label_index_dict")
+            raise nx.NetworkXError("Error: Length of manual_colormap does not match that of label_index_dict")
 
         cmap = matplotlib.colors.ListedColormap([manual_colormap[l] for l in sorted(manual_colormap.keys())],
             name='custom_cmap', N=None)
@@ -662,7 +662,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     # svg viewers are slow, also save pdf
     pylab.savefig('dynconsuper%s.%s'%(suffix,'pdf'), dpi=dpi)
     if display_on is True:
-    	pylab.show()
+        pylab.show()
 
 def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
 
@@ -671,10 +671,10 @@ def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
     Parameters
     ----------
     linewidth : float, optional
-	The font size of the lines in the plot. This is set to 2.0 by default.
+        The font size of the lines in the plot. This is set to 2.0 by default.
     image_extension : string, optional
         Specifies the extension of the plot file to be saved. The default image 
-        type is '.svg'	
+        type is '.svg'  
     
     Returns
     -------
@@ -684,24 +684,24 @@ def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
     -------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...	 	estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> plot_with_lambdas()
     """
 
     with open("Fdetails.log", 'r') as Fdetails_file:
-        Fdetails_dict = eval(Fdetails_file.read()) 	# {time: {lambda: {run_number: F}}}
-	
-    with open("Qdetails.log", 'r') as Qdetails_file:  	
+        Fdetails_dict = eval(Fdetails_file.read())      # {time: {lambda: {run_number: F}}}
+        
+    with open("Qdetails.log", 'r') as Qdetails_file:    
         Qdetails_dict = eval(Qdetails_file.read())      # {time: {lambda: {run_number: Q}}}
 
     with open("Edetails.log", 'r') as Edetails_file:
-        Edetails_dict = eval(Edetails_file.read())	# {time: {lambda: {run_number: E}}}
+        Edetails_dict = eval(Edetails_file.read())      # {time: {lambda: {run_number: E}}}
 
     with open("lambdaopt.log", 'r') as f:
-      lambdaopt_dict = eval(f.read())  			# {time: lambdaopt}
+      lambdaopt_dict = eval(f.read())                   # {time: lambdaopt}
 
     with open("best_feasible_lambda.log", 'r') as f:
-      best_feasible_lambda_dict = eval(f.read()) 	# {time: best_feasible_lambda}
+      best_feasible_lambda_dict = eval(f.read())        # {time: best_feasible_lambda}
 
     with open("Q.log", 'r') as f:
       Q_dict = eval(f.read())  # {time: lambdaopt}
