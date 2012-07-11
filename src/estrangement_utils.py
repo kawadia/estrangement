@@ -5,6 +5,7 @@ This module implements various functions used to compute and plot temporal commu
 """
 
 __all__ = ['graph_distance','node_graph_distance','estrangement','match_labels','confidence_interval']
+
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
                             'Stephen Dabideen <dabideen@bbn.com>'])
@@ -12,6 +13,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
 #   Sameet Sreenivasan <sreens@rpi.edu>
+#   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
 #   BSD license. 
 
@@ -27,7 +29,7 @@ def graph_distance(g0, g1, weighted=True):
     """Return the Tanimoto distance between the two input graphs.
 
     Tanimoto distance between the set of edges is defined as    
-    (aUb 0 a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
+    (aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
 
     Parameters
     ----------
@@ -98,7 +100,7 @@ def Estrangement(G, label_dict, Zgraph):
 
     """Return the Estrangement between G and Zgraph
 
-    Compute Q-tauE for the given input parameters
+    Compute Q-tauE for the given input parameters.
 
     Parameters
     -----------
@@ -106,8 +108,8 @@ def Estrangement(G, label_dict, Zgraph):
 	A networkx graph object (current snapshot)
     label_dict: dictionary
 	key = node_identifier, value = community label
-    ZGraph: graph
-	A networkx graph object (compliation of overlapping edges from previous snapshots)
+    Zgraph: networkx.Graph
+	A graph containing edges between nodes of the same community in all previous snapshots
   
     Returns
     -------
@@ -116,7 +118,7 @@ def Estrangement(G, label_dict, Zgraph):
  
     Note
     ----
-    Used in LPA and Agglomerate
+    Used in 'LPA()' and 'agglomerate.generate_dendogram()'
 
     Examples
     --------
@@ -165,8 +167,8 @@ def match_labels(label_dict, prev_label_dict):
 
     Returns
     -------
-    matched_label_dict: dictionary
-  	{node:community} new labelling
+    matched_label_dict: dictionar {node:community} 
+	The new community labelling.
 
     Example
     -------
@@ -202,7 +204,6 @@ def match_labels(label_dict, prev_label_dict):
             jaccard =  len(nodeset_t_minus_1 & nodeset_t)/float(len((nodeset_t_minus_1 | nodeset_t))) 
             overlap_graph.add_edge(l_t_minus_1, l_t, weight=jaccard)
 
-
     max_overlap_digraph = nx.DiGraph() 
     # each label at t-1  and at t is a vertex in this bi-partite graph and 
     # a directed edge implies the max overlap with the other side. 
@@ -225,7 +226,6 @@ def match_labels(label_dict, prev_label_dict):
             matched_label_dict[n] = best_matched_label
 
     return matched_label_dict
-
 
 def confidence_interval(nums):
 

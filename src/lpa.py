@@ -18,6 +18,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
 #   Sameet Sreenivasan <sreens@rpi.edu>
+#   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
 #   BSD license. 
 
@@ -31,7 +32,6 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
     The process is repeated until there are no more changes in label.
     Final set of labels is returned.  
     
-
     Parameters
     ----------
     G : graph
@@ -48,7 +48,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         Graph in each edges join nodes belonging to the same community over
         previous snapshots
     lambduh: 
-	Lagrange multiplier.
+	The Lagrange multiplier.
     initial_label_dict : dictionary  {node_identifier:label,....}, optional
 	Initial labeling of the nodes in G.
 
@@ -61,6 +61,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
     ------
     NetworkXError
 	If the keys in the initial labelling does not match the nodes of the graph. 
+	If the number of iterations is greater than 4 times the number of edges in the graph.
 
     See Also
     --------
@@ -121,7 +122,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
                 continue
 
             obj_fn_dict = collections.defaultdict(float) 
-			# key = label, value = objective function to maximize
+	    # key = label, value = objective function to maximize
 
             for nbr,eattr in G[v].items():
                 # self loops are not included in the N_vl term

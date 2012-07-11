@@ -7,10 +7,10 @@ process information and output the results to file.
 For a desciption of ERA reference [1]:
 [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities in evolving networks by 
 				    estrangement confinement", http://arxiv.org/abs/1203.5126.
-
 """
 
 __all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
+
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
 			    'Stephen Dabideen <dabideen@bbn.com>'])
@@ -18,6 +18,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
 #   Sameet Sreenivasan <sreens@rpi.edu>
+#   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
 #   BSD license. 
 
@@ -31,11 +32,10 @@ import estrangement_utils
 import agglomerate
 import logging
 
-#have to make this global for access inside g_of_lambda
 itrepeats = 0
 
 
-def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
+def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
 
     """ Generator function to read datasets from file.
    
@@ -49,10 +49,6 @@ def read_general(datadir,delta,precedence_tiebreaking,tolerance,minrepeats):
     ----------
     datadir: string
 	path to the directory containing the dataset
-    delta: float
-	The temporal divergence. Smaller values imply greater emphasis on temporal
-	contiguity whereas larger values place greater emphasis on finding better
-	instanteous communities.
     precedence_tiebreaking: boolean
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
@@ -114,7 +110,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     ----------
     g1: networkx graph
 	The input graph.
-    minrepeats: integer
+    minrepeats: integer, optional
 	The number of variations to try before returning the best partition. 
     precedence_tiebreaking: boolean, optional
         This is only relevant when there are multiple dominant labels while running the LPA.
@@ -129,7 +125,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     Returns
     -------
     dictPartition: dictionary {node:communitu}
-	The partitioning which results in the best value of Q
+	The partitioning which results in the best value of the quality function: Q (which is modularity in this case)
 
     Example
     -------
@@ -318,7 +314,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
     beginning = True
     snapshot_number = 0
-    for t, g1, initial_label_dict in read_general(dataset_dir,delta=delta, 
+    for t, g1, initial_label_dict in read_general(dataset_dir, 
 			precedence_tiebreaking=precedence_tiebreaking,
 			tolerance=tolerance,minrepeats=minrepeats):
         
@@ -491,11 +487,11 @@ class SnapshotStatistics():
       self.numfunc = {} 	# key = time t, Number of function evaluations needed for solving the dual
       self.ierr = {} 		# key = time t, convergence of the dual
       self.feasible = {} 	# key = time t, convergence of the dual
-      self.NumNodes = {}
-      self.NumEdges = {}
-      self.Size = {}
-      self.NumComponents = {}
-      self.LargestComponentsize = {}
+      self.NumNodes = {}	# key = time t, val = number of nodes in the graph
+      self.NumEdges = {}	# key = time t, val = number of edges in the graph
+      self.Size = {}		# key = time t, val = sum of the weight of the edges in the graph 
+      self.NumComponents = {}	# key = time t, val = number of connected components in the graph 
+      self.LargestComponentsize = {}  # key = time t, val = number of nodes in the largest component
       self.Qdetails = {} # {'time': {'lambduh': {'run_number': Q}}}
       self.Edetails = {} # {'time': {'lambduh': {'run_number': E}}}
       self.Fdetails = {} # {'time': {'lambduh': {'run_number': F}}}

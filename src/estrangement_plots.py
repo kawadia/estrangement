@@ -1,8 +1,10 @@
-#!/usr/bin/env python
-
-""" This module implements functions to plot graphs based on file output from ERA. """
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+""" 
+This module implements functions used process log files and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm (ERA)."""
 
 __all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas','layout']
+
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
                             'Stephen Dabideen <dabideen@bbn.com>'])
@@ -10,6 +12,7 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
 #   Sameet Sreenivasan <sreens@rpi.edu>
+#   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
 #   BSD license. 
 
@@ -57,6 +60,9 @@ def GetDeltas():
     each of these folders, a config file specifies the value of delta, and this 
     function reads the value of delta from each such config file. 
 
+    Alternatively, delta can be specified in the function calls, bypassing this
+    function. See 'estrangement_sample.py' for details. 
+
     Returns
     -------
     deltas : list
@@ -86,8 +92,7 @@ def GetDeltas():
 
 def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_fontsize=20, xfigsize=16.0, yfigsize=12.0, fontsize=28, fname=None, listLinestyles=None, xlabel="", ylabel="", title="", xscale='linear', yscale='linear', dictErr=None, display_on=False):
 
-    """
-    Given dictionaries, dictX with key=label, val = iterable of X values, 
+    """ Given dictionaries, dictX with key=label, val = iterable of X values, 
     and dictY with key=label, val = iterable of Y values, this function 
     plots lines for all the labels on the same plot.  
 
@@ -258,7 +263,9 @@ def plot_function(listNames,image_extension="svg"):
 
 def ChoosingDelta(image_extension="svg",deltas=[]):
 
-    """ Plots avg Q*-E vs delta to get insights into the best delta 
+    """ Plots avg Q*-E vs delta to get insights into the best delta.
+   
+    This module merely processes the data, the plotting is done by 'plot_by_param'.
 	
     Parameters
     ----------
@@ -271,6 +278,10 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
     Returns
     -------
     Nothing : The plot is displayed on the screen and/or written to file
+
+    Note
+    ----
+    To produce the necessary stat files, set 'write_stats=True' when calling 'estrangment.ERA()'
 
     Example
     -------

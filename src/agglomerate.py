@@ -7,6 +7,7 @@ This module implements static community detection.
 # modified by vkawadia to do agglomerative lpam
 
 __all__ = ["partition_at_level", "modularity", "best_partition", "generate_dendogram", "induced_graph"]
+
 __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 #    Copyright (C) 2009 by
 #    Thomas Aynaud <thomas.aynaud@lip6.fr>
@@ -73,7 +74,7 @@ def modularity(partition, graph) :
 
     Parameters
     ----------
-    partition : dictionary
+    partition : dictionary {node : community label}
        The partition of the nodes, i.e a dictionary where keys are their nodes and values the communities.
     graph : networkx.Graph
        The graph showing the relationship between the nodes. 
@@ -144,14 +145,28 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
     ----------
     graph : networkx.Graph
        The networkx graph which is decomposed.
-    partition : dict, optionnal
+    partition : dict, optional
        The algorithm will start using this partition of the nodes. It's a dictionary where 
        the keys are their nodes and values the community labels.
+    tiebreaking: boolean
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
+    tolerance: float
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller it is, the fewer dominant labels there 
+        will be. 
+    lambduh: float
+	The Lagrange multiplier.
+    Zgraph : networkx.Graph
+	A graph containing edges between nodes of the same community in all previous snapshots
+    Partition: dictionary {node : community label}
+	The current labelling of the nodes in the graph
 
     Returns
     -------
-    partition : dictionnary
-       The partition, with communities numbered from 0 to number of communities.
+    partition : dictionnary {node : community label}
+       Maps each node to a community label in the graph
 
     Raises
     ------
@@ -213,9 +228,28 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
     ----------
     graph : networkx.Graph
         The networkx graph which will be decomposed.
-    part_init : dict, optionnal
+    delta : float
+        The temporal divergence. Smaller values imply greater emphasis on temporal
+        contiguity whereas larger values place greater emphasis on finding better
+        instanteous communities.
+    tolerance: float
+        For a label to be considered a dominant label, it must be within this much of the maximum
+        value found for the quality function. The smaller it is, the fewer dominant labels there 
+        will be.     
+    tiebreaking: boolean
+        This is only relevant when there are multiple dominant labels while running the LPA.
+        If it is set to 'True', the dominant label is set dominant label most recently seen. 
+        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
+    lambduh: float
+        The Lagrange multiplier.
+    Zgraph : networkx.Graph
+        A graph containing edges between nodes of the same community in all previous snapshots
+        The current labelling of the nodes in the graph
+    part_init : dict, optional
         The algorithm will start using this partition of the nodes. 
         It is a dictionary where keys are their nodes and values the communities.
+
+
 
     Returns
     -------
@@ -284,7 +318,11 @@ def induced_graph(partition, graph, zgraph) :
     partition : dictionary
        A dictionary where keys are graph nodes and the values are the partition to which  the node belongs.
     graph : networkx.Graph
-        The initial graph.
+        The current snapshot of the graph
+    Zgraph : networkx.Graph
+        A graph containing edges between nodes of the same community in all previous snapshots
+        The current labelling of the nodes in the graph
+	
 
     Returns
     -------

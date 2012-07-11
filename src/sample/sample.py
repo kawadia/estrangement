@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Sample script demonstrating the use of the Estrangement library to plot temporal communities. """
+"""
+Sample script demonstrating the use of the Estrangement library to plot temporal communities. 
+\"""
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',

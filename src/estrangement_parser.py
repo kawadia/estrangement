@@ -1,9 +1,14 @@
-import os
-import argparse
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+""" 
+Helper function for parsing arguments from the command line or a config file. 
 
-""" estrangement_parser: Helper function for parsing arguments from the command line or a config file"""
+These may be used in the calling script to simplify parsing arguments , but is 
+not called by the library. 
+"""
 
 __all__ = ['parse_args','add_options']
+
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
                             'Stephen Dabideen <dabideen@bbn.com>'])
@@ -11,9 +16,12 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
 #   Sameet Sreenivasan <sreens@rpi.edu>
+#   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
 #   BSD license. 
 
+import os
+import argparse
  
 def parse_args():
     """@brief parse cmd line and conf file options 
