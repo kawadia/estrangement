@@ -31,6 +31,8 @@ import lpa
 import estrangement_utils
 import agglomerate
 import logging
+from multiprocessing import Queue,Process
+
 
 itrepeats = 0
 
@@ -235,12 +237,16 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     dictQ = {} 		# key = run number, val = Q for that run
     dictE = {} 		# key = run number, val = E for that run
     dictF = {} 		# key = run number, val = F for that run
-    
+    q = Queue() 
     # the for loop below does repeat number of runs to find the best F using
     # agglomerate lpa. Node visitation order is randomized in the LPA thus
     # giving potentially different results each run. 
     for r in range(repeats):
-        r_partition = agglomerate.best_partition(g1, delta, tolerance, tiebreaking, lambduh, Zgraph)
+        p = Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
+	p.start()
+
+    for r in range(repeats):
+        r_partition = q.get()
         dictPartition[r] = r_partition
         dictQ[r] = agglomerate.modularity(r_partition, g1)
         dictE[r] = estrangement_utils.Estrangement(g1, r_partition, Zgraph)
@@ -248,7 +254,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
+def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=Queue()):
 
     """ The Estrangement Reduction Algorithm.
     Detects temporal communities and output the results to file for further processing. 
@@ -281,6 +287,8 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     write_stats, optional
 	If 'True', the stats are written to files named <stat>.log
  	These logs are not needed to plot temporal communities but are needed to plot other stats. 
+    q : multiprocessing.Queue
+	Queue to store the results, to be shared across all threads
 
     Returns
     -------
@@ -468,6 +476,9 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             	pprint.pprint(statobj, stream=fout) 
 
     os.chdir('../')
+    ret_dict = {}
+    ret_dict[str(delta)] = matched_labels
+    q.put(ret_dict)
     return matched_labels
 
 class SnapshotStatistics():

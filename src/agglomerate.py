@@ -22,6 +22,7 @@ import types
 import lpa
 import logging
 from estrangement_utils import Estrangement
+from multiprocessing import Queue
 
 def partition_at_level(dendogram, level) :
 
@@ -133,7 +134,7 @@ def modularity(partition, graph) :
     return res
 
 
-def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None) :
+def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None,q=Queue()) :
 
     """Function to compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices.
@@ -162,6 +163,8 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
 	A graph containing edges between nodes of the same community in all previous snapshots
     Partition: dictionary {node : community label}
 	The current labelling of the nodes in the graph
+    q : Queue (from multiprocessing)
+	A queue used to store the results from multiple processes
 
     Returns
     -------
@@ -212,6 +215,8 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
     """
 
     dendo = generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition)
+    r_partition = partition_at_level(dendo, len(dendo) - 1 )
+    q.put(r_partition)
     return partition_at_level(dendo, len(dendo) - 1 )
 
 
@@ -281,6 +286,7 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
     >>> for level in range(len(dendo) - 1) :
     >>>     print "partition at level", level, "is", partition_at_level(dendo, level)
     """
+
 
     if type(graph) != nx.Graph :
         raise TypeError("Bad graph type, use only non directed graph")

@@ -10,6 +10,7 @@ More details in http://arxiv.org/abs/1203.5126
 * python-scipy
 * python-numpy
 * python-matplotlib
+* python-multiprocessing
 
 ### Pip
 * networkx (Note: Ubuntu's python-networkx package is out of date and will not work)
