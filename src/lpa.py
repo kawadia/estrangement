@@ -8,7 +8,6 @@ import networkx as nx
 import random
 import collections
 import logging
-import utils
 import agglomerate
 
 __all__ = ['lpa']

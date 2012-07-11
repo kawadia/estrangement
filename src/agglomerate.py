@@ -20,7 +20,7 @@ import networkx as nx
 import types
 import lpa
 import logging
-import utils
+from estrangement_utils import Estrangement
 
 def partition_at_level(dendogram, level) :
 
@@ -260,7 +260,7 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
         partition = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
 
         mod = modularity(partition, current_graph)
-        E = utils.Estrangement(current_graph, partition, current_Zgraph)
+        E = Estrangement(current_graph, partition, current_Zgraph)
         new_F = mod - lambduh*E + lambduh*delta
         logging.info("level=%d, Q=%f, E=%f, F=%f -----------", len(partition_list), mod, E, new_F)
 

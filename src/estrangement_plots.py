@@ -23,7 +23,7 @@ import numpy
 import collections
 import random
 import logging
-import utils
+from estrangement_utils import match_labels
 
 markers = [
   'o'	,
@@ -394,7 +394,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
                         appearances_dict[n].append(time) 
        
         #align temporal communities for various deltas for sensible visualization
-        matched_temporal_label_dict = utils.match_labels(temporal_label_dict, prev_temporal_label_dict)
+        matched_temporal_label_dict = match_labels(temporal_label_dict, prev_temporal_label_dict)
         prev_temporal_label_dict = matched_temporal_label_dict 
         all_labels_set.update(matched_temporal_label_dict.values()) 
 

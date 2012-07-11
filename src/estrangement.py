@@ -27,7 +27,7 @@ import os
 from scipy import optimize
 import pprint
 import lpa
-import utils
+import estrangement_utils
 import agglomerate
 import logging
 
@@ -247,7 +247,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         r_partition = agglomerate.best_partition(g1, delta, tolerance, tiebreaking, lambduh, Zgraph)
         dictPartition[r] = r_partition
         dictQ[r] = agglomerate.modularity(r_partition, g1)
-        dictE[r] = utils.Estrangement(g1, r_partition, Zgraph)
+        dictE[r] = estrangement_utils.Estrangement(g1, r_partition, Zgraph)
         dictF[r] = dictQ[r] - lambduh*dictE[r] + lambduh*delta
         
     return (dictPartition, dictQ, dictE, dictF)
@@ -441,11 +441,11 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
         for n in label_dict:
             label_dict[n] += 1000000*snapshot_number
 
-        matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
+        matched_label_dict = estrangement_utils.match_labels(label_dict, prev_matched_label_dict)
         matched_labels.update({t:matched_label_dict})
 
-        snapstats.GD[t] = utils.graph_distance(g0, g1, True)
-        snapstats.Node_GD[t] = utils.node_graph_distance(g0, g1)
+        snapstats.GD[t] = estrangement_utils.graph_distance(g0, g1, True)
+        snapstats.Node_GD[t] = estrangement_utils.node_graph_distance(g0, g1)
         snapstats.NumComm[t] = len(set((label_dict.values())))
                 
         snapstats.NumNodes[t] = g1.number_of_nodes()

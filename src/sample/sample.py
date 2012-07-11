@@ -18,16 +18,12 @@ import sys
 import os
 sys.path.append(os.getcwd() + "/..")
 sys.path.append(os.getcwd() + "../..")
-import utils
-import agglomerate
-import optionsadder
-import postpro
-import lpa
-import string
+import estrangement_parser
+import estrangement_plots
 import estrangement
 
 # use argparse to parse command-line arguments using optionsadder.py
-opt = optionsadder.parse_args()
+opt = estrangement_parser.parse_args()
 
 # set the values of delta for which to create plots
 deltas = [0.01,0.025,0.05,1.0]
@@ -66,14 +62,12 @@ for d in deltas:
 	matched_label_file.close()
 
 # plot the temporal communities 
-postpro.plot_temporal_communities(matched_labels_dict)
+estrangement_plots.plot_temporal_communities(matched_labels_dict)
 os.chdir("..")
 
 
 # to plot other parameters, set write_stats=True in estrangement.ERA() 
-# and use postpro.plot_function(). For example,
-# postpro.plot_function(['Estrangement'])
-# postpro.plot_function(['ierr','feasible'])
-
-
+# and use estrangement_plots.plot_function(). For example,
+# estrangement_plots.plot_function(['Estrangement'])
+# estrangement_plots.plot_function(['ierr','feasible'])
 
