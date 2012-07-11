@@ -237,7 +237,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     dictQ = {}          # key = run number, val = Q for that run
     dictE = {}          # key = run number, val = E for that run
     dictF = {}          # key = run number, val = F for that run
-    q = Queue() 
+    q = multiprocessing.Queue() 
     # the for loop below does repeat number of runs to find the best F using
     # agglomerate lpa. Node visitation order is randomized in the LPA thus
     # giving potentially different results each run. 
