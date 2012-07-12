@@ -375,7 +375,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
                     
             lambdaopt, fval, ierr, numfunc = optimize.fminbound(
                 g_of_lambda, 0.0, 10.0, args=(), xtol=convergence_tolerance,
-                maxfun=maxfun, full_output=True, disp=2)  
+                maxfun=maxfun, full_output=True, disp=0)  
             
             if ierr is 0:
                 logging.info("[%d] best lambduh = %f, found in %d function calls", t, lambdaopt, numfunc)
