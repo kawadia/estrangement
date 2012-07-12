@@ -34,8 +34,7 @@ deltas = [0.01,0.025,0.05,1.0]
 # check if there are results for these deltas
 for d in deltas:
     if(os.path.isfile(opt.exp_name + "/task_delta_" + str(d) + "/matched_labels.log")):
-        print("WARNING: Using existing results for delta=" +str(d) + ".\n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(d,opt.exp_name))
-
+        print("WARNING: Using existing results for delta=%s \n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(d,opt.exp_name))
 
 # dictionary to pass the simulation output to the plot function
 matched_labels_dict = {}
@@ -47,13 +46,14 @@ if(not os.path.exists(opt.exp_name)):
     os.mkdir(opt.exp_name)
 os.chdir(opt.exp_name)
 
-q = multiprocessing.Queue()
+if(not os.path.isdir(opt.dataset_dir)):
+    sys.exit("ERROR: 'dataset_dir' invalid, please specify using --dataset_dir at the command line or in config file.")
 
+q = multiprocessing.Queue()
 for d in deltas:
     # check if the matched_labels.log file file exists, and prompt the user if it does 
     label_file = "task_delta_" + str(d) + "/matched_labels.log"
     if(os.path.isfile(label_file) and os.path.getsize(label_file) > 0 ):
-	print(d)
         with open("task_delta_" + str(d) + "/matched_labels.log", 'r') as ml:
             matched_labels = ml.read()
             matched_labels_dict[str(d)] = eval(matched_labels)
@@ -61,7 +61,7 @@ for d in deltas:
     # run the simulation if the matched_labels.log file does not exist
     # run multiple processes in parallel, each for a different value of delta
     else:
-	print("Running simulations for delta=%d"%d)
+	print("Running simulations for delta=%s"%d)
         p = multiprocessing.Process(target=estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
         p.start()
 

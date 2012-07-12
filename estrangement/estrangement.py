@@ -242,8 +242,10 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     # agglomerate lpa. Node visitation order is randomized in the LPA thus
     # giving potentially different results each run. 
     for r in range(repeats):
-        p = multiprocessing.Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
-        p.start()
+#        p = multiprocessing.Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
+#        p.start()
+         agglomerate.best_partition(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q)
+
 
     for r in range(repeats):
         r_partition = q.get()
@@ -322,7 +324,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
     beginning = True
     snapshot_number = 0
-    for t, g1, initial_label_dict in read_general(dataset_dir, 
+    for t, g1, initial_label_dict in read_general("../" + dataset_dir, 
                         precedence_tiebreaking=precedence_tiebreaking,
                         tolerance=tolerance,minrepeats=minrepeats):
         

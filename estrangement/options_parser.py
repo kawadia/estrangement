@@ -40,30 +40,28 @@ def add_options(parser):
     """define all the program options here"""
     parser.add_argument("--dataset_dir",
             dest="dataset_dir", 
-            help="dir where all the datasets are stored [default: %default]",
             type=str,
-            default=os.path.join(os.path.expanduser("~"), "datasets")
+            default=os.path.join(os.path.expanduser("~"), "datasets"),
+            help="dir where all the datasets are stored  (default: %(default)s)"
     )
 
     parser.add_argument("--exp_name",
             dest="exp_name",
-            help="name of the folder in which to store the results [default: %default]",
+            help="name of the folder in which to store the results  (default: %(default)s)",
             type=str,
             default="exp"
-    )
-    
-
+    ) 
 
     parser.add_argument("-e", "--precedence_tiebreaking",
             dest="precedence_tiebreaking", 
-            help="turn on precedence tiebreaking which keeps a node's current label if it is one of the dominant lables. [default: %default]",
+            help="turn on precedence tiebreaking which keeps a node's current label if it is one of the dominant lables. (default: %(default)s)",
             action="store_true",
             default=False
     )
 
     parser.add_argument("--maxfun",
             dest="maxfun", 
-            help="max number of iterations allowed for scipy optimize [default: %default]",
+            help="max number of iterations allowed for scipy optimize (default: %(default)s)",
             type=int,
             default=200
     )
@@ -71,21 +69,21 @@ def add_options(parser):
  
     parser.add_argument("--tolerance",
             dest="tolerance", 
-            help="tolerance as a fraction of the max when picking dominant labels [default: %default]",
+            help="tolerance as a fraction of the max when picking dominant labels (default: %(default)s)",
             type=float,
             default=0.00001
     )
     
     parser.add_argument("--convergence_tolerance",
             dest="convergence_tolerance", 
-            help="lambda (X) tolerance for scipy optimize [default: %default]",
+            help="lambda (X) tolerance for scipy optimize (default: %(default)s)",
             type=float,
             default=0.01
     )
 
     parser.add_argument("--delta",
             dest="delta", 
-            help="constraint on estrangement [default: %default]",
+            help="constraint on estrangement (default: %(default)s)",
             type=float,
             default=0.05
     )
@@ -93,14 +91,14 @@ def add_options(parser):
     
     parser.add_argument("--minrepeats",
             dest="minrepeats", 
-            help="min number of repeats for each snapshot [default: %default]",
+            help="min number of repeats for each snapshot (default: %(default)s)",
             type=int,
             default=10
     )
 
     parser.add_argument("--increpeats",
             dest="increpeats", 
-            help="number of repeats in increased by this amount for every call to g_of_lambda [default: %default]",
+            help="number of repeats in increased by this amount for every call to g_of_lambda (default: %(default)s)",
             type=int,
             default=10
     )
@@ -109,27 +107,27 @@ def add_options(parser):
     parser.add_argument("--savefor_layouts",
             dest="savefor_layouts",
             type=bool,
-            help="Save gexf for layouts [default: %default]",
+            help="Save gexf for layouts (default: %(default)s)",
             default=False
     )
 
     parser.add_argument("-x", "--xfigsize",
             dest="xfigsize",
-            help="fig width in inches [default: %default]",
+            help="fig width in inches (default: %(default)s)",
             type=float,
             default=16.0
     )
 
     parser.add_argument("-y", "--yfigsize",
             dest="yfigsize",
-            help="fig height in inches [default: %default]",
+            help="fig height in inches (default: %(default)s)",
             type=float,
             default=12.0
     )
 
     parser.add_argument("--tiled_figsize",
             dest="tiled_figsize",
-            help="tuple of figsize for the tiled plots [default: %default]",
+            help="tuple of figsize for the tiled plots (default: %(default)s)",
             type=str,
             default='(36,16)'
     )
@@ -137,20 +135,20 @@ def add_options(parser):
 
     parser.add_argument("-m", "--markersize",
             dest="markersize",
-            help="marker size in points [default: %default]",
+            help="marker size in points (default: %(default)s)",
             type=float,
             default=15
     )
     parser.add_argument("--markerheight",
             dest="markerheight",
-            help="marker height as a fraction of markersize [default: %default]",
+            help="marker height as a fraction of markersize (default: %(default)s)",
             type=float,
             default=0.2
     )
 
     parser.add_argument("--xtick_separation",
             dest="xtick_separation",
-            help="separation of labels on the x axis [default: %default]",
+            help="separation of labels on the x axis (default: %(default)s)",
             type=int,
             default=5
     )
@@ -158,7 +156,7 @@ def add_options(parser):
 
     parser.add_argument("--linewidth",
             dest="linewidth",
-            help="linewidth in pts [default: %default]",
+            help="linewidth in pts (default: %(default)s)",
             type=float,
             default=2.0
     )
@@ -166,27 +164,27 @@ def add_options(parser):
 
     parser.add_argument("--seed",
             dest="seed",
-            help="seed for randomizing label indices [default: %default]",
+            help="seed for randomizing label indices (default: %(default)s)",
             type=int,
             default=1378389
     )
 
     parser.add_argument("--label_sorting_keyfunc",
             dest="label_sorting_keyfunc",
-            help="keyfunc for sorting label indices so that patches dont get nearby colors in the the colormap [default: %default]. Identity implies sorting by label values. Also see the seed option above.",
+            help="keyfunc for sorting label indices so that patches dont get nearby colors in the the colormap (default: %(default)s). Identity implies sorting by label values. Also see the seed option above.",
             type=str,
             default="random"
     )
 
     parser.add_argument("--fontsize",
             dest="fontsize",
-            help="fontsize for figure text [default: %default]",
+            help="fontsize for figure text (default: %(default)s)",
             type=float,
             default=28
     )
     parser.add_argument("--label_fontsize",
             dest="label_fontsize",
-            help="fontsize for axis labels [default: %default]",
+            help="fontsize for axis labels (default: %(default)s)",
             type=float,
             default=20
     )
@@ -194,7 +192,7 @@ def add_options(parser):
 
     parser.add_argument("--alpha",
             dest="alpha",
-            help="figure transparency [default: %default]",
+            help="figure transparency (default: %(default)s)",
             type=float,
             default=1.0
     )
@@ -202,48 +200,48 @@ def add_options(parser):
 
     parser.add_argument("--dpi",
             dest="dpi",
-            help="dpi for savefig [default: %default]",
+            help="dpi for savefig (default: %(default)s)",
             type=int,
             default=200
     )
 
     parser.add_argument("--wspace",
             dest="wspace",
-            help="whitespace between subplots [default: %default]",
+            help="whitespace between subplots (default: %(default)s)",
             type=float,
             default=0.2
     )
 
     parser.add_argument("--bottom",
             dest="bottom",
-            help="whitesapce below subplots [default: %default]",
+            help="whitesapce below subplots (default: %(default)s)",
             type=float,
             default=0.1
     )
 
     parser.add_argument("--frameon",
             dest="frameon",
-            help="set frameon on each axis True or False [default: %default]",
+            help="set frameon on each axis True or False (default: %(default)s)",
             type=bool,
             default=True
     )
     parser.add_argument("--delta_to_use_for_node_ordering",
             dest="delta_to_use_for_node_ordering",
-            help="delta value to use for node ordering on the tiles plots [default: %default]",
+            help="delta value to use for node ordering on the tiles plots (default: %(default)s)",
             type=float,
             default=1.0
     )
 
     parser.add_argument("--deltas_to_plot",
             dest="deltas_to_plot",
-            help="deltas_to_plot in the dynconsuper plot [default: %default]",
+            help="deltas_to_plot in the dynconsuper plot (default: %(default)s)",
             type=list,
             default=[]
     )
 
     parser.add_argument("--manual_colormap",
             dest="manual_colormap",
-            help="dict of label_indices to colors to use for the patches in the dynconsuper plot [default: %default]",
+            help="dict of label_indices to colors to use for the patches in the dynconsuper plot (default: %(default)s)",
             type=str,
             default=None
     )
@@ -251,27 +249,27 @@ def add_options(parser):
 
     parser.add_argument("--title",
             dest="title",
-            help="title text [default: %default]",
+            help="title text (default: %(default)s)",
             type=str,
             default="Dynamic communities"
     )
 
     parser.add_argument("--xlabel",
             dest="xlabel",
-            help="xlabel [default: %default]",
+            help="xlabel (default: %(default)s)",
             type=str,
             default="Time"
     )
 
     parser.add_argument("--ylabel",
             dest="ylabel",
-            help="ylabel [default: %default]",
+            help="ylabel (default: %(default)s)",
             type=str,
             default="Node id"
     )
     parser.add_argument("--label_cmap",
             dest="label_cmap",
-            help="color map for communities [default: %default]",
+            help="color map for communities (default: %(default)s)",
             type=str,
             default='Paired'
     )
@@ -279,7 +277,7 @@ def add_options(parser):
 
     parser.add_argument("--display_on",
             dest="display_on",
-            help="display label plot after each task is done [default: %default]",
+            help="display label plot after each task is done (default: %(default)s)",
             type=bool,
             default=False
     )
@@ -287,7 +285,7 @@ def add_options(parser):
 
     parser.add_argument("--show_title",
             dest="show_title",
-            help="show title on plots [default: %default]",
+            help="show title on plots (default: %(default)s)",
             type=bool,
             default=True
     )
@@ -295,21 +293,21 @@ def add_options(parser):
 
     parser.add_argument("--use_separate_label_indices",
             dest="use_separate_label_indices",
-            help="set to true if labels are not from the space of nodenames [default: %default]",
+            help="set to true if labels are not from the space of nodenames (default: %(default)s)",
             type=bool,
             default=True
     )
 
     parser.add_argument("--colorbar",
             dest="colorbar",
-            help="display colorbar if true [default: %default]",
+            help="display colorbar if true (default: %(default)s)",
             type=bool,
             default=True
     )
 
     parser.add_argument("--show_yticklabels",
             dest="show_yticklabels",
-            help="display yticklabels if true [default: %default]",
+            help="display yticklabels if true (default: %(default)s)",
             type=bool,
             default=False
     )
@@ -317,37 +315,35 @@ def add_options(parser):
     parser.add_argument("--loglevel",
             dest="loglevel",
             choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"],
-            help="Set console logging level to LEVEL [default: %default]",
+            help="Set console logging level to LEVEL (default: %(default)s)",
             metavar="LEVEL",
             default="INFO"
     )
 
     parser.add_argument("--node_indexing",
             dest="node_indexing",
-            help="node indexing scheme [default: %default]",
+            help="node indexing scheme (default: %(default)s)",
             type=str,
             default='fancy'
     )
 
     parser.add_argument("--nodeorder",
             dest="nodeorder",
-            help="psecify node order for tiled plots [default: %default]",
+            help="specify node order for tiled plots (default: %(default)s)",
             type=str,
             default=None
     )
 
-
-
     parser.add_argument("--nodelabel_func",
             dest="nodelabel_func",
-            help="func which provides node names to display, it should return a dict from nodes in the graph to node name strs to display[default: %default]",
+            help="func which provides node names to display, it should return a dict from nodes in the graph to node name strs to display(default: %(default)s)",
             type=str,
             default=None
     )
 
     parser.add_argument("--nodes_of_interest",
             dest="nodes_of_interest",
-            help="only show labels ever taken by the node in this list, can be specified multiple times[default: %default]",
+            help="only show labels ever taken by the node in this list, can be specified multiple times(default: %(default)s)",
             type=list,
             action="append"
     )
@@ -355,30 +351,29 @@ def add_options(parser):
 
     parser.add_argument("--snaphotlabel_func",
             dest="snapshotlabel_func",
-            help="func which provides snapshot names to display, it should return a dict from nodes in the graph to snapshot name strs to display[default: %default]",
+            help="func which provides snapshot names to display, it should return a dict from nodes in the graph to snapshot name strs to display(default: %(default)s)",
             type=str,
             default=None
     )
 
     parser.add_argument("--image_extension",
             dest="image_extension",
-            help="image_extension [default: %default]",
+            help="image_extension (default: %(default)s)",
             type=str,
             default="svg"
     )
 
     parser.add_argument("--partition_file",
             dest="partition_file",
-            help="name of the file from which to read matched partitions (simplified_matched_labels.log is max weight matching and matched_labels.log is max mutual overlap) [default: %default]",
+            help="name of the file from which to read matched partitions (simplified_matched_labels.log is max weight matching and matched_labels.log is max mutual overlap) (default: %(default)s)",
             type=str,
             default="matched_labels.log"
     )
 
     parser.add_argument("--profiler_on",
         dest="profiler_on",
-        help="turn profiling using cProfile on [default: %default], saves output to profile_output_filename",
+        help="turn profiling using cProfile on (default: %(default)s), saves output to profile_output_filename",
         type=bool,
         default=True
     )
-
 
