@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
 Helper function for parsing arguments from the command line or a config file. 
@@ -44,6 +44,14 @@ def add_options(parser):
             type=str,
             default=os.path.join(os.path.expanduser("~"), "datasets")
     )
+
+    parser.add_argument("--exp_name",
+            dest="exp_name",
+            help="name of the folder in which to store the results [default: %default]",
+            type=str,
+            default="exp"
+    )
+    
 
 
     parser.add_argument("-e", "--precedence_tiebreaking",
