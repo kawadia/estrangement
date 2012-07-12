@@ -31,37 +31,39 @@ opt = estrangement_parser.parse_args()
 # set the values of delta for which to create plots
 deltas = [0.01,0.025,0.05,1.0]
 
+# check if there are results for these deltas
+for d in deltas:
+    if(os.path.isfile(opt.exp_name + "/task_delta_" + str(d) + "/matched_labels.log")):
+        print("WARNING: Using existing results for delta=%s.\n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(str(d),opt.exp_name))
+
+
 # dictionary to pass the simulation output to the plot function
 matched_labels_dict = {}
 
-# Prompt the user for a name of the experiment. A folder is created in 
+# A folder is created, specified by the --exp_name argument in 
 # the current working directory and all the files from the experiment will
 # be placed in this file. 
-exp_name = raw_input("Please enter experiment name:")
-if(not os.path.exists(exp_name)):
-    os.mkdir(exp_name)
-os.chdir(exp_name)
-
-# Prompt the user for the path to the dataset
-path_to_data=raw_input("Please enter path to data:")
-if(not os.path.isdir(path_to_data)):
-     sys.exit("data folder %s does not exist"%path_to_data)
+if(not os.path.exists(opt.exp_name)):
+    os.mkdir(opt.exp_name)
+os.chdir(opt.exp_name)
 
 q = multiprocessing.Queue()
 
 for d in deltas:
-        # check if the matched_labels.log file file exists, and prompt the user if it does 
-        if(os.path.isfile("task_delta_" + str(d) + "/matched_labels.log")):
-            use_log = raw_input("Do you wish to use the existing log files for delta=%s? [Y/n]"%d)
-            if(use_log != 'n'):
-                with open("task_delta_" + str(d) + "/matched_labels.log", 'r') as ml:
-                        matched_labels = ml.read()
-                        matched_labels_dict[str(d)] = eval(matched_labels)
-                        continue
+    # check if the matched_labels.log file file exists, and prompt the user if it does 
+    label_file = "task_delta_" + str(d) + "/matched_labels.log"
+    if(os.path.isfile(label_file) and os.path.getsize(label_file) > 0 ):
+	print(d)
+        with open("task_delta_" + str(d) + "/matched_labels.log", 'r') as ml:
+            matched_labels = ml.read()
+            matched_labels_dict[str(d)] = eval(matched_labels)
 
-        # run the simulation if the matched_labels.log file does not exist or the user specifies this is desired
-        # run multiple processes in parallel, each for a different value of delta
-        p = multiprocessing.Process(target=estrangement.ERA,args=(path_to_data,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
+    # run the simulation if the matched_labels.log file does not exist
+    # run multiple processes in parallel, each for a different value of delta
+    else:
+	print("Running simulations for delta=%d"%d)
+	print(os.getcwd())
+        p = multiprocessing.Process(target=estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
         p.start()
 
 # combine the results stored in the queue into a single dictionary
@@ -70,7 +72,7 @@ for d in deltas:
         for k in entry.keys():
                 matched_labels_dict[k] = entry[k]
         matched_label_file = open("task_delta_" + k +"/matched_labels.log", 'w')
-        matched_label_file.write(str(matched_labels))
+        matched_label_file.write(str(matched_labels_dict[k]))
         matched_label_file.close()
 
 # plot the temporal communities 
