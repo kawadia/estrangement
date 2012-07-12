@@ -20,13 +20,13 @@ import sys
 import os
 sys.path.append(os.getcwd() + "/..")
 sys.path.append(os.getcwd() + "../..")
-import parser
+import options_parser
 import plots
 import estrangement
 import multiprocessing
 
 # use argparse to parse command-line arguments using optionsadder.py
-opt = parser.parse_args()
+opt = options_parser.parse_args()
 
 # set the values of delta for which to create plots
 deltas = [0.01,0.025,0.05,1.0]

@@ -26,7 +26,7 @@ import numpy
 import collections
 import random
 import logging
-from estrangement_utils import match_labels
+from utils import match_labels
 
 markers = [
   'o'   ,
