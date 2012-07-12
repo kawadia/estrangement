@@ -34,7 +34,7 @@ deltas = [0.01,0.025,0.05,1.0]
 # check if there are results for these deltas
 for d in deltas:
     if(os.path.isfile(opt.exp_name + "/task_delta_" + str(d) + "/matched_labels.log")):
-        print("WARNING: Using existing results for delta=%s.\n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(str(d),opt.exp_name))
+        print("WARNING: Using existing results for delta=" +str(d) + ".\n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(d,opt.exp_name))
 
 
 # dictionary to pass the simulation output to the plot function
@@ -62,7 +62,6 @@ for d in deltas:
     # run multiple processes in parallel, each for a different value of delta
     else:
 	print("Running simulations for delta=%d"%d)
-	print(os.getcwd())
         p = multiprocessing.Process(target=estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
         p.start()
 
