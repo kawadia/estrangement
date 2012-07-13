@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Estrangement Confinement &mdash; estrangement 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="estrangement 1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">estrangement 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="estrangement-confinement">
+<h1>Estrangement Confinement<a class="headerlink" href="#estrangement-confinement" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="module-agglomerate">
+<span id="agglomerate"></span><h1>Agglomerate<a class="headerlink" href="#module-agglomerate" title="Permalink to this headline">¶</a></h1>
+<p>This module implements static community detection.</p>
+<dl class="function">
+<dt id="agglomerate.partition_at_level">
+<tt class="descclassname">agglomerate.</tt><tt class="descname">partition_at_level</tt><big>(</big><em>dendogram</em>, <em>level</em><big>)</big><a class="headerlink" href="#agglomerate.partition_at_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the partition of the nodes at the given level.</p>
+<p>A dendogram is a tree and each level is a partition of the graph nodes.
+Level 0 is the first partition, which contains the smallest communities, and the best is len(dendogram) - 1.
+The higher the level is, the bigger are the communities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dendogram</strong> : list of dict</p>
+<blockquote>
+<div><p>A list of partitions, ie dictionnaries where keys of the i+1 are the values of the i.</p>
+</div></blockquote>
+<p><strong>level</strong> : int</p>
+<blockquote>
+<div><p>The level which belongs to [0..len(dendogram)-1].</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionnary</p>
+<blockquote>
+<div><p>A dictionary where keys are the nodes and the values are the set to which it belongs.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError</strong> :</p>
+<blockquote class="last">
+<div><p>If the dendogram is not well formed or the level is too high.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#agglomerate.best_partition" title="agglomerate.best_partition"><tt class="xref py py-obj docutils literal"><span class="pre">best_partition</span></tt></a>, <a class="reference internal" href="#agglomerate.generate_dendogram" title="agglomerate.generate_dendogram"><tt class="xref py py-obj docutils literal"><span class="pre">generate_dendogram</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dendo</span> <span class="o">=</span> <span class="n">generate_dendogram</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dendo</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">print</span> <span class="s">&quot;partition at level&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="s">&quot;is&quot;</span><span class="p">,</span> <span class="n">partition_at_level</span><span class="p">(</span><span class="n">dendo</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="agglomerate.modularity">
+<tt class="descclassname">agglomerate.</tt><tt class="descname">modularity</tt><big>(</big><em>partition</em>, <em>graph</em><big>)</big><a class="headerlink" href="#agglomerate.modularity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute the modularity of a partition of a graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionary {node</p>
+<blockquote>
+<div><p>The partition of the nodes, i.e a dictionary where keys are their nodes and values the communities.</p>
+</div></blockquote>
+<p><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The graph showing the relationship between the nodes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>modularity</strong> : float</p>
+<blockquote>
+<div><p>The modularity.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError:</strong> :</p>
+<blockquote>
+<div><p>If the partition is not a partition of all graph nodes.</p>
+</div></blockquote>
+<p><strong>ValueError:</strong> :</p>
+<blockquote>
+<div><p>If the graph has no link.</p>
+</div></blockquote>
+<p><strong>TypeError:</strong> :</p>
+<blockquote class="last">
+<div><p>If graph is not a networkx.Graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modularity</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="agglomerate.best_partition">
+<tt class="descclassname">agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x10715fb10&gt;</em><big>)</big><a class="headerlink" href="#agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute the partition of the graph nodes which maximises the modularity
+(or try..) using the Louvain heuristices.</p>
+<p>This is the partition of highest modularity, i.e. the highest partition of the dendogram
+generated by the Louvain algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The networkx graph which is decomposed.</p>
+</div></blockquote>
+<p><strong>partition</strong> : dict, optional</p>
+<blockquote>
+<div><p>The algorithm will start using this partition of the nodes. It&#8217;s a dictionary where 
+the keys are their nodes and values the community labels.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>tolerance: float</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+<p><strong>lambduh: float</strong> :</p>
+<p><strong>The Lagrange multiplier.</strong> :</p>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<p><strong>A graph containing edges between nodes of the same community in all previous snapshots</strong> :</p>
+<p><strong>Partition: dictionary {node</strong> : community label}</p>
+<p><strong>The current labelling of the nodes in the graph</strong> :</p>
+<p><strong>q</strong> : Queue (from multiprocessing)</p>
+<p><strong>A queue used to store the results from multiple processes</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionnary {node</p>
+<blockquote>
+<div><p>Maps each node to a community label in the graph</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>NetworkXError:</strong> :</p>
+<blockquote class="last">
+<div><p>If the graph is not Eulerian.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#agglomerate.generate_dendogram" title="agglomerate.generate_dendogram"><tt class="xref py py-obj docutils literal"><span class="pre">generate_dendogram</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Uses Louvain algorithm</p>
+<p class="rubric">References</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span> <span class="c">#Basic usage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#other example to display a graph with its community :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#better with karate_graph() as defined in networkx examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#erdos renyi don&#39;t have true community structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#first compute the best partition</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partition</span> <span class="o">=</span> <span class="n">community</span><span class="o">.</span><span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="c">#drawing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">size</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">com</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mf">1.</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">list_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">nodes</span> <span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">partition</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>                                <span class="k">if</span> <span class="n">partition</span><span class="p">[</span><span class="n">nodes</span><span class="p">]</span> <span class="o">==</span> <span class="n">com</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">list_nodes</span><span class="p">,</span> <span class="n">node_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="go">                                node_color = str(count / size))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="agglomerate.generate_dendogram">
+<tt class="descclassname">agglomerate.</tt><tt class="descname">generate_dendogram</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>part_init=None</em><big>)</big><a class="headerlink" href="#agglomerate.generate_dendogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find communities in the graph and return the associated dendogram</p>
+<p>A dendogram is a tree and each level is a partition of the graph nodes.  
+Level 0 is the first partition, which contains the smallest communities, 
+and the best is len(dendogram) - 1. The higher the level is, the bigger 
+are the communities.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The networkx graph which will be decomposed.</p>
+</div></blockquote>
+<p><strong>delta</strong> : float</p>
+<blockquote>
+<div><p>The temporal divergence. Smaller values imply greater emphasis on temporal
+contiguity whereas larger values place greater emphasis on finding better
+instanteous communities.</p>
+</div></blockquote>
+<p><strong>tolerance: float</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>lambduh: float</strong> :</p>
+<blockquote>
+<div><p>The Lagrange multiplier.</p>
+</div></blockquote>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>A graph containing edges between nodes of the same community in all previous snapshots
+The current labelling of the nodes in the graph</p>
+</div></blockquote>
+<p><strong>part_init</strong> : dict, optional</p>
+<blockquote>
+<div><p>The algorithm will start using this partition of the nodes. 
+It is a dictionary where keys are their nodes and values the communities.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dendogram</strong> : list of dictionaries</p>
+<blockquote>
+<div><p>A list of partitions, ie dictionnaries where keys of the i+1 are the values of the i, 
+and where keys of the first are the nodes of graph.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>TypeError:</strong> :</p>
+<blockquote class="last">
+<div><p>If the graph is not a networkx.Graph</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#agglomerate.best_partition" title="agglomerate.best_partition"><tt class="xref py py-obj docutils literal"><span class="pre">best_partition</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Uses Louvain algorithm</p>
+<p class="rubric">References</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dendo</span> <span class="o">=</span> <span class="n">generate_dendogram</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dendo</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">print</span> <span class="s">&quot;partition at level&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="s">&quot;is&quot;</span><span class="p">,</span> <span class="n">partition_at_level</span><span class="p">(</span><span class="n">dendo</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="agglomerate.induced_graph">
+<tt class="descclassname">agglomerate.</tt><tt class="descname">induced_graph</tt><big>(</big><em>partition</em>, <em>graph</em>, <em>zgraph</em><big>)</big><a class="headerlink" href="#agglomerate.induced_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to produce the graph where nodes are the communities.</p>
+<p>There is a link of weight w between communities if the sum of the weights of the 
+links between their elements is w.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary where keys are graph nodes and the values are the partition to which  the node belongs.</p>
+</div></blockquote>
+<p><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The current snapshot of the graph</p>
+</div></blockquote>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>A graph containing edges between nodes of the same community in all previous snapshots
+The current labelling of the nodes in the graph</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>g</strong> : networkx.Graph</p>
+<blockquote class="last">
+<div><p>A networkx graph where nodes are the partitions.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">complete_graph</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">part</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span> <span class="o">%</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span> <span class="o">=</span> <span class="n">induced_graph</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">goal</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">goal</span><span class="o">.</span><span class="n">add_weighted_edges_from</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">goal</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="estrangement">
+<h2>Estrangement<a class="headerlink" href="#estrangement" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-utils"></span><p>This module implements various functions used to compute and plot temporal communities.</p>
+<dl class="function">
+<dt id="utils.graph_distance">
+<tt class="descclassname">utils.</tt><tt class="descname">graph_distance</tt><big>(</big><em>g0</em>, <em>g1</em>, <em>weighted=True</em><big>)</big><a class="headerlink" href="#utils.graph_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Tanimoto distance between the two input graphs.</p>
+<p>Tanimoto distance between the set of edges is defined as    
+(aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g0,g1: graph</strong> :</p>
+<blockquote>
+<div><p>Input networkx graphs to be compared</p>
+</div></blockquote>
+<p><strong>weighted: bool</strong> :</p>
+<blockquote>
+<div><p>True if the edges of the graph are weighted, False otherwise</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>graph_distance: float</strong> :</p>
+<blockquote class="last">
+<div><p>The Tanimoto distance between the nodes of g0 and g1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.node_graph_distance">
+<tt class="descclassname">utils.</tt><tt class="descname">node_graph_distance</tt><big>(</big><em>g0</em>, <em>g1</em><big>)</big><a class="headerlink" href="#utils.node_graph_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Jaccard distance between the two input graphs.</p>
+<p>Jaccard distance between the set of nodes is defined as    
+(a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g0,g1: graph</strong> :</p>
+<blockquote>
+<div><p>Input networkx graphs to be compared</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>node_graph_distance: float</strong> :</p>
+<blockquote class="last">
+<div><p>The Jaccard distance between the nodes of g0 and g1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.match_labels">
+<tt class="descclassname">utils.</tt><tt class="descname">match_labels</tt><big>(</big><em>label_dict</em>, <em>prev_label_dict</em><big>)</big><a class="headerlink" href="#utils.match_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of community labels to be preserved representing the 
+communities that remain mostly intact between snapshots.</p>
+<p>We start by representing the communities at t-1 and t as nodes of a
+bipartite graph. From each node at t-1 draw a directed link to the 
+node at t with which it has maximum overlap. From each node at t draw 
+a directed link to the node at t-1 with which it has maximum overlap.</p>
+<p>Basically x,y and z choose who they are most similar to among a and b
+and denote this by arrows directed outward from them. Similarly a and
+b, choose who they are most similar to among x, y and z. Then the rule
+is that labels on the t-1 side of every bidirected (symmetric) link is
+preserved - all other labels on the t-1 side die.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>label_dict: dictionary</strong> :</p>
+<blockquote>
+<div><p>{node:community} at time t</p>
+</div></blockquote>
+<p><strong>prev_label_dict: dictionary</strong> :</p>
+<blockquote>
+<div><p>{node:community} at time (t - 1)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>matched_label_dict: dictionar {node:community}</strong> :</p>
+<blockquote class="last">
+<div><p>The new community labelling.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.confidence_interval">
+<tt class="descclassname">utils.</tt><tt class="descname">confidence_interval</tt><big>(</big><em>nums</em><big>)</big><a class="headerlink" href="#utils.confidence_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (half) the 95% confidence interval around the mean for nums:
+1.96 * std_deviation / sqrt(len(nums)).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>nums: list of numbers</strong> :</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>half the range of the 95% confidence interval</strong> :</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">confidence_interval</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">confidence_interval</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
+<span class="go">0.98</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lpa">
+<span id="link-propagation-algorithm"></span><h2>Link Propagation Algorithm<a class="headerlink" href="#module-lpa" title="Permalink to this headline">¶</a></h2>
+<p>Link Propagation Algorithm (LPA).</p>
+<dl class="function">
+<dt id="lpa.lpa">
+<tt class="descclassname">lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1.0000000000000001e-05</em>, <em>tiebreaking=False</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x104583d50&gt;</em><big>)</big><a class="headerlink" href="#lpa.lpa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a graph with fewer distinct labels than the input graph.</p>
+<p>Each node examines the labels of its neighbors and determines
+which of their label maximizes a specified objective function.
+The process is repeated until there are no more changes in label.
+Final set of labels is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : graph</p>
+<blockquote>
+<div><p>Input NetworkX Graph.</p>
+</div></blockquote>
+<p><strong>tolerance: float, optional</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller the value of tolerance, the fewer dominant 
+labels there will be.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean, optional</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>Z: networkx graph, optional</strong> :</p>
+<blockquote>
+<div><p>Graph in each edges join nodes belonging to the same community over
+previous snapshots</p>
+</div></blockquote>
+<p><strong>lambduh:</strong> :</p>
+<blockquote>
+<div><p>The Lagrange multiplier.</p>
+</div></blockquote>
+<p><strong>initial_label_dict</strong> : dictionary  {node_identifier:label,....}, optional</p>
+<blockquote>
+<div><p>Initial labeling of the nodes in G.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>label_dict</strong> : dictionary  {node_identifier:label,....}</p>
+<blockquote>
+<div><p>Modified labeling after running LPA on G and the initial labeling.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>NetworkXError</strong> :</p>
+<blockquote class="last">
+<div><p>If the keys in the initial labelling does not match the nodes of the graph. 
+If the number of iterations is greater than 4 times the number of edges in the graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">Agglomerate.generate_dendogram.</span></tt></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><ol class="first last upperalpha simple" start="22">
+<li>Kawadia and S. Sreenivasan, &#8220;Online detection of temporal communities</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<p>in evolving networks by estrangement confinement&#8221;, <a class="reference external" href="http://arxiv.org/abs/1203.5126">http://arxiv.org/abs/1203.5126</a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">labeling</span> <span class="o">=</span> <span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_labeling</span> <span class="o">=</span> <span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">labelling</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">))</span>
+<span class="go">[(0,1),(1,1),(2,2),(3,1)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="plot-functions">
+<h2>Plot Functions<a class="headerlink" href="#plot-functions" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-options_parser">
+<span id="options-parser"></span><h2>Options Parser<a class="headerlink" href="#module-options_parser" title="Permalink to this headline">¶</a></h2>
+<p>Helper function for parsing arguments from the command line or a config file.</p>
+<p>These may be used in the calling script to simplify parsing arguments , but is 
+not called by the library.</p>
+<dl class="function">
+<dt id="options_parser.parse_args">
+<tt class="descclassname">options_parser.</tt><tt class="descname">parse_args</tt><big>(</big><big>)</big><a class="headerlink" href="#options_parser.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;brief parse cmd line and conf file options 
+&#64;returns opt  as returned by argsparse.parse_args</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="options_parser.add_options">
+<tt class="descclassname">options_parser.</tt><tt class="descname">add_options</tt><big>(</big><em>parser</em><big>)</big><a class="headerlink" href="#options_parser.add_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>define all the program options here</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Estrangement Confinement</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-agglomerate">Agglomerate</a><ul>
+<li><a class="reference internal" href="#estrangement">Estrangement</a></li>
+<li><a class="reference internal" href="#utils">Utils</a></li>
+<li><a class="reference internal" href="#module-lpa">Link Propagation Algorithm</a></li>
+<li><a class="reference internal" href="#plot-functions">Plot Functions</a></li>
+<li><a class="reference internal" href="#module-options_parser">Options Parser</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">estrangement 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, vikas.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
