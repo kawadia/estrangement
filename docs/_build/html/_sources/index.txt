@@ -1,10 +1,10 @@
-.. estrangement documentation master file, created by
-   sphinx-quickstart on Thu Jul 12 13:32:47 2012.
+.. Estrangement documentation master file, created by
+   sphinx-quickstart on Fri Jul 13 10:13:23 2012.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 Estrangement Confinement
-========================
+========================================
 
 Contents:
 
@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 3
 
 Agglomerate
-===========
+-----------
 .. automodule:: agglomerate
     :members:
 
@@ -39,6 +39,11 @@ Plot Functions
 Options Parser
 --------------
 .. automodule:: options_parser
+    :members:
+
+Sample Script
+-------------
+.. automodule:: sample
     :members:
 
 Indices and tables

@@ -1,19 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-The Estrangement Reduction Algorithm (ERA) and various functions necessary and read the input snapshots,
-process information and output the results to file. 
-
-For a desciption of ERA reference [1]:
-[1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities in evolving networks by 
-                                    estrangement confinement", http://arxiv.org/abs/1203.5126.
+This module implements the Estrangement Reduction Algorithm (ERA) and various functions necessary 
+to read the input snapshots, process information and output the results to file.
 """
 
 __all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
-                            'Sameet Sreenivasan <sreens@rpi.edu>',
-                            'Stephen Dabideen <dabideen@bbn.com>'])
+    'Sameet Sreenivasan <sreens@rpi.edu>',
+    'Stephen Dabideen <dabideen@bbn.com>'])
 
 #   Copyright (C) 2012 by 
 #   Vikas Kawadia <vkawadia@bbn.com>
@@ -39,11 +35,11 @@ itrepeats = 0
 
 def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
 
-    """ Generator function to read datasets from file.
+    """ Function to read datasets from file.
    
     Each file represents a graph for a particular timestamp. 
     The name of the files is expected to be <timestamp>.ncol,
-    and each line represents one edge in the graph e.g.
+    and each line in the file represents one edge in the graph e.g.
     line:' 1 2 5 ' indicates there is an edge between nodes
     '1' and '2' with weight '5'
 
@@ -105,8 +101,9 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
 
 def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
-    """ Returns a partitioning of the input graph into communities 
-    which maximizes the value of the quality function Q.
+    """ Function to returns the partitioning of the input graph into communities 
+    which maximizes the value of the quality function Q. In this case, the quality
+    function is modularity. See, [Blondel08]_
 
     Parameters
     ----------
@@ -118,7 +115,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
-    tolerance: float,optional
+    tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there 
         will be. 
@@ -127,10 +124,10 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     Returns
     -------
     dictPartition: dictionary {node:communitu}
-        The partitioning which results in the best value of the quality function: Q (which is modularity in this case)
+        The partitioning which results in the best value of the quality function: Q (modularity).
 
-    Example
-    -------
+    Examples
+    --------
     >>> g0 = nx.Graph
     >>> g0.add_edges_from([(1,2,{'weight':2}),(1,3,{'weight':1}),(2,4,{'weight':1})])
     >>> print(maxQ(g0,minrepeats=10))
@@ -161,16 +158,16 @@ def make_Zgraph(g0, g1, g0_label_dict):
     ----------
     g0, g1: networkx graphs
         Graph of the current snapshop and previous Zgraph respectively
-    g0_label_dict: dictionary
-        {node:community} for the nodes in g0
+    g0_label_dict: dictionary {node:community}
+        Dictionary mapping nodes to communities in g0.
 
     Returns
     -------
     Z: graph
         A Zgraph incoorperating the current snapshot into the previous Zgraph 
 
-    Example
-    -------
+    Examples
+    --------
     >>> g0 = nx.Graph()
     >>> g0.add_edges_from([(1,2,{'weight':2}),(1,3,{'weight':1}),(2,4,{'weight':1})])
     >>> g1 = nx.Graph()
@@ -191,11 +188,9 @@ def make_Zgraph(g0, g1, g0_label_dict):
 
 def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
 
-    """ Makes repeated calls to the Link Propagation Algorithm (LPA) and
-    store the values of Q, E and F, as well as the corresponding partition
-    for later use. 
-
-    This is done to help find the optimal value of lambduh.
+    """ Function to make repeated calls to the Link Propagation Algorithm (LPA) and
+    store the values of Q, E and F, as well as the corresponding partitioning
+    for later use. This is done to help find the optimal value of lambduh.
    
     Parameters
     ----------
@@ -214,7 +209,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Zgraph: networkx graph
-        Graph in each edges join nodes belonging to the same community over
+        Graph where each edges join nodes belonging to the same community over
         previous snapshots
     repeats: integer
         The number of calls to be made to the LPA.      
@@ -226,8 +221,8 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         dictE: List of values of E corresponding to the above labeling
         dictF: List of values of F corresponding to the above labeling
         
-    Example
-    -------
+    Examples
+    --------
     >>> g0 = nx.Graph()
     >>> g0.add_edges_from([(1,2,{'weight':1}),(2,3,{'weight':1}),(1,3,{'weight':1}),(3,4,{'weight':1}),(4,5,{'weight':1}),(4,6,{'weight':1}),(5,7,{'weight':1}),(6,7,{'weight':1}),(8,9,{'weight':1}),(8,10,{'weight':1}),(9,10,{'weight':1})])
     >>> dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(g0, delta=0.05, tolerance=0.01, precedence_tiebreaking=False,lambduh=1,g0,repeats = 3)
@@ -258,21 +253,20 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
 
 def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
 
-    """ The Estrangement Reduction Algorithm.
-    Detects temporal communities and output the results to file for further processing. 
+    """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
+    This function detects temporal communities and output the results to file for further processing. 
 
     Parameters
     ----------
     dataset_dir: string
         Path to the relevant dataset files
-     precedence_tiebreaking: boolean,optional
+    precedence_tiebreaking: boolean,optional
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
-    tolerance: float,optional
+    tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
-        value found for the quality function. The smaller it is, the fewer dominant labels there 
-        will be. 
+        value found for the quality function. The smaller it is, the fewer dominant labels there will be. 
     convergence_tolerance: float,optional
         The convergence tolerance used in optimizing the value of lambda.
     delta: float
@@ -296,9 +290,13 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     -------
     matched_labels : dictionary {time: {node:label}}
         The labelling of each node for each snapshot
-        
-    Example
-    -------
+    
+    References
+    ----------
+    .. [Kawadia12] V. Kawadia and S. Sreenivasan, Online detection of temporal communities in evolving networks by estrangement confinement. http://arxiv.org/abs/1203.5126
+ 
+    Examples
+    --------
     >>> ERA(dataset_dir='tests/sample_data',delta=0.001)
     """
 

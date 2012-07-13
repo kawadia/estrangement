@@ -24,9 +24,13 @@ import os
 import argparse
  
 def parse_args():
-    """@brief parse cmd line and conf file options 
-    @returns opt  as returned by argsparse.parse_args"""
-    # read in options from cmdline and conffile
+    """Function to parse command line and configuration file options. 
+    
+    Returns
+    -------
+    opt : argparser object
+        returned by argsparse.parse_args"""
+
     usage="""usage: %prog [options] (--help for help)\n"""
 
     parser = argparse.ArgumentParser(description="Estrangement Confinement Algorithm",
@@ -37,7 +41,7 @@ def parse_args():
     return opt
 
 def add_options(parser):
-    """define all the program options here"""
+    """Function which defines the command line options and default values for each configuable parameter."""
     parser.add_argument("--dataset_dir",
             dest="dataset_dir", 
             type=str,

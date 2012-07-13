@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# estrangement documentation build configuration file, created by
-# sphinx-quickstart on Thu Jul 12 13:32:47 2012.
+# Estrangement documentation build configuration file, created by
+# sphinx-quickstart on Fri Jul 13 10:13:23 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'estrangement'
-copyright = u'2012, vikas'
+project = u'Estrangement'
+copyright = u'2012, Vikas'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'estrangementdoc'
+htmlhelp_basename = 'Estrangementdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,8 +183,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'estrangement.tex', u'estrangement Documentation',
-   u'vikas', 'manual'),
+  ('index', 'Estrangement.tex', u'Estrangement Documentation',
+   u'Vikas', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,8 +213,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'estrangement', u'estrangement Documentation',
-     [u'vikas'], 1)
+    ('index', 'estrangement', u'Estrangement Documentation',
+     [u'Vikas'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'estrangement', u'estrangement Documentation',
-   u'vikas', 'estrangement', 'One line description of project.',
+  ('index', 'Estrangement', u'Estrangement Documentation',
+   u'Vikas', 'Estrangement', 'One line description of project.',
    'Miscellaneous'),
 ]
 

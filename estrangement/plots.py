@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-This module implements functions used process log files and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm (ERA)."""
+This module implements functions used to process data and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm :mod:`estrangement.ERA` ."""
 
-__all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas','layout']
+__all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas']
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
@@ -56,20 +56,21 @@ def GetDeltas():
 
     """ Function to scan the folders and read the values of delta used in ERA.
 
-    The ERA function creates a folder specific to the value of delta used. Within
-    each of these folders, a config file specifies the value of delta, and this 
-    function reads the value of delta from each such config file. 
+    The :mod:`estrangement.ERA` function creates a folder specific to the value 
+    of delta used (e.g. task_delta_0.01). Within each of these folders, a config 
+    file (simulation.conf) specifies the value of delta used in the simulation.
+    This function reads the value of delta from each such config file. 
 
     Alternatively, delta can be specified in the function calls, bypassing this
-    function. See 'estrangement_sample.py' for details. 
+    function. See :mod:`sample` for more details. 
 
     Returns
     -------
     deltas : list
-        each member of the list is a float denoting a value of delta used in ERA
+        A list of float, where each member denotes a value of delta used in :mod:`estrangement.ERA`.
 
-    Example
-    -------
+    Examples
+    --------
     >>> deltas = GetDeltas()
     >>> print(deltas)
     """
@@ -94,49 +95,49 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
 
     """ Given dictionaries, dictX with key=label, val = iterable of X values, 
     and dictY with key=label, val = iterable of Y values, this function 
-    plots lines for all the labels on the same plot.  
+    plots lines for each the labels specified on the same plot.  
 
     Parameters
     ----------
-    dictX : dictionary {string : iterable}
-        The X values of a set of lines to be plotted and their respective label
-    dictY : dictionary {string : iterable}
-        The Y values of a set of lines to be plotted and their respective label
+    dictX : dictionary {label:[list of values]}
+        The X values of a set of lines to be plotted and their respective label.
+    dictY : dictionary {lable:[list of values]}
+        The Y values of a set of lines to be plotted and their respective label.
     deltas : list of floats
-        The values of delta used for ERA for which there are results
+        The values of delta used for ERA for which there are results.
     linewidth : float, optional
-        The desired font size of the lines to be plotted
+        The desired font size of the lines to be plotted.
     markersize : float, optional
-        The size of the markers used on each line
+        The size of the markers used on each line.
     label_fontsize : integer, optional
-        The size of the font used for the labels
+        The size of the font used for the labels.
     xfigsize : float, optional
-        The desired length of the x-axis
+        The desired length of the x-axis.
     yfigsize : float, optional
-        The desired length of the y-axis
+        The desired length of the y-axis.
     fontsize : integer, optional
-        The size of the font to be used in the figure
+        The size of the font to be used in the figure.
     fname : string, optional
-        The file is saved with this name
+        The file is saved with this name.
     listLinesstyles : list of strings, optional
-        A list consisting of the line styles to be used in the figures
+        A list consisting of the line styles to be used in the figures.
     xlabel : string, optional
-        The label to appear on the x-axis
+        The label to appear on the x-axis.
     ylabel : string, optional 
-        The label to appear on the y-axis
+        The label to appear on the y-axis.
     title : string, optional
-        The title of the figure
+        The title of the figure.
     xscale : string, optional
-        The type of scale to be used on the x-axis 
+        The type of scale to be used on the x-axis. 
     yscale : string, optional
-        The type of scale to be used on the y-axis      
-    dictErr : Dictionary {string : iterable}
+        The type of scale to be used on the y-axis.      
+    dictErr : Dictionary {label:[list of values]}
         Dictionary containing the Error Bars to be plotted on each line
     display_on : boolean
         If True, the graph is shown on the screen       
 
-    Example
-    -------
+    Examples
+    --------
     >>> dictX = {'Estrangement:delta_0.05': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'Estrangement:delta_0.025': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'Estrangement:delta_0.01': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'Estrangement:delta_1.0': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
     >>> dictY = {'Estrangement:delta_0.05': [0.0, 0.020202020202020204, 0.04040404040404041, 0.031578947368421054, 0.010309278350515464, 0.010101010101010102, 0.020202020202020204, 0.030612244897959183, 0.030303030303030304, 0.0103092783505154], 'Estrangement:delta_0.025': [0.0, 0.020202020202020204, 0.0, 0.021052631578947368, 0.0, 0.020202020202020204, 0.010101010101010102, 0.02040816326530612, 0.010101010101010102, 0.0], 'Estrangement:delta_0.01': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 'Estrangement:delta_1.0': [0.061224489795918366, 0.020202020202020204, 0.04040404040404041, 0.05263157894736842, 0.0, 0.020202020202020204, 0.06060606060606061, 0.02040816326530612, 0.04040404040404041, 0.041237113402061855]}
     >>> plot_by_param(dictX, dictY,deltas=[],fname='estrangement.svg', listLinestyles=['bs--', 'ro-',], xlabel="Time", ylabel='Estrangement', title="Estrangement")
@@ -208,12 +209,12 @@ def plot_function(listNames,image_extension="svg"):
 
     Returns
     ------- 
-    Nothing : The image is displayed on the screen and/or written to file
+    Nothing : The image is displayed on the screen and/or written to file.
 
-    Note
-    ----
+    Notes
+    -----
     The function reads the relevant input data from file and formats it. 
-    The actual plotting is done in 'plot_by_param'.     
+    The actual plotting is done in :mod:`plots.plot_by_param`.     
 
     Examples
     --------
@@ -263,9 +264,9 @@ def plot_function(listNames,image_extension="svg"):
 
 def ChoosingDelta(image_extension="svg",deltas=[]):
 
-    """ Plots avg Q*-E vs delta to get insights into the best delta.
+    """ Function to plot avg(Q*-E) vs delta to get insights into the best delta.
    
-    This module merely processes the data, the plotting is done by 'plot_by_param'.
+    This module merely processes the data, the plotting is done by :mod:`plots.plot_by_param`.
         
     Parameters
     ----------
@@ -273,18 +274,18 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
         The extension of the plot file to be saved
     deltas : list of floats, optional
         The values of deltas used in the simulation. If delta is not
-        specifed, 'GetDeltas' is called to create the list. 
+        specifed, :mod:`plots.GetDeltas` is called to create the list. 
 
     Returns
     -------
-    Nothing : The plot is displayed on the screen and/or written to file
+    Nothing : The plot is displayed on the screen and/or written to file.
 
-    Note
-    ----
-    To produce the necessary stat files, set 'write_stats=True' when calling 'estrangment.ERA()'
+    Notes
+    -----
+    To produce the necessary stat files, set 'write_stats=True' when calling :mod:`estrangement.ERA`.
 
-    Example
-    -------
+    Examples
+    --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
     ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
@@ -334,31 +335,31 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     Parameters
     ----------
     matched_labels : dictionary {delta:{time: {node:label}}}
-        The labelling of each node for each snapshot
-    deltas : list of floats,optional
+        The labelling of each node for each snapshot.
+    deltas : list of floats, optional
         The values of delta used in the simulation. 
     nodes of interest : list of integers, optional
         If nodes_of_interest is not an empty list then show egocentric view of the
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
     delta_to_use_for_node_ordering : float, optional
-        The value of delta used to order nodes for all temporal community plots
+        The value of delta used to order nodes for all temporal community plots.
     label_sorting_keyfunc : string, optional
-        Method used to order the labels to be plotted
+        Method used to order the labels to be plotted.
 
     Returns
     -------
     node_index_dict : dictionary {nodename:index_value}
-        A dictionary mapping nodenames to index values, which are to be plotted 
+        A dictionary mapping nodenames to index values, which are to be plotted. 
     t_index_dict : dictionary {timestamp : index_value)
-        A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted
+        A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted.
     label_index_dict : dictionary {label : index_value}
-        A dictionary mapping community labels to an index value, which are to be plotted
+        A dictionary mapping community labels to an index value, which are to be plotted.
     labels_of_interest_dict : dictionary {delta : labels}
-        Dictionary mapping delta to the labels of 'nodes_of_interest' for that delta 
+        Dictionary mapping delta to the labels of 'nodes_of_interest' for that delta.
 
-    Example
-    -------
+    Examples
+    --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
     ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
@@ -528,8 +529,8 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     -------
     Nothing, the plot is written to file and/or displayed on the screen depending on specified parameters.
    
-    Example
-    -------
+    Examples
+    --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
     ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
@@ -666,7 +667,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
 
 def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
 
-    """ Function to plot F with lambdas for various snapshots 
+    """ Function to plot F with lambdas for various snapshots. 
 
     Parameters
     ----------
@@ -680,8 +681,8 @@ def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
     -------
     Nothing. The plot is written to file. 
 
-    Example
-    -------
+    Examples
+    --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
     ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)

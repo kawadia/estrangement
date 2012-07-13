@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-Link Propagation Algorithm (LPA).
+The module implements the Link Propagation Algorithm (LPA) as decribed in: [Barber09]_.
 """
 
 import networkx as nx
@@ -25,11 +25,12 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 
 def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
 
-    """Returns a graph with fewer distinct labels than the input graph.  
+    """Function to relabel nodes such that it constructs a graph with the 
+     same structure as the input graph, but with fewer distinct labels.  
 
     Each node examines the labels of its neighbors and determines
     which of their label maximizes a specified objective function.
-    The process is repeated until there are no more changes in label.
+    The process is repeated until there are no more changes in the labelling.
     Final set of labels is returned.  
     
     Parameters
@@ -46,7 +47,7 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Z: networkx graph, optional
         Graph in each edges join nodes belonging to the same community over
-        previous snapshots
+        previous snapshots.
     lambduh: 
         The Lagrange multiplier.
     initial_label_dict : dictionary  {node_identifier:label,....}, optional
@@ -65,13 +66,11 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
 
     See Also
     --------
-    Agglomerate.generate_dendogram.
-
+    agglomerate.generate_dendogram
 
     References
-    ----------                  
-    .. [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities 
-    in evolving networks by estrangement confinement", http://arxiv.org/abs/1203.5126.
+    ----------                 
+    .. [Barber09] MJ Barber and JW Clark, "Detecting Network Communities by propagating labels under constraints." Physical Review E 80:026129
 
     Examples
     --------
@@ -79,7 +78,6 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
     >>> new_labeling = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, labelling, Z=current_Zgraph)
     >>> list(lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
     [(0,1),(1,1),(2,2),(3,1)]
-
     """
 
     # If not specifed, each node's initial label is the node's identifier

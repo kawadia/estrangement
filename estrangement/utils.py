@@ -4,7 +4,7 @@
 This module implements various functions used to compute and plot temporal communities.
 """
 
-__all__ = ['graph_distance','node_graph_distance','estrangement','match_labels','confidence_interval']
+__all__ = ['graph_distance','node_graph_distance','Estrangement','match_labels','confidence_interval']
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
@@ -26,7 +26,7 @@ import logging
 
 def graph_distance(g0, g1, weighted=True):
 
-    """Return the Tanimoto distance between the two input graphs.
+    """Function to calculate and return the Tanimoto distance between the two input graphs.
 
     Tanimoto distance between the set of edges is defined as    
     (aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
@@ -35,7 +35,7 @@ def graph_distance(g0, g1, weighted=True):
     ----------
     g0,g1: graph
         Input networkx graphs to be compared
-    weighted: bool
+    weighted: boolean
         True if the edges of the graph are weighted, False otherwise
 
     Returns
@@ -43,8 +43,8 @@ def graph_distance(g0, g1, weighted=True):
     graph_distance: float
         The Tanimoto distance between the nodes of g0 and g1
 
-    Example
-    -------
+    Examples
+    --------
     >>> g0 = nx.complete_graph(5)
     >>> g1 = nx.complete_graph(5)
     >>> print(graph_distance(g0,g1,False)
@@ -67,7 +67,7 @@ def graph_distance(g0, g1, weighted=True):
 
 def node_graph_distance(g0, g1):
 
-    """Return the Jaccard distance between the two input graphs.
+    """Function to calculate and return the Jaccard distance between the two input graphs.
 
     Jaccard distance between the set of nodes is defined as    
     (a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
@@ -82,8 +82,8 @@ def node_graph_distance(g0, g1):
     node_graph_distance: float
         The Jaccard distance between the nodes of g0 and g1
         
-    Example
-    -------
+    Examples
+    --------
     >>> g0 = nx.path_graph(2)
     >>> g1 = nx.path_graph(4)
     >>> print(node_graph_distance(g0,g1)
@@ -104,21 +104,22 @@ def Estrangement(G, label_dict, Zgraph):
 
     Parameters
     -----------
-    G: graph
-        A networkx graph object (current snapshot)
-    label_dict: dictionary
-        key = node_identifier, value = community label
+    G: networkx.Graph
+        A networkx graph object representing the current snapshot.
+    label_dict: dictionary {node:community}
+        A dictionary mapping nodes to communities.
     Zgraph: networkx.Graph
-        A graph containing edges between nodes of the same community in all previous snapshots
+        A graph containing only the edges between nodes of the same community in all previous snapshots.
   
     Returns
     -------
     estrangement: float
         the value of Q-tauE for the given input
  
-    Note
-    ----
-    Used in 'LPA()' and 'agglomerate.generate_dendogram()'
+    See Also
+    --------
+    lpa.lpa
+    agglomerate.generate_dendogram()
 
     Examples
     --------
@@ -170,8 +171,8 @@ def match_labels(label_dict, prev_label_dict):
     matched_label_dict: dictionar {node:community} 
         The new community labelling.
 
-    Example
-    -------
+    Examples
+    --------
     >>> label_dict_a = {1:'a',2:'a',3:'a',4:'a',5:'a',6:'a'}
     >>> label_dict_b = {1:'b',2:'b',3:'b',4:'b',5:'b',6:'b'}
     >>> print(match_labels(label_dict_a,label_dict_b)
@@ -249,6 +250,4 @@ def confidence_interval(nums):
     """
 
     return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
-
-
 
