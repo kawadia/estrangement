@@ -58,7 +58,7 @@ def plot_communities():
     opt = options_parser.parse_args()
 
     # set the values of delta for which to create plots
-    deltas = [0.01,0.025,0.05,1.0]
+    deltas = opt.delta
 
     # check if there are results for these deltas
     for d in deltas:

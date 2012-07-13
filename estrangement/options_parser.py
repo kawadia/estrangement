@@ -86,10 +86,11 @@ def add_options(parser):
     )
 
     parser.add_argument("--delta",
-            dest="delta", 
+            dest="delta",
+            nargs='+', 
             help="constraint on estrangement (default: %(default)s)",
             type=float,
-            default=0.05
+            default=[0.01, 0.025, 0.05, 1.0]
     )
     
     
