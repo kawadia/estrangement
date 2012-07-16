@@ -165,7 +165,7 @@ The higher the level in the dendogram, the bigger the communities in that level.
 
 <dl class="function">
 <dt id="agglomerate.best_partition">
-<tt class="descclassname">agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x4260f10&gt;</em><big>)</big><a class="headerlink" href="#agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x3d01ed0&gt;</em><big>)</big><a class="headerlink" href="#agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to compute the partition of the graph nodes which maximises the modularity
 (or try to) using the Louvain heuristices.</p>
 <p>This is the partition of highest modularity, i.e. the highest partition of the dendogram
@@ -598,7 +598,7 @@ dictF: List of values of F corresponding to the above labeling</p>
 
 <dl class="function">
 <dt id="estrangement.ERA">
-<tt class="descclassname">estrangement.</tt><tt class="descname">ERA</tt><big>(</big><em>dataset_dir='./data'</em>, <em>precedence_tiebreaking=False</em>, <em>tolerance=1e-05</em>, <em>convergence_tolerance=0.01</em>, <em>delta=0.05</em>, <em>minrepeats=10</em>, <em>increpeats=10</em>, <em>maxfun=500</em>, <em>write_stats=False</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x4819e90&gt;</em><big>)</big><a class="headerlink" href="#estrangement.ERA" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">estrangement.</tt><tt class="descname">ERA</tt><big>(</big><em>dataset_dir='./data'</em>, <em>precedence_tiebreaking=False</em>, <em>tolerance=1e-05</em>, <em>convergence_tolerance=0.01</em>, <em>delta=0.05</em>, <em>minrepeats=10</em>, <em>increpeats=10</em>, <em>maxfun=500</em>, <em>write_stats=False</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x4216fd0&gt;</em><big>)</big><a class="headerlink" href="#estrangement.ERA" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Estrangement Reduction Algorithm, as decribed in: <a class="reference internal" href="#kawadia12">[Kawadia12]</a>. 
 This function detects temporal communities and output the results to file for further processing.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -873,7 +873,7 @@ preserved - all other labels on the t-1 side die.</p>
 <p>The module implements the Link Propagation Algorithm (LPA) as decribed in: <a class="reference internal" href="#barber09">[Barber09]</a>.</p>
 <dl class="function">
 <dt id="lpa.lpa">
-<tt class="descclassname">lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1e-05</em>, <em>tiebreaking=False</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x3eb5510&gt;</em><big>)</big><a class="headerlink" href="#lpa.lpa" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1e-05</em>, <em>tiebreaking=False</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x386b650&gt;</em><big>)</big><a class="headerlink" href="#lpa.lpa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to relabel nodes such that it constructs a graph with the 
 same structure as the input graph, but with fewer distinct labels.</p>
 <p>Each node examines the labels of its neighbors and determines

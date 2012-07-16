@@ -11,9 +11,11 @@ More details in http://arxiv.org/abs/1203.5126
 * python-numpy
 * python-matplotlib
 * python-multiprocessing
+* python-sphinx (Note: Used for generating documentation only)
 
 ### Pip
 * networkx (Note: Ubuntu's python-networkx package is out of date and will not work)
+* numpydoc (Note: Used for generating documentation only)
 
 ### Standard Python Library
 * types
