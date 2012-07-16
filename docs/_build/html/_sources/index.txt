@@ -11,8 +11,15 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   utils
-   agglomerate
+Utils
+-----
+.. automodule:: utils
+    :members:
+
+Link Propagation Algorithm
+--------------------------
+.. automodule:: lpa
+    :members:
 
 Agglomerate
 -----------
@@ -22,16 +29,6 @@ Agglomerate
 Estrangement
 ------------
 .. automodule:: estrangement
-    :members:
-
-Utils
------
-.. automodule:: utils
-    :members:
-
-Link Propagation Algorithm
---------------------------
-.. automodule:: lpa
     :members:
 
 Plot Functions
@@ -44,9 +41,9 @@ Options Parser
 .. automodule:: options_parser
     :members:
 
-Sample Script
--------------
-.. automodule:: sample
+EstrangementDemo
+----------------
+.. automodule:: EstrangementDemo
     :members:
 
 Indices and tables

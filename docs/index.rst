@@ -11,9 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   utils
-   agglomerate
-
 Utils
 -----
 .. automodule:: utils
@@ -44,9 +41,9 @@ Options Parser
 .. automodule:: options_parser
     :members:
 
-Sample Script
--------------
-.. automodule:: sample
+EstrangementDemo
+----------------
+.. automodule:: EstrangementDemo
     :members:
 
 Indices and tables

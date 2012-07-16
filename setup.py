@@ -3,10 +3,8 @@
 from distutils.core import setup
 setup(
     name = "estrangement",
-    packages = ["estrangement",
-		"estrangement.tests",
-		"estrangement.sample"],
-    version = "1.0",
+    packages = ["estrangement", "estrangement.tests","bin"],
+    version = "0.1.0",
     description = "Temporal Community Detection and Plotting",
     author = ["Vikas Kawadia, Sameet Sreenivasan, Stephen Dabideen"],
     author_email = "vkawadia@bbn.com",

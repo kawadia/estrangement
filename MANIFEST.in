@@ -1,9 +1,10 @@
 include COPYING.txt
 include README.md
+include CHANGES.txt
+include setup.py
 
 recursive-include docs *
-
+recursive-include bin *
 recursive-include estrangement/tests/sample_data *
 recursive-include estrangement/tests/sample_data2 *
 
-recursive-include datasets *
