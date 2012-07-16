@@ -18,11 +18,9 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 
 import sys
 import os
-sys.path.append(os.getcwd() + "/..")
-sys.path.append(os.getcwd() + "../..")
-import options_parser
-import plots
-import estrangement
+import estrangement.options_parser
+import estrangement.plots
+import estrangement.estrangement
 import multiprocessing
 
 
@@ -37,25 +35,25 @@ def plot_communities():
     Each experiment requires a name, which is used to create a folder to store the
     results of the simulation. If the results already exist in the folder specified
     by the experiment name, plots are created using these existing results and the 
-    simulation is not run on subsequent calls to sample.py. 
+    simulation is not run on subsequent calls to EstrangementDemo.py. 
     To run the simulation again, delete the experiment folder before running this script,
     or use a different experiment name. 
 
     Examples
     --------
     >>> # To see all configuarable parameters use the -h option 
-    >>> sample.py -h
+    >>> EstrangementDemo.py -h
     >>> # Configurable parameters can be specified at the command line
-    >>> sample.py --dataset_dir ../data --display_on True --exp_name my_experiment
+    >>> EstrangementDemo.py --dataset_dir ../data --display_on True --exp_name my_experiment
     >>> # A config file can be used, but it must be preceeded by an '@'
     >>> # Three config files are provided as examples, check that that path to the dataset is valid.
-    >>> sample.py @senate.conf
-    >>> sample.py @random.conf
-    >>> sample.py @mitdata.conf 
+    >>> EstrangementDemo.py @senate.conf
+    >>> EstrangementDemo.py @random.conf
+    >>> EstrangementDemo.py @mitdata.conf 
     """
 
     # use argparse to parse command-line arguments using optionsadder.py
-    opt = options_parser.parse_args()
+    opt = estrangement.options_parser.parse_args()
 
     # set the values of delta for which to create plots
     deltas = opt.delta
@@ -91,7 +89,7 @@ def plot_communities():
         # run multiple processes in parallel, each for a different value of delta
         else:
 	    print("Running simulations for delta=%s"%d)
-            p = multiprocessing.Process(target=estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
+            p = multiprocessing.Process(target=estrangement.estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
             p.start()
 
     # combine the results stored in the queue into a single dictionary
@@ -104,7 +102,7 @@ def plot_communities():
         matched_label_file.close()
 
     # plot the temporal communities 
-    plots.plot_temporal_communities(matched_labels_dict)
+    estrangement.plots.plot_temporal_communities(matched_labels_dict)
     os.chdir("..")
 
 
