@@ -28,20 +28,21 @@ def graph_distance(g0, g1, weighted=True):
 
     """Function to calculate and return the Tanimoto distance between the two input graphs.
 
-    Tanimoto distance between the set of edges is defined as    
+    Let **a** be the set of edges belonging to graph *G0* and let **b** be the set of
+    edges belonging to *G1*. The Tanimoto distance between *G0* and *G1* is defined as    
     (aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
 
     Parameters
     ----------
-    g0,g1: graph
-        Input networkx graphs to be compared
+    g0,g1: networkx.Graph
+        The networkx graphs to be compared.
     weighted: boolean
-        True if the edges of the graph are weighted, False otherwise
+        True if the edges of the graph are weighted, False otherwise.
 
     Returns
     -------
     graph_distance: float
-        The Tanimoto distance between the nodes of g0 and g1
+        The Tanimoto distance between the nodes of g0 and g1.
 
     Examples
     --------
@@ -69,18 +70,19 @@ def node_graph_distance(g0, g1):
 
     """Function to calculate and return the Jaccard distance between the two input graphs.
 
-    Jaccard distance between the set of nodes is defined as    
+    Let **a** be the set of nodes belonging to graph *G0* and let **b** be the set of 
+    nodes belonging to *G1*. The Jaccard distance between *G0* and *G1* is defined as    
     (a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
 
     Parameters
     ----------
-    g0,g1: graph
-        Input networkx graphs to be compared
+    g0,g1: networkx.Graph
+        The networkx graphs to be compared.
 
     Returns
     -------
     node_graph_distance: float
-        The Jaccard distance between the nodes of g0 and g1
+        The Jaccard distance between the nodes of g0 and g1.
         
     Examples
     --------
@@ -100,7 +102,13 @@ def Estrangement(G, label_dict, Zgraph):
 
     """Return the Estrangement between G and Zgraph
 
-    Compute Q-tauE for the given input parameters.
+    Given network snapshots and partitioning at times *t* and *(t-1)*, 
+    an edge (u; v) in |Gt| is said to be estranged if, *u* and *v* are
+    in the same partition in |G(t-1)| but not in |Gt|.
+    Estrangement is defined as the fraction of estranged edges in G\ :sub:`t` \.
+
+    .. |Gt| replace:: G\ :sub:`t`
+    .. |G(t-1)| replace:: G\ :sub:`t-1`
 
     Parameters
     -----------
@@ -114,7 +122,7 @@ def Estrangement(G, label_dict, Zgraph):
     Returns
     -------
     estrangement: float
-        the value of Q-tauE for the given input
+	The weighted fraction of estranged edges in *G*. 
  
     See Also
     --------
@@ -145,30 +153,31 @@ def Estrangement(G, label_dict, Zgraph):
 
 def match_labels(label_dict, prev_label_dict):
 
-    """Returns a list of community labels to be preserved representing the 
+    """Returns a list of community labels to be preserved, representing the 
     communities that remain mostly intact between snapshots.
 
-    We start by representing the communities at t-1 and t as nodes of a
-    bipartite graph. From each node at t-1 draw a directed link to the 
-    node at t with which it has maximum overlap. From each node at t draw 
-    a directed link to the node at t-1 with which it has maximum overlap.
+    We start by representing the communities at time *t-1* and at time *t* as 
+    nodes of a bipartite graph. From each node at time *t-1*, we  draw a directed 
+    link to the node at time *t* with which it has maximum overlap. From each node 
+    at time *t*, we  draw a directed link to the node at time *t-1* with which it 
+    has maximum overlap.
 
     Basically x,y and z choose who they are most similar to among a and b
     and denote this by arrows directed outward from them. Similarly a and
     b, choose who they are most similar to among x, y and z. Then the rule
     is that labels on the t-1 side of every bidirected (symmetric) link is
-    preserved - all other labels on the t-1 side die.
+    preserved - all other labels on the t-1 side are removed.
 
     Parameters
     ----------
     label_dict: dictionary
-        {node:community} at time t
+        {node:community} at time t.
     prev_label_dict: dictionary
-        {node:community} at time (t - 1)
+        {node:community} at time (t - 1).
 
     Returns
     -------
-    matched_label_dict: dictionar {node:community} 
+    matched_label_dict: dictionary {node:community} 
         The new community labelling.
 
     Examples
@@ -230,12 +239,12 @@ def match_labels(label_dict, prev_label_dict):
 
 def confidence_interval(nums):
 
-    """Return (half) the 95% confidence interval around the mean for nums:
-    1.96 * std_deviation / sqrt(len(nums)).
+    """Return (half) the 95% confidence interval around the mean for the list of input numbers,
+    i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).
     
     Parameters
     ----------
-    nums: list of numbers
+    nums: list of floats
 
     Returns
     -------

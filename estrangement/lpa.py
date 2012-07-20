@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-The module implements the Link Propagation Algorithm (LPA) as decribed in: [Barber09]_.
+This module implements the Link Propagation Algorithm (LPA) as decribed in: [Raghavan07]_.
 """
 
 import networkx as nx
@@ -25,18 +25,18 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 
 def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
 
-    """Function to relabel nodes such that it constructs a graph with the 
-     same structure as the input graph, but with fewer distinct labels.  
+    """Function to run the Link Propagation Algorithm and return the labelling upon convergence.
 
-    Each node examines the labels of its neighbors and determines
-    which of their label maximizes a specified objective function.
-    The process is repeated until there are no more changes in the labelling.
-    Final set of labels is returned.  
+    The Link Propagation algorithm initially assigns each node a unique label and sequentially
+    allows nodes to change their label so as to maximize a specified objective function, which 
+    in this case is modularity. The algorithm converges when each node has a label that is one 
+    of the most popular amongst its neighbors. At the end of LPA, there should be few distinct 
+    labels than in the *initial_label_dict*. The final set of labels is returned.  
     
     Parameters
     ----------
-    G : graph
-        Input NetworkX Graph.
+    G : networkx.Graph
+        The input graph.
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
@@ -45,18 +45,18 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
         If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
-    Z: networkx graph, optional
-        Graph in each edges join nodes belonging to the same community over
-        previous snapshots.
+    Z: networkx.Graph, optional
+        Graph where the edges join nodes belonging to the same community over previous snapshots.
     lambduh: 
         The Lagrange multiplier.
-    initial_label_dict : dictionary  {node_identifier:label,....}, optional
-        Initial labeling of the nodes in G.
+    initial_label_dict : dictionary  {node_identifier:label}, optional
+        Initial labeling of the nodes in G. If no labelling is specified, each node is assigned
+        a unique label. 
 
     Returns
     -------
-    label_dict : dictionary  {node_identifier:label,....}
-        Modified labeling after running LPA on G and the initial labeling.
+    label_dict : dictionary  {node_identifier:label}
+        Modified labeling after running the LPA on G.
 
     Raises
     ------
@@ -70,7 +70,8 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
 
     References
     ----------                 
-    .. [Barber09] MJ Barber and JW Clark, "Detecting Network Communities by propagating labels under constraints." Physical Review E 80:026129
+    .. [Barber09] M.J. Barber and J.W. Clark, "Detecting Network Communities by propagating labels under constraints." Physical Review E 80:026129
+    .. [Raghavan07] U.N. Raghavan, R. Albert and S. Kumara, "Near linear time algorithm to detect community structure in large-scale networks." Physical Review E 76:036106
 
     Examples
     --------

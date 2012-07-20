@@ -13,32 +13,32 @@ Contents:
 
 Utils
 -----
-.. automodule:: utils
+.. automodule:: estrangement.utils
     :members:
 
 Link Propagation Algorithm
 --------------------------
-.. automodule:: lpa
+.. automodule:: estrangement.lpa
     :members:
 
 Agglomerate
 -----------
-.. automodule:: agglomerate
+.. automodule:: estrangement.agglomerate
     :members:
 
 Estrangement
 ------------
-.. automodule:: estrangement
+.. automodule:: estrangement.estrangement
     :members:
 
 Plot Functions
 --------------
-.. automodule:: plots
+.. automodule:: estrangement.plots
     :members:
 
 Options Parser
 --------------
-.. automodule:: options_parser
+.. automodule:: estrangement.options_parser
     :members:
 
 EstrangementDemo

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-This module implements functions used to process data and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm :mod:`estrangement.ERA` ."""
+This module implements functions used to process data and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm :mod:`estrangement.estrangement.ERA` ."""
 
 __all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas']
 
@@ -54,20 +54,22 @@ markers = [
 
 def GetDeltas():
 
-    """ Function to scan the folders and read the values of delta used in ERA.
+    """ Function to scan for simulation folders in the current working directory and read 
+    the values of delta used in ERA.
 
-    The :mod:`estrangement.ERA` function creates a folder specific to the value 
-    of delta used (e.g. task_delta_0.01). Within each of these folders, a config 
-    file (simulation.conf) specifies the value of delta used in the simulation.
-    This function reads the value of delta from each such config file. 
+    The :mod:`estrangement.estrangement.ERA` function creates a folder specific to the value 
+    of delta used in each simulation (e.g. task_delta_0.01). Within each of these folders, 
+    a config file (simulation.conf) specifies the value of delta used in the simulation.
+    This function reads the value of delta from each such config file and returns them in
+    a list.  
 
     Alternatively, delta can be specified in the function calls, bypassing this
-    function. See :mod:`sample` for more details. 
+    function. See :mod:`EstrangementDemo` for more details. 
 
     Returns
     -------
     deltas : list
-        A list of float, where each member denotes a value of delta used in :mod:`estrangement.ERA`.
+        A list of float, where each member denotes a value of delta used in :mod:`estrangement.estrangement.ERA`.
 
     Examples
     --------
@@ -95,7 +97,7 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
 
     """ Given dictionaries, dictX with key=label, val = iterable of X values, 
     and dictY with key=label, val = iterable of Y values, this function 
-    plots lines for each the labels specified on the same plot.  
+    plots lines for each the labels specified on the same axes.  
 
     Parameters
     ----------
@@ -198,7 +200,11 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
 
 def plot_function(listNames,image_extension="svg"):
 
-    """ Plots a graph with the specified attributes
+    """ Plots a graph with the attributes specified in *listNames*.
+
+    This function relies on the file output of :mod:`estrangement.estrangement.ERA`.
+    The value of the parameter *write_stats* should be set to *True* when calling 
+    :mod:`estrangement.estrangement.ERA`. 
 
     Parameters
     ----------
@@ -214,7 +220,7 @@ def plot_function(listNames,image_extension="svg"):
     Notes
     -----
     The function reads the relevant input data from file and formats it. 
-    The actual plotting is done in :mod:`plots.plot_by_param`.     
+    The actual plotting is done in :mod:`estrangement.plots.plot_by_param`.     
 
     Examples
     --------
@@ -264,17 +270,18 @@ def plot_function(listNames,image_extension="svg"):
 
 def ChoosingDelta(image_extension="svg",deltas=[]):
 
-    """ Function to plot avg(Q*-E) vs delta to get insights into the best delta.
+    """ Function to plot avg(Q*-E) versus delta to get insights into the best delta for the given dataset.
    
-    This module merely processes the data, the plotting is done by :mod:`plots.plot_by_param`.
-        
+    This module merely processes the data, the plotting is done by :mod:`estrangement.plots.plot_by_param`.
+    It requires the results from :mod:`estrangement.estrangement.ERA` to be outputted to file.        
+ 
     Parameters
     ----------
     image_extension : string
         The extension of the plot file to be saved
     deltas : list of floats, optional
         The values of deltas used in the simulation. If delta is not
-        specifed, :mod:`plots.GetDeltas` is called to create the list. 
+        specifed, :mod:`estrangement.plots.GetDeltas` is called to create the list. 
 
     Returns
     -------
@@ -282,7 +289,7 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
     Notes
     -----
-    To produce the necessary stat files, set 'write_stats=True' when calling :mod:`estrangement.ERA`.
+    To produce the necessary stat files, set 'write_stats=True' when calling :mod:`estrangement.estrangement.ERA`.
 
     Examples
     --------
@@ -329,8 +336,8 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
 def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[],delta_to_use_for_node_ordering=1.0,label_sorting_keyfunc="random",nodeorder=None):
 
-    """ Function to perform the necessary preprocessing before plotting 
-    the tiled plots for all simulation parameters. 
+    """ Function to perform the necessary preprocessing before making 
+    the tiled plots, of the temporal communities, for all simulation parameters. 
 
     Parameters
     ----------
@@ -473,7 +480,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
 
 
 def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tiled_figsize='(36,16)',manual_colormap=None,label_cmap='Paired',frameon=True,xlabel="Time",ylabel="Node ID",label_fontsize=20,show_title=True,fontsize=28,colorbar=False,show_yticklabels=False,nodelabel_func=None,xtick_separation=5,snapshotlabel_func=None,wspace=0.2,bottom=0.1,image_extension="svg",dpi=200,display_on=True):
-    """ Module to create tiled plots for different values of paramters.
+    """ Module to create tiled plots, illustrating the temporal communities, for different values of paramters.
 
     Parameters
     ----------
@@ -667,7 +674,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
 
 def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
 
-    """ Function to plot F with lambdas for various snapshots. 
+    """ Function to plot F with lambduhs for various snapshots. 
 
     Parameters
     ----------

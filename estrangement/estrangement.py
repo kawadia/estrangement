@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """ 
 This module implements the Estrangement Reduction Algorithm (ERA) and various functions necessary 
-to read the input snapshots, process information and output the results to file.
+to read the input snapshots, process information and return the results and/or print them to file.
 """
 
 __all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
@@ -35,7 +35,7 @@ itrepeats = 0
 
 def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
 
-    """ Function to read datasets from file.
+    """ Function to read datasets from files in *datadir*.
    
     Each file represents a graph for a particular timestamp. 
     The name of the files is expected to be <timestamp>.ncol,
@@ -46,7 +46,7 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
     Parameters
     ----------
     datadir: string
-        path to the directory containing the dataset
+        path to the directory containing the dataset.
     precedence_tiebreaking: boolean
         This is only relevant when there are multiple dominant labels while running the LPA.
         If it is set to 'True', the dominant label is set dominant label most recently seen. 
@@ -61,11 +61,11 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
     Returns 
     ------- 
     t: list
-        an array of timestamps, each representing a snapshot of the communities
-    g1: networkx graph
-        the last graph to be read from file
+        an array of timestamps, each representing a snapshot of the communities.
+    g1: networkx.Graph
+        the last graph to be read from file.
     initial_label_dictionary: dictionary { node: community}
-        The community labels if it is the first snapshot, otherwise None
+        A dictionary mapping nodes to community labels if it is the first snapshot, otherwise *None*.
     """
 
     raw_file_list = os.listdir(datadir)
@@ -101,13 +101,17 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
 
 def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
-    """ Function to returns the partitioning of the input graph into communities 
-    which maximizes the value of the quality function Q. In this case, the quality
-    function is modularity. See, [Blondel08]_
+    """ Function which returns the partitioning of the input graph, into communities, 
+    which maximizes the value of the quality function Q. 
+
+    In this case, the quality function is modularity. See, [Blondel08]_ for more details. 
+    Maximizing modularity is NP-hard, so we run multiple iterations, randomizing the order
+    of node visitations and return the partitioning which yields the greatest modularity.
+    Note that estrangement is not taken into cosideration in this calculation.
 
     Parameters
     ----------
-    g1: networkx graph
+    g1: networkx.Graph
         The input graph.
     minrepeats: integer, optional
         The number of variations to try before returning the best partition. 
@@ -123,7 +127,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
     Returns
     -------
-    dictPartition: dictionary {node:communitu}
+    dictPartition: dictionary {node:community}
         The partitioning which results in the best value of the quality function: Q (modularity).
 
     Examples
@@ -150,16 +154,16 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
 
 def make_Zgraph(g0, g1, g0_label_dict):
 
-    """Constructs and returns  a graphs which consists of only edges that appear
-    in both input graphs and the endpoints have the same label (i.e. both end
-    points are in the same community). 
+    """Constructs and returns a graphs with edges that appear in both input graphs,
+    and the nodes connected by the edges have the same label (i.e. they belong to the
+    same community).
 
     Parameters
     ----------
-    g0, g1: networkx graphs
-        Graph of the current snapshop and previous Zgraph respectively
+    g0, g1: networkx.Graph
+        Graphs of the current snapshot and previous Zgraph respectively
     g0_label_dict: dictionary {node:community}
-        Dictionary mapping nodes to communities in g0.
+        Dictionary mapping nodes to communities in g0 (the current snapshot)
 
     Returns
     -------
@@ -254,7 +258,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
 def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
 
     """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
-    This function detects temporal communities and output the results to file for further processing. 
+    This function detects temporal communities and returns the results. 
 
     Parameters
     ----------
