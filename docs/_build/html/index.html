@@ -1,0 +1,1528 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Estrangement Confinement &mdash; Estrangement 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Estrangement 1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">Estrangement 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="estrangement-confinement">
+<h1>Estrangement Confinement<a class="headerlink" href="#estrangement-confinement" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="module-estrangement.utils">
+<span id="utils"></span><h2>Utils<a class="headerlink" href="#module-estrangement.utils" title="Permalink to this headline">¶</a></h2>
+<p>This module implements various functions used to compute and plot temporal communities.</p>
+<dl class="function">
+<dt id="estrangement.utils.graph_distance">
+<tt class="descclassname">estrangement.utils.</tt><tt class="descname">graph_distance</tt><big>(</big><em>g0</em>, <em>g1</em>, <em>weighted=True</em><big>)</big><a class="headerlink" href="#estrangement.utils.graph_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate and return the Tanimoto distance between the two input graphs.</p>
+<p>Let <strong>a</strong> be the set of edges belonging to graph <em>G0</em> and let <strong>b</strong> be the set of
+edges belonging to <em>G1</em>. The Tanimoto distance between <em>G0</em> and <em>G1</em> is defined as    
+(aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g0,g1: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>The networkx graphs to be compared.</p>
+</div></blockquote>
+<p><strong>weighted: boolean</strong> :</p>
+<blockquote>
+<div><p>True if the edges of the graph are weighted, False otherwise.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>graph_distance: float</strong> :</p>
+<blockquote class="last">
+<div><p>The Tanimoto distance between the nodes of g0 and g1.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">complete_graph</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">complete_graph</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">graph_distance</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span><span class="n">g1</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.utils.node_graph_distance">
+<tt class="descclassname">estrangement.utils.</tt><tt class="descname">node_graph_distance</tt><big>(</big><em>g0</em>, <em>g1</em><big>)</big><a class="headerlink" href="#estrangement.utils.node_graph_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate and return the Jaccard distance between the two input graphs.</p>
+<p>Let <strong>a</strong> be the set of nodes belonging to graph <em>G0</em> and let <strong>b</strong> be the set of 
+nodes belonging to <em>G1</em>. The Jaccard distance between <em>G0</em> and <em>G1</em> is defined as    
+(a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g0,g1: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>The networkx graphs to be compared.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>node_graph_distance: float</strong> :</p>
+<blockquote class="last">
+<div><p>The Jaccard distance between the nodes of g0 and g1.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">path_graph</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">path_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">node_graph_distance</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span><span class="n">g1</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.utils.Estrangement">
+<tt class="descclassname">estrangement.utils.</tt><tt class="descname">Estrangement</tt><big>(</big><em>G</em>, <em>label_dict</em>, <em>Zgraph</em><big>)</big><a class="headerlink" href="#estrangement.utils.Estrangement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Estrangement between G and Zgraph</p>
+<p>Given network snapshots and partitioning at times <em>t</em> and <em>(t-1)</em>, 
+an edge (u; v) in G<sub>t</sub> is said to be estranged if, <em>u</em> and <em>v</em> are
+in the same partition in G<sub>t-1</sub> but not in G<sub>t</sub>.
+Estrangement is defined as the fraction of estranged edges in G<sub>t</sub> .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>A networkx graph object representing the current snapshot.</p>
+</div></blockquote>
+<p><strong>label_dict: dictionary {node:community}</strong> :</p>
+<blockquote>
+<div><p>A dictionary mapping nodes to communities.</p>
+</div></blockquote>
+<p><strong>Zgraph: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>A graph containing only the edges between nodes of the same community in all previous snapshots.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>estrangement: float</strong> :</p>
+<blockquote class="last">
+<div><p>The weighted fraction of estranged edges in <em>G</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">lpa.lpa</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">agglomerate.generate_dendogram</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">communities</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">Estrangement</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span><span class="n">communities</span><span class="p">,</span><span class="n">g1</span><span class="p">)</span>
+<span class="go">0.333333333333</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.utils.match_labels">
+<tt class="descclassname">estrangement.utils.</tt><tt class="descname">match_labels</tt><big>(</big><em>label_dict</em>, <em>prev_label_dict</em><big>)</big><a class="headerlink" href="#estrangement.utils.match_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of community labels to be preserved, representing the 
+communities that remain mostly intact between snapshots.</p>
+<p>We start by representing the communities at time <em>t-1</em> and at time <em>t</em> as 
+nodes of a bipartite graph. From each node at time <em>t-1</em>, we  draw a directed 
+link to the node at time <em>t</em> with which it has maximum overlap. From each node 
+at time <em>t</em>, we  draw a directed link to the node at time <em>t-1</em> with which it 
+has maximum overlap.</p>
+<p>Basically x,y and z choose who they are most similar to among a and b
+and denote this by arrows directed outward from them. Similarly a and
+b, choose who they are most similar to among x, y and z. Then the rule
+is that labels on the t-1 side of every bidirected (symmetric) link is
+preserved - all other labels on the t-1 side are removed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>label_dict: dictionary</strong> :</p>
+<blockquote>
+<div><p>{node:community} at time t.</p>
+</div></blockquote>
+<p><strong>prev_label_dict: dictionary</strong> :</p>
+<blockquote>
+<div><p>{node:community} at time (t - 1).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>matched_label_dict: dictionary {node:community}</strong> :</p>
+<blockquote class="last">
+<div><p>The new community labelling.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">label_dict_a</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s">&#39;a&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label_dict_b</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">match_labels</span><span class="p">(</span><span class="n">label_dict_a</span><span class="p">,</span><span class="n">label_dict_b</span><span class="p">)</span>
+<span class="go">{1:&#39;a&#39;,2:&#39;a&#39;,3:&#39;a&#39;,4:&#39;a&#39;,5:&#39;a&#39;,6:&#39;a&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.utils.confidence_interval">
+<tt class="descclassname">estrangement.utils.</tt><tt class="descname">confidence_interval</tt><big>(</big><em>nums</em><big>)</big><a class="headerlink" href="#estrangement.utils.confidence_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (half) the 95% confidence interval around the mean for the list of input numbers,
+i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>nums: list of floats</strong> :</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>half the range of the 95% confidence interval</strong> :</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">confidence_interval</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">confidence_interval</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
+<span class="go">0.98</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-estrangement.lpa">
+<span id="link-propagation-algorithm"></span><h2>Link Propagation Algorithm<a class="headerlink" href="#module-estrangement.lpa" title="Permalink to this headline">¶</a></h2>
+<p>This module implements the Link Propagation Algorithm (LPA) as decribed in: <a class="reference internal" href="#raghavan07">[Raghavan07]</a>.</p>
+<dl class="function">
+<dt id="estrangement.lpa.lpa">
+<tt class="descclassname">estrangement.lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1e-05</em>, <em>tiebreaking=False</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x3ddcb50&gt;</em><big>)</big><a class="headerlink" href="#estrangement.lpa.lpa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to run the Link Propagation Algorithm and return the labelling upon convergence.</p>
+<p>The Link Propagation algorithm initially assigns each node a unique label and sequentially
+allows nodes to change their label so as to maximize a specified objective function, which 
+in this case is modularity. The algorithm converges when each node has a label that is one 
+of the most popular amongst its neighbors. At the end of LPA, there should be few distinct 
+labels than in the <em>initial_label_dict</em>. The final set of labels is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The input graph.</p>
+</div></blockquote>
+<p><strong>tolerance: float, optional</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller the value of tolerance, the fewer dominant 
+labels there will be.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean, optional</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>Z: networkx.Graph, optional</strong> :</p>
+<blockquote>
+<div><p>Graph where the edges join nodes belonging to the same community over previous snapshots.</p>
+</div></blockquote>
+<p><strong>lambduh:</strong> :</p>
+<blockquote>
+<div><p>The Lagrange multiplier.</p>
+</div></blockquote>
+<p><strong>initial_label_dict</strong> : dictionary  {node_identifier:label}, optional</p>
+<blockquote>
+<div><p>Initial labeling of the nodes in G. If no labelling is specified, each node is assigned
+a unique label.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>label_dict</strong> : dictionary  {node_identifier:label}</p>
+<blockquote>
+<div><p>Modified labeling after running the LPA on G.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>NetworkXError</strong> :</p>
+<blockquote class="last">
+<div><p>If the keys in the initial labelling does not match the nodes of the graph. 
+If the number of iterations is greater than 4 times the number of edges in the graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">agglomerate.generate_dendogram</span></tt></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="barber09" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Barber09]</a></td><td>M.J. Barber and J.W. Clark, &#8220;Detecting Network Communities by propagating labels under constraints.&#8221; Physical Review E 80:026129</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="raghavan07" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Raghavan07]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> U.N. Raghavan, R. Albert and S. Kumara, &#8220;Near linear time algorithm to detect community structure in large-scale networks.&#8221; Physical Review E 76:036106</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">labeling</span> <span class="o">=</span> <span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_labeling</span> <span class="o">=</span> <span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">labelling</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">lpa</span><span class="o">.</span><span class="n">lpa</span><span class="p">(</span><span class="n">current_graph</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tiebreaking</span><span class="p">,</span> <span class="n">lambduh</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">current_Zgraph</span><span class="p">))</span>
+<span class="go">[(0,1),(1,1),(2,2),(3,1)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-estrangement.agglomerate">
+<span id="agglomerate"></span><h2>Agglomerate<a class="headerlink" href="#module-estrangement.agglomerate" title="Permalink to this headline">¶</a></h2>
+<p>This module implements static community detection using an agglomerative approach as decribed in <a class="reference internal" href="#blondel08">[Blondel08]</a>.</p>
+<dl class="function">
+<dt id="estrangement.agglomerate.partition_at_level">
+<tt class="descclassname">estrangement.agglomerate.</tt><tt class="descname">partition_at_level</tt><big>(</big><em>dendogram</em>, <em>level</em><big>)</big><a class="headerlink" href="#estrangement.agglomerate.partition_at_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which return the partition of the nodes at the given level.</p>
+<p>A dendogram is a tree and each level is a partition of the graph nodes.
+Level 0 is the first partition, which contains the smallest communities, 
+and the best partition is at height [len(dendogram) - 1].
+The higher the level in the dendogram, the bigger the communities in that level.
+This function merely processes an existing dendogram, which is created by 
+<a class="reference internal" href="#estrangement.agglomerate.generate_dendogram" title="estrangement.agglomerate.generate_dendogram"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.agglomerate.generate_dendogram</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dendogram</strong> : list of dict</p>
+<blockquote>
+<div><p>A list of partitions, i.e. dictionnaries where keys at level (i+1) are the values at level i.</p>
+</div></blockquote>
+<p><strong>level</strong> : int</p>
+<blockquote>
+<div><p>The level in the dendogram of the desired partitioning, which belongs to [0..len(dendogram)-1].</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary where keys are the nodes and the values are the set (community) to which it belongs.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError</strong> :</p>
+<blockquote class="last">
+<div><p>If the dendogram is not well formed or the level is greater than the height of the dendogram.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#estrangement.agglomerate.best_partition" title="estrangement.agglomerate.best_partition"><tt class="xref py py-obj docutils literal"><span class="pre">best_partition</span></tt></a>, <a class="reference internal" href="#estrangement.agglomerate.generate_dendogram" title="estrangement.agglomerate.generate_dendogram"><tt class="xref py py-obj docutils literal"><span class="pre">generate_dendogram</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dendo</span> <span class="o">=</span> <span class="n">generate_dendogram</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dendo</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">print</span> <span class="s">&quot;partition at level&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="s">&quot;is&quot;</span><span class="p">,</span> <span class="n">partition_at_level</span><span class="p">(</span><span class="n">dendo</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.agglomerate.modularity">
+<tt class="descclassname">estrangement.agglomerate.</tt><tt class="descname">modularity</tt><big>(</big><em>partition</em>, <em>graph</em><big>)</big><a class="headerlink" href="#estrangement.agglomerate.modularity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute the modularity of a partitioning of a graph, as defined in <a class="reference internal" href="#newman04">[Newman04]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionary {node:community label}</p>
+<blockquote>
+<div><p>The partition of the nodes, i.e a dictionary where keys are their nodes and values the communities.</p>
+</div></blockquote>
+<p><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The graph showing the relationships between the nodes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>modularity</strong> : float</p>
+<blockquote>
+<div><p>The modularity of the graph, given the partition, see: <a class="reference internal" href="#newman04">[Newman04]</a></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError:</strong> :</p>
+<blockquote>
+<div><p>If the partition is not a partition of all graph nodes.</p>
+</div></blockquote>
+<p><strong>ValueError:</strong> :</p>
+<blockquote>
+<div><p>If the graph has no link.</p>
+</div></blockquote>
+<p><strong>TypeError:</strong> :</p>
+<blockquote class="last">
+<div><p>If graph is not a networkx.Graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="newman04" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Newman04]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id7">3</a>)</em> M.E.J. Newman and M. Girvan, &#8220;Finding and evaluating community structure in networks.&#8221; Physical Review E 69:26113 (2004).</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modularity</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.agglomerate.best_partition">
+<tt class="descclassname">estrangement.agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x3dd2390&gt;</em><big>)</big><a class="headerlink" href="#estrangement.agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to compute the partition of the graph nodes which maximises the modularity
+(or tries to) using the Louvain heuristices.</p>
+<p>This is the partition of highest modularity, i.e. the highest partition of the dendogram
+generated by the Louvain algorithm, see: <a class="reference internal" href="#blondel08">[Blondel08]</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The networkx graph of the network.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>tolerance: float</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+<p><strong>lambduh: float</strong> :</p>
+<blockquote>
+<div><p>The Lagrange multiplier.</p>
+</div></blockquote>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>A graph containing edges between nodes of the same community in all previous snapshots.</p>
+</div></blockquote>
+<p><strong>partition: dictionary {node</strong> : community label}</p>
+<blockquote>
+<div><p>The current labelling of the nodes in the graph.</p>
+</div></blockquote>
+<p><strong>q</strong> : multiprocessing.Queue</p>
+<blockquote>
+<div><p>A queue used to store the results from multiple processes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionnary {node</p>
+<blockquote>
+<div><p>A dictionary which maps each node to a label (community) in the graph, which maximizes modularity.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>NetworkXError:</strong> :</p>
+<blockquote class="last">
+<div><p>If the graph is not Eulerian.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#estrangement.agglomerate.generate_dendogram" title="estrangement.agglomerate.generate_dendogram"><tt class="xref py py-obj docutils literal"><span class="pre">generate_dendogram</span></tt></a></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="blondel08" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Blondel08]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id8">2</a>, <a class="fn-backref" href="#id9">3</a>, <a class="fn-backref" href="#id10">4</a>, <a class="fn-backref" href="#id11">5</a>, <a class="fn-backref" href="#id12">6</a>)</em> Blondel, V.D. et al. Fast unfolding of communities in large networks. J. Stat. Mech 10008, 1-12(2008).</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span> <span class="c">#Basic usage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#other example to display a graph with its community :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#better with karate_graph() as defined in networkx examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#erdos renyi don&#39;t have true community structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#first compute the best partition</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partition</span> <span class="o">=</span> <span class="n">community</span><span class="o">.</span><span class="n">best_partition</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="c">#drawing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">size</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">com</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mf">1.</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">list_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">nodes</span> <span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">partition</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>                                <span class="k">if</span> <span class="n">partition</span><span class="p">[</span><span class="n">nodes</span><span class="p">]</span> <span class="o">==</span> <span class="n">com</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">list_nodes</span><span class="p">,</span> <span class="n">node_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="go">                                node_color = str(count / size))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.agglomerate.generate_dendogram">
+<tt class="descclassname">estrangement.agglomerate.</tt><tt class="descname">generate_dendogram</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>part_init=None</em><big>)</big><a class="headerlink" href="#estrangement.agglomerate.generate_dendogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to find communities in a graph and return the associated dendogram.</p>
+<p>A dendogram is a tree and each level is a partition of the graph nodes.  
+Level 0 is the first partition, which contains the smallest communities, 
+and the best is len(dendogram) - 1. The higher the level, the bigger 
+the size of the communities. At each step, nodes (which are the communities
+from the previous step) are merged into aggregate communities such that modularity
+is maximized, subject to the estrangement constraint. For more details on the 
+basic agglomerative procedure, see: <a class="reference internal" href="#blondel08">[Blondel08]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The networkx graph representing the network.</p>
+</div></blockquote>
+<p><strong>delta</strong> : float</p>
+<blockquote>
+<div><p>The temporal divergence. Smaller values imply greater emphasis on temporal
+contiguity whereas larger values place greater emphasis on finding better
+instanteous communities.</p>
+</div></blockquote>
+<p><strong>tolerance: float</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>lambduh: float</strong> :</p>
+<blockquote>
+<div><p>The Lagrange multiplier.</p>
+</div></blockquote>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>A graph containing edges between nodes of the same community in all previous snapshots
+The current labelling of the nodes in the graph</p>
+</div></blockquote>
+<p><strong>part_init</strong> : dictiionary, optional {node:community}</p>
+<blockquote>
+<div><p>The algorithm will start using this partition of the nodes. 
+It is a dictionary where keys are their nodes and values the communities.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dendogram</strong> : list of dictionaries</p>
+<blockquote>
+<div><p>A list of partitions, ie dictionnaries where keys of the i+1 are the values of the i, 
+and where keys of the first are the nodes of graph.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>TypeError:</strong> :</p>
+<blockquote class="last">
+<div><p>If the graph is not a networkx.Graph</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#estrangement.agglomerate.best_partition" title="estrangement.agglomerate.best_partition"><tt class="xref py py-obj docutils literal"><span class="pre">best_partition</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Uses Louvain algorithm: <a class="reference internal" href="#blondel08">[Blondel08]</a></p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dendo</span> <span class="o">=</span> <span class="n">generate_dendogram</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dendo</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">print</span> <span class="s">&quot;partition at level&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="s">&quot;is&quot;</span><span class="p">,</span> <span class="n">partition_at_level</span><span class="p">(</span><span class="n">dendo</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.agglomerate.induced_graph">
+<tt class="descclassname">estrangement.agglomerate.</tt><tt class="descname">induced_graph</tt><big>(</big><em>partition</em>, <em>graph</em>, <em>zgraph</em><big>)</big><a class="headerlink" href="#estrangement.agglomerate.induced_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to produce a graph where the nodes belonging to the same community are aggregated
+into a single node.</p>
+<p>In the induced graph, there is a link of weight w between communities if the sum of the weights of the 
+links between their elements is w. Communities are merged until there is no significant improvement on 
+the objective function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>partition</strong> : dictionary {node:community}</p>
+<blockquote>
+<div><p>A dictionary where keys are graph nodes and the values are the partition to which  the node belongs.</p>
+</div></blockquote>
+<p><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The current snapshot of the graph</p>
+</div></blockquote>
+<p><strong>Zgraph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>A graph containing edges between nodes of the same community in all previous snapshots
+The current labelling of the nodes in the graph</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>g</strong> : networkx.Graph</p>
+<blockquote class="last">
+<div><p>A networkx graph where nodes are the communities of the input graph.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">complete_graph</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">part</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">part</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span> <span class="o">%</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span> <span class="o">=</span> <span class="n">induced_graph</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">goal</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">goal</span><span class="o">.</span><span class="n">add_weighted_edges_from</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">goal</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-estrangement.estrangement">
+<span id="estrangement"></span><h2>Estrangement<a class="headerlink" href="#module-estrangement.estrangement" title="Permalink to this headline">¶</a></h2>
+<p>This module implements the Estrangement Reduction Algorithm (ERA) and various functions necessary 
+to read the input snapshots, process information and return the results and/or print them to file.</p>
+<dl class="function">
+<dt id="estrangement.estrangement.make_Zgraph">
+<tt class="descclassname">estrangement.estrangement.</tt><tt class="descname">make_Zgraph</tt><big>(</big><em>g0</em>, <em>g1</em>, <em>g0_label_dict</em><big>)</big><a class="headerlink" href="#estrangement.estrangement.make_Zgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs and returns a graphs with edges that appear in both input graphs,
+and the nodes connected by the edges have the same label (i.e. they belong to the
+same community).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g0, g1: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>Graphs of the current snapshot and previous Zgraph respectively</p>
+</div></blockquote>
+<p><strong>g0_label_dict: dictionary {node:community}</strong> :</p>
+<blockquote>
+<div><p>Dictionary mapping nodes to communities in g0 (the current snapshot)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Z: graph</strong> :</p>
+<blockquote class="last">
+<div><p>A Zgraph incoorperating the current snapshot into the previous Zgraph</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">make_Zgraph</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span><span class="n">g1</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.estrangement.read_general">
+<tt class="descclassname">estrangement.estrangement.</tt><tt class="descname">read_general</tt><big>(</big><em>datadir</em>, <em>precedence_tiebreaking</em>, <em>tolerance</em>, <em>minrepeats</em><big>)</big><a class="headerlink" href="#estrangement.estrangement.read_general" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to read datasets from files in <em>datadir</em>.</p>
+<p>Each file represents a graph for a particular timestamp. 
+The name of the files is expected to be &lt;timestamp&gt;.ncol,
+and each line in the file represents one edge in the graph e.g.
+line:&#8217; 1 2 5 &#8216; indicates there is an edge between nodes
+&#8216;1&#8217; and &#8216;2&#8217; with weight &#8216;5&#8217;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>datadir: string</strong> :</p>
+<blockquote>
+<div><p>path to the directory containing the dataset.</p>
+</div></blockquote>
+<p><strong>precedence_tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>tolerance: float,optional</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+<p><strong>minrepeats: integer</strong> :</p>
+<blockquote>
+<div><p>The number of variations to try before returning the best partition.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>t: list</strong> :</p>
+<blockquote>
+<div><p>an array of timestamps, each representing a snapshot of the communities.</p>
+</div></blockquote>
+<p><strong>g1: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>the last graph to be read from file.</p>
+</div></blockquote>
+<p><strong>initial_label_dictionary: dictionary { node: community}</strong> :</p>
+<blockquote class="last">
+<div><p>A dictionary mapping nodes to community labels if it is the first snapshot, otherwise <em>None</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.estrangement.maxQ">
+<tt class="descclassname">estrangement.estrangement.</tt><tt class="descname">maxQ</tt><big>(</big><em>g1</em>, <em>precedence_tiebreaking=False</em>, <em>tolerance=1e-05</em>, <em>minrepeats=10</em><big>)</big><a class="headerlink" href="#estrangement.estrangement.maxQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which returns the partitioning of the input graph, into communities, 
+which maximizes the value of the quality function Q.</p>
+<p>In this case, the quality function is modularity. See, <a class="reference internal" href="#blondel08">[Blondel08]</a> for more details. 
+Maximizing modularity is NP-hard, so we run multiple iterations, randomizing the order
+of node visitations and return the partitioning which yields the greatest modularity.
+Note that estrangement is not taken into cosideration in this calculation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g1: networkx.Graph</strong> :</p>
+<blockquote>
+<div><p>The input graph.</p>
+</div></blockquote>
+<p><strong>minrepeats: integer, optional</strong> :</p>
+<blockquote>
+<div><p>The number of variations to try before returning the best partition.</p>
+</div></blockquote>
+<p><strong>precedence_tiebreaking: boolean, optional</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>tolerance: float, optional</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there 
+will be.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dictPartition: dictionary {node:community}</strong> :</p>
+<blockquote class="last">
+<div><p>The partitioning which results in the best value of the quality function: Q (modularity).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">maxQ</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.estrangement.repeated_runs">
+<tt class="descclassname">estrangement.estrangement.</tt><tt class="descname">repeated_runs</tt><big>(</big><em>g1</em>, <em>delta</em>, <em>tolerance</em>, <em>tiebreaking</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>repeats</em><big>)</big><a class="headerlink" href="#estrangement.estrangement.repeated_runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to make repeated calls to the Link Propagation Algorithm (LPA) and
+store the values of Q, E and F, as well as the corresponding partitioning
+for later use. This is done to help find the optimal value of lambduh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g1: networkx graph</strong> :</p>
+<blockquote>
+<div><p>The input graph</p>
+</div></blockquote>
+<p><strong>delta: float</strong> :</p>
+<blockquote>
+<div><p>The temporal divergence. Smaller values imply greater emphasis on temporal
+contiguity whereas larger values place greater emphasis on finding better
+instanteous communities.</p>
+</div></blockquote>
+<p><strong>tolerance: float</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller the value of tolerance, the fewer dominant 
+labels there will be.</p>
+</div></blockquote>
+<p><strong>tiebreaking: boolean</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>Zgraph: networkx graph</strong> :</p>
+<blockquote>
+<div><p>Graph where each edges join nodes belonging to the same community over
+previous snapshots</p>
+</div></blockquote>
+<p><strong>repeats: integer</strong> :</p>
+<blockquote>
+<div><p>The number of calls to be made to the LPA.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dictPartition: List of dictionaries representing community labeling</strong> :</p>
+<blockquote class="last">
+<div><p>dictQ: List of values of Q corresponding to the above labeling
+dictE: List of values of E corresponding to the above labeling
+dictF: List of values of F corresponding to the above labeling</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g0</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}),(</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictPartition</span><span class="p">,</span><span class="n">dictQ</span><span class="p">,</span><span class="n">DictE</span><span class="p">,</span><span class="n">DictF</span> <span class="o">=</span> <span class="n">estrangement</span><span class="o">.</span><span class="n">repeated_runs</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">precedence_tiebreaking</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">lambduh</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">g0</span><span class="p">,</span><span class="n">repeats</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.estrangement.ERA">
+<tt class="descclassname">estrangement.estrangement.</tt><tt class="descname">ERA</tt><big>(</big><em>dataset_dir='./data'</em>, <em>precedence_tiebreaking=False</em>, <em>tolerance=1e-05</em>, <em>convergence_tolerance=0.01</em>, <em>delta=0.05</em>, <em>minrepeats=10</em>, <em>increpeats=10</em>, <em>maxfun=500</em>, <em>write_stats=False</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x41fcbd0&gt;</em><big>)</big><a class="headerlink" href="#estrangement.estrangement.ERA" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Estrangement Reduction Algorithm, as decribed in: <a class="reference internal" href="#kawadia12">[Kawadia12]</a>. 
+This function detects temporal communities and returns the results.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dataset_dir: string</strong> :</p>
+<blockquote>
+<div><p>Path to the relevant dataset files</p>
+</div></blockquote>
+<p><strong>precedence_tiebreaking: boolean,optional</strong> :</p>
+<blockquote>
+<div><p>This is only relevant when there are multiple dominant labels while running the LPA.
+If it is set to &#8216;True&#8217;, the dominant label is set dominant label most recently seen. 
+If it is set to &#8216;False&#8217;, the dominant label is randomly chosen from the set of dominant labels.</p>
+</div></blockquote>
+<p><strong>tolerance: float, optional</strong> :</p>
+<blockquote>
+<div><p>For a label to be considered a dominant label, it must be within this much of the maximum
+value found for the quality function. The smaller it is, the fewer dominant labels there will be.</p>
+</div></blockquote>
+<p><strong>convergence_tolerance: float,optional</strong> :</p>
+<blockquote>
+<div><p>The convergence tolerance used in optimizing the value of lambda.</p>
+</div></blockquote>
+<p><strong>delta: float</strong> :</p>
+<blockquote>
+<div><p>The temporal divergence. Smaller values imply greater emphasis on temporal
+contiguity whereas larger values place greater emphasis on finding better
+instanteous communities.</p>
+</div></blockquote>
+<p><strong>minrepeats: integer,optional</strong> :</p>
+<blockquote>
+<div><p>The number of times to call LPA. Each call increases the likilhood of finding the optimal
+partition, however, such a partition may be found with few calls depending on the graph.</p>
+</div></blockquote>
+<p><strong>increpeats: integer,optional</strong> :</p>
+<blockquote>
+<div><p>The size of a step in the LPA.</p>
+</div></blockquote>
+<p><strong>maxfun: integer, optional</strong> :</p>
+<blockquote>
+<div><p>The maximum number of function calls made to optimize lambda.</p>
+</div></blockquote>
+<p><strong>write_stats, optional</strong> :</p>
+<blockquote>
+<div><p>If &#8216;True&#8217;, the stats are written to files named &lt;stat&gt;.log
+These logs are not needed to plot temporal communities but are needed to plot other stats.</p>
+</div></blockquote>
+<p><strong>q</strong> : multiprocessing.Queue</p>
+<blockquote>
+<div><p>Queue to store the results, to be shared across all threads</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>matched_labels</strong> : dictionary {time: {node:label}}</p>
+<blockquote class="last">
+<div><p>The labelling of each node for each snapshot</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="kawadia12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Kawadia12]</td><td><em>(<a class="fn-backref" href="#id13">1</a>, <a class="fn-backref" href="#id14">2</a>)</em> <ol class="last upperalpha simple" start="22">
+<li>Kawadia and S. Sreenivasan, Online detection of temporal communities in evolving networks by estrangement confinement. <a class="reference external" href="http://arxiv.org/abs/1203.5126">http://arxiv.org/abs/1203.5126</a></li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;tests/sample_data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-estrangement.plots">
+<span id="plot-functions"></span><h2>Plot Functions<a class="headerlink" href="#module-estrangement.plots" title="Permalink to this headline">¶</a></h2>
+<p>This module implements functions used to process data and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a> .</p>
+<dl class="function">
+<dt id="estrangement.plots.GetDeltas">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">GetDeltas</tt><big>(</big><big>)</big><a class="headerlink" href="#estrangement.plots.GetDeltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to scan for simulation folders in the current working directory and read 
+the values of delta used in ERA.</p>
+<p>The <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a> function creates a folder specific to the value 
+of delta used in each simulation (e.g. task_delta_0.01). Within each of these folders, 
+a config file (simulation.conf) specifies the value of delta used in the simulation.
+This function reads the value of delta from each such config file and returns them in
+a list.</p>
+<p>Alternatively, delta can be specified in the function calls, bypassing this
+function. See <a class="reference internal" href="#module-EstrangementDemo" title="EstrangementDemo"><tt class="xref py py-mod docutils literal"><span class="pre">EstrangementDemo</span></tt></a> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>deltas</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of float, where each member denotes a value of delta used in <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="n">GetDeltas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.plot_by_param">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">plot_by_param</tt><big>(</big><em>dictX</em>, <em>dictY</em>, <em>deltas=</em><span class="optional">[</span><span class="optional">]</span>, <em>linewidth=2.0</em>, <em>markersize=15</em>, <em>label_fontsize=20</em>, <em>xfigsize=16.0</em>, <em>yfigsize=12.0</em>, <em>fontsize=28</em>, <em>fname=None</em>, <em>listLinestyles=None</em>, <em>xlabel=''</em>, <em>ylabel=''</em>, <em>title=''</em>, <em>xscale='linear'</em>, <em>yscale='linear'</em>, <em>dictErr=None</em>, <em>display_on=False</em><big>)</big><a class="headerlink" href="#estrangement.plots.plot_by_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given dictionaries, dictX with key=label, val = iterable of X values, 
+and dictY with key=label, val = iterable of Y values, this function 
+plots lines for each the labels specified on the same axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dictX</strong> : dictionary {label:[list of values]}</p>
+<blockquote>
+<div><p>The X values of a set of lines to be plotted and their respective label.</p>
+</div></blockquote>
+<p><strong>dictY</strong> : dictionary {lable:[list of values]}</p>
+<blockquote>
+<div><p>The Y values of a set of lines to be plotted and their respective label.</p>
+</div></blockquote>
+<p><strong>deltas</strong> : list of floats</p>
+<blockquote>
+<div><p>The values of delta used for ERA for which there are results.</p>
+</div></blockquote>
+<p><strong>linewidth</strong> : float, optional</p>
+<blockquote>
+<div><p>The desired font size of the lines to be plotted.</p>
+</div></blockquote>
+<p><strong>markersize</strong> : float, optional</p>
+<blockquote>
+<div><p>The size of the markers used on each line.</p>
+</div></blockquote>
+<p><strong>label_fontsize</strong> : integer, optional</p>
+<blockquote>
+<div><p>The size of the font used for the labels.</p>
+</div></blockquote>
+<p><strong>xfigsize</strong> : float, optional</p>
+<blockquote>
+<div><p>The desired length of the x-axis.</p>
+</div></blockquote>
+<p><strong>yfigsize</strong> : float, optional</p>
+<blockquote>
+<div><p>The desired length of the y-axis.</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : integer, optional</p>
+<blockquote>
+<div><p>The size of the font to be used in the figure.</p>
+</div></blockquote>
+<p><strong>fname</strong> : string, optional</p>
+<blockquote>
+<div><p>The file is saved with this name.</p>
+</div></blockquote>
+<p><strong>listLinesstyles</strong> : list of strings, optional</p>
+<blockquote>
+<div><p>A list consisting of the line styles to be used in the figures.</p>
+</div></blockquote>
+<p><strong>xlabel</strong> : string, optional</p>
+<blockquote>
+<div><p>The label to appear on the x-axis.</p>
+</div></blockquote>
+<p><strong>ylabel</strong> : string, optional</p>
+<blockquote>
+<div><p>The label to appear on the y-axis.</p>
+</div></blockquote>
+<p><strong>title</strong> : string, optional</p>
+<blockquote>
+<div><p>The title of the figure.</p>
+</div></blockquote>
+<p><strong>xscale</strong> : string, optional</p>
+<blockquote>
+<div><p>The type of scale to be used on the x-axis.</p>
+</div></blockquote>
+<p><strong>yscale</strong> : string, optional</p>
+<blockquote>
+<div><p>The type of scale to be used on the y-axis.</p>
+</div></blockquote>
+<p><strong>dictErr</strong> : Dictionary {label:[list of values]}</p>
+<blockquote>
+<div><p>Dictionary containing the Error Bars to be plotted on each line</p>
+</div></blockquote>
+<p><strong>display_on</strong> : boolean</p>
+<blockquote class="last">
+<div><p>If True, the graph is shown on the screen</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dictX</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Estrangement:delta_0.05&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_0.025&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_0.01&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_1.0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictY</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Estrangement:delta_0.05&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.04040404040404041</span><span class="p">,</span> <span class="mf">0.031578947368421054</span><span class="p">,</span> <span class="mf">0.010309278350515464</span><span class="p">,</span> <span class="mf">0.010101010101010102</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.030612244897959183</span><span class="p">,</span> <span class="mf">0.030303030303030304</span><span class="p">,</span> <span class="mf">0.0103092783505154</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_0.025&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.021052631578947368</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.010101010101010102</span><span class="p">,</span> <span class="mf">0.02040816326530612</span><span class="p">,</span> <span class="mf">0.010101010101010102</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_0.01&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="s">&#39;Estrangement:delta_1.0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.061224489795918366</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.04040404040404041</span><span class="p">,</span> <span class="mf">0.05263157894736842</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.020202020202020204</span><span class="p">,</span> <span class="mf">0.06060606060606061</span><span class="p">,</span> <span class="mf">0.02040816326530612</span><span class="p">,</span> <span class="mf">0.04040404040404041</span><span class="p">,</span> <span class="mf">0.041237113402061855</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_by_param</span><span class="p">(</span><span class="n">dictX</span><span class="p">,</span> <span class="n">dictY</span><span class="p">,</span><span class="n">deltas</span><span class="o">=</span><span class="p">[],</span><span class="n">fname</span><span class="o">=</span><span class="s">&#39;estrangement.svg&#39;</span><span class="p">,</span> <span class="n">listLinestyles</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;bs--&#39;</span><span class="p">,</span> <span class="s">&#39;ro-&#39;</span><span class="p">,],</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;Time&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;Estrangement&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Estrangement&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.plot_function">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">plot_function</tt><big>(</big><em>listNames</em>, <em>image_extension='svg'</em><big>)</big><a class="headerlink" href="#estrangement.plots.plot_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a graph with the attributes specified in <em>listNames</em>.</p>
+<p>This function relies on the file output of <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a>.
+The value of the parameter <em>write_stats</em> should be set to <em>True</em> when calling 
+<a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>listNames</strong> : list of strings</p>
+<blockquote>
+<div><p>Each string is an attribute to be plotted e.g. &#8216;Estrangement&#8217;,&#8217;Q&#8217;,&#8217;F&#8217; etc.</p>
+</div></blockquote>
+<p><strong>image_extension</strong> : string, optional</p>
+<blockquote>
+<div><p>The extension of the plot file to be saved.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing</strong> : The image is displayed on the screen and/or written to file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The function reads the relevant input data from file and formats it. 
+The actual plotting is done in <a class="reference internal" href="#estrangement.plots.plot_by_param" title="estrangement.plots.plot_by_param"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.plots.plot_by_param</span></tt></a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">estrangement</span><span class="o">.</span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;../data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">increpeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">increpeats</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">minrepeats</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_function</span><span class="p">([</span><span class="s">&#39;Q&#39;</span><span class="p">,</span> <span class="s">&#39;F&#39;</span><span class="p">,])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_function</span><span class="p">([</span><span class="s">&#39;Estrangement&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.ChoosingDelta">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">ChoosingDelta</tt><big>(</big><em>image_extension='svg'</em>, <em>deltas=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#estrangement.plots.ChoosingDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to plot avg(Q*-E) versus delta to get insights into the best delta for the given dataset.</p>
+<p>This module merely processes the data, the plotting is done by <a class="reference internal" href="#estrangement.plots.plot_by_param" title="estrangement.plots.plot_by_param"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.plots.plot_by_param</span></tt></a>.
+It requires the results from <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a> to be outputted to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>image_extension</strong> : string</p>
+<blockquote>
+<div><p>The extension of the plot file to be saved</p>
+</div></blockquote>
+<p><strong>deltas</strong> : list of floats, optional</p>
+<blockquote>
+<div><p>The values of deltas used in the simulation. If delta is not
+specifed, <a class="reference internal" href="#estrangement.plots.GetDeltas" title="estrangement.plots.GetDeltas"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.plots.GetDeltas</span></tt></a> is called to create the list.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing</strong> : The plot is displayed on the screen and/or written to file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>To produce the necessary stat files, set &#8216;write_stats=True&#8217; when calling <a class="reference internal" href="#estrangement.estrangement.ERA" title="estrangement.estrangement.ERA"><tt class="xref py py-mod docutils literal"><span class="pre">estrangement.estrangement.ERA</span></tt></a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">estrangement</span><span class="o">.</span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;../data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">increpeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">increpeats</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">minrepeats</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChooseingDelta</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.preprocess_temporal_communities">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">preprocess_temporal_communities</tt><big>(</big><em>matched_labels</em>, <em>deltas=</em><span class="optional">[</span><span class="optional">]</span>, <em>nodes_of_interest=</em><span class="optional">[</span><span class="optional">]</span>, <em>delta_to_use_for_node_ordering=1.0</em>, <em>label_sorting_keyfunc='random'</em>, <em>nodeorder=None</em><big>)</big><a class="headerlink" href="#estrangement.plots.preprocess_temporal_communities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to perform the necessary preprocessing before making 
+the tiled plots, of the temporal communities, for all simulation parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>matched_labels</strong> : dictionary {delta:{time: {node:label}}}</p>
+<blockquote>
+<div><p>The labelling of each node for each snapshot.</p>
+</div></blockquote>
+<p><strong>deltas</strong> : list of floats, optional</p>
+<blockquote>
+<div><p>The values of delta used in the simulation.</p>
+</div></blockquote>
+<p><strong>nodes of interest</strong> : list of integers, optional</p>
+<blockquote>
+<div><p>If nodes_of_interest is not an empty list then show egocentric view of the
+evolution, meaning plot only the nodes which ever share a label with a node
+in the nodes_of_interest. If this list is empty, all nodes are plotted.</p>
+</div></blockquote>
+<p><strong>delta_to_use_for_node_ordering</strong> : float, optional</p>
+<blockquote>
+<div><p>The value of delta used to order nodes for all temporal community plots.</p>
+</div></blockquote>
+<p><strong>label_sorting_keyfunc</strong> : string, optional</p>
+<blockquote>
+<div><p>Method used to order the labels to be plotted.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>node_index_dict</strong> : dictionary {nodename:index_value}</p>
+<blockquote>
+<div><p>A dictionary mapping nodenames to index values, which are to be plotted.</p>
+</div></blockquote>
+<p><strong>t_index_dict</strong> : dictionary {timestamp</p>
+<blockquote>
+<div><p>A dictionary mapping timestamps/snapshot numbers to an index value, which are to be plotted.</p>
+</div></blockquote>
+<p><strong>label_index_dict</strong> : dictionary {label</p>
+<blockquote>
+<div><p>A dictionary mapping community labels to an index value, which are to be plotted.</p>
+</div></blockquote>
+<p><strong>labels_of_interest_dict</strong> : dictionary {delta</p>
+<blockquote class="last">
+<div><p>Dictionary mapping delta to the labels of &#8216;nodes_of_interest&#8217; for that delta.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">estrangement</span><span class="o">.</span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;../data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">increpeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">increpeats</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">minrepeats</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node_index_dict</span><span class="p">,</span> <span class="n">t_index_dict</span><span class="p">,</span> <span class="n">label_index_dict</span><span class="p">,</span> <span class="n">labels_of_interest_dict</span> <span class="o">=</span> <span class="n">preprocess_temporal_communities</span><span class="p">(</span>
+<span class="go">    nodes_of_interest=nodes_of_interest)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">node_index_dict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">t_index_dict</span><span class="p">)</span>   
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.plot_temporal_communities">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">plot_temporal_communities</tt><big>(</big><em>matched_labels</em>, <em>nodes_of_interest=</em><span class="optional">[</span><span class="optional">]</span>, <em>deltas=</em><span class="optional">[</span><span class="optional">]</span>, <em>tiled_figsize='(36</em>, <em>16)'</em>, <em>manual_colormap=None</em>, <em>label_cmap='Paired'</em>, <em>frameon=True</em>, <em>xlabel='Time'</em>, <em>ylabel='Node ID'</em>, <em>label_fontsize=20</em>, <em>show_title=True</em>, <em>fontsize=28</em>, <em>colorbar=False</em>, <em>show_yticklabels=False</em>, <em>nodelabel_func=None</em>, <em>xtick_separation=5</em>, <em>snapshotlabel_func=None</em>, <em>wspace=0.2</em>, <em>bottom=0.1</em>, <em>image_extension='svg'</em>, <em>dpi=200</em>, <em>display_on=True</em><big>)</big><a class="headerlink" href="#estrangement.plots.plot_temporal_communities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module to create tiled plots, illustrating the temporal communities, for different values of paramters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>matched_labels</strong> : dictionary {delta</p>
+<blockquote>
+<div><p>Dictionary containing the labelling of each node, at each snapshot for each value of delta.</p>
+</div></blockquote>
+<p><strong>nodes of interest</strong> : list of integers, optional</p>
+<blockquote>
+<div><p>If nodes_of_interest is not an empty list then show egocentric view of the
+evolution, meaning plot only the nodes which ever share a label with a node
+in the nodes_of_interest. If this list is empty, all nodes are plotted.</p>
+</div></blockquote>
+<p><strong>deltas</strong> : list of floats, optional</p>
+<blockquote>
+<div><p>The values of delta used for ERA for which there are results. This list
+can be derived from files created during simulation if it is not specified.</p>
+</div></blockquote>
+<p><strong>tiled_figsize</strong> : string, optional</p>
+<blockquote>
+<div><p>Dimensions of the figure to be plotted.</p>
+</div></blockquote>
+<p><strong>manual_colormap</strong> : dictionary, optional</p>
+<blockquote>
+<div><p>Maps labels to colors. If not specified, one is returned from &#8216;matlibplot.cm.get_cmap&#8217;.</p>
+</div></blockquote>
+<p><strong>label_cmap</strong> : string, optional</p>
+<blockquote>
+<div><p>The name of a colors.Colormap instance, used by &#8216;matlibplot.cm.get_cmap&#8217;.</p>
+</div></blockquote>
+<p><strong>frameon</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If False, suppress drawing the figure frame in the subplots.</p>
+</div></blockquote>
+<p><strong>xlabel</strong> : string, optional</p>
+<blockquote>
+<div><p>Label to appear on the x axis. This is set to &#8216;Time&#8217; by default.</p>
+</div></blockquote>
+<p><strong>ylabel</strong> : string, optional</p>
+<blockquote>
+<div><p>Label to appear on the y axis. This is set to &#8216;Node ID&#8217; by default.</p>
+</div></blockquote>
+<p><strong>label_fontsize</strong> : integer, optional</p>
+<blockquote>
+<div><p>The size of the font used for the labels. This is set to 20 by default.</p>
+</div></blockquote>
+<p><strong>show_title</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If False, the title of the figure is not displayed.</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : integer, optional</p>
+<blockquote>
+<div><p>The font size of the title.</p>
+</div></blockquote>
+<p><strong>colorbar</strong> : boolean, optional</p>
+<blockquote>
+<div><p>Includes a color in the figure</p>
+</div></blockquote>
+<p><strong>show_y_ticklabels</strong> : boolean, False</p>
+<blockquote>
+<div><p>If True, show tick labels on the y-axis</p>
+</div></blockquote>
+<p><strong>nodelabel_func</strong> : String, optional</p>
+<blockquote>
+<div><p>The name of a function which maps node labels to indicies.</p>
+</div></blockquote>
+<p><strong>xtick_separation</strong> : integer, optional</p>
+<blockquote>
+<div><p>The distance between ticks on the x-axis</p>
+</div></blockquote>
+<p><strong>snapshotlabel_func</strong> : string, optional</p>
+<blockquote>
+<div><p>The name of a function to determine the ticks on the x-axis.</p>
+</div></blockquote>
+<p><strong>wspace</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of width reserved for blank space between subplots</p>
+</div></blockquote>
+<p><strong>bottom</strong> : float, optional</p>
+<blockquote>
+<div><p>The bottom of the subplots for &#8216;matlibplot.subplots_adjust&#8217;</p>
+</div></blockquote>
+<p><strong>image_extension</strong> : string, optional</p>
+<blockquote>
+<div><p>The extension of plot file to be saved. This is &#8220;svg&#8221; by default.</p>
+</div></blockquote>
+<p><strong>dpi</strong> : integer, optional</p>
+<blockquote>
+<div><p>The resolution of the plot. This is set to 200 dpi by default.</p>
+</div></blockquote>
+<p><strong>display_on</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If this is set to False, the plot is not displayed on the screen.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing, the plot is written to file and/or displayed on the screen depending on specified parameters.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">estrangement</span><span class="o">.</span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;../data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">increpeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">increpeats</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">minrepeats</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_temporal_communities</span><span class="p">()</span> 
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.plots.plot_with_lambdas">
+<tt class="descclassname">estrangement.plots.</tt><tt class="descname">plot_with_lambdas</tt><big>(</big><em>linewidth=2.0</em>, <em>image_extension='svg'</em><big>)</big><a class="headerlink" href="#estrangement.plots.plot_with_lambdas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to plot F with lambduhs for various snapshots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>linewidth</strong> : float, optional</p>
+<blockquote>
+<div><p>The font size of the lines in the plot. This is set to 2.0 by default.</p>
+</div></blockquote>
+<p><strong>image_extension</strong> : string, optional</p>
+<blockquote>
+<div><p>Specifies the extension of the plot file to be saved. The default image 
+type is &#8216;.svg&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing. The plot is written to file.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deltas</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">estrangement</span><span class="o">.</span><span class="n">ERA</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="s">&#39;../data&#39;</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">increpeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">increpeats</span><span class="p">,</span><span class="n">minrepeats</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">minrepeats</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_with_lambdas</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-estrangement.options_parser">
+<span id="options-parser"></span><h2>Options Parser<a class="headerlink" href="#module-estrangement.options_parser" title="Permalink to this headline">¶</a></h2>
+<p>Helper function for parsing arguments from the command line or a config file.</p>
+<p>These may be used in the calling script to simplify parsing arguments , but is 
+not called by the library.</p>
+<dl class="function">
+<dt id="estrangement.options_parser.parse_args">
+<tt class="descclassname">estrangement.options_parser.</tt><tt class="descname">parse_args</tt><big>(</big><big>)</big><a class="headerlink" href="#estrangement.options_parser.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to parse command line and configuration file options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>opt</strong> : argparser object</p>
+<blockquote class="last">
+<div><p>returned by argsparse.parse_args</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="estrangement.options_parser.add_options">
+<tt class="descclassname">estrangement.options_parser.</tt><tt class="descname">add_options</tt><big>(</big><em>parser</em><big>)</big><a class="headerlink" href="#estrangement.options_parser.add_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which defines the command line options and default values for each configuable parameter.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-EstrangementDemo">
+<span id="estrangementdemo"></span><h2>EstrangementDemo<a class="headerlink" href="#module-EstrangementDemo" title="Permalink to this headline">¶</a></h2>
+<p>Sample script demonstrating the use of the Estrangement library to plot temporal communities.</p>
+<dl class="function">
+<dt id="EstrangementDemo.plot_communities">
+<tt class="descclassname">EstrangementDemo.</tt><tt class="descname">plot_communities</tt><big>(</big><big>)</big><a class="headerlink" href="#EstrangementDemo.plot_communities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to run simulations, based on a specified dataset, and created 
+tiled plots of the temporal communities.</p>
+<p>Parameters can be specified at the command line, when calling this script.
+Alternatively, a config file specifed at the command line can be used to set
+the parameter. At the very minimum, a path to the data set must be specified.</p>
+<p>Each experiment requires a name, which is used to create a folder to store the
+results of the simulation. If the results already exist in the folder specified
+by the experiment name, plots are created using these existing results and the 
+simulation is not run on subsequent calls to EstrangementDemo.py. 
+To run the simulation again, delete the experiment folder before running this script,
+or use a different experiment name.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># To see all configuarable parameters use the -h option </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EstrangementDemo</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">h</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Configurable parameters can be specified at the command line</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EstrangementDemo</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">dataset_dir</span> <span class="o">../</span><span class="n">data</span> <span class="o">--</span><span class="n">display_on</span> <span class="bp">True</span> <span class="o">--</span><span class="n">exp_name</span> <span class="n">my_experiment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># A config file can be used, but it must be preceeded by an &#39;@&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Three config files are provided as examples, check that that path to the dataset is valid.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EstrangementDemo</span><span class="o">.</span><span class="n">py</span> <span class="nd">@senate.conf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EstrangementDemo</span><span class="o">.</span><span class="n">py</span> <span class="nd">@random.conf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EstrangementDemo</span><span class="o">.</span><span class="n">py</span> <span class="nd">@mitdata.conf</span> 
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Estrangement Confinement</a><ul>
+<li><a class="reference internal" href="#module-estrangement.utils">Utils</a></li>
+<li><a class="reference internal" href="#module-estrangement.lpa">Link Propagation Algorithm</a></li>
+<li><a class="reference internal" href="#module-estrangement.agglomerate">Agglomerate</a></li>
+<li><a class="reference internal" href="#module-estrangement.estrangement">Estrangement</a></li>
+<li><a class="reference internal" href="#module-estrangement.plots">Plot Functions</a></li>
+<li><a class="reference internal" href="#module-estrangement.options_parser">Options Parser</a></li>
+<li><a class="reference internal" href="#module-EstrangementDemo">EstrangementDemo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">Estrangement 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Vikas Kawadia.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
