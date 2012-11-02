@@ -33,7 +33,7 @@ import multiprocessing
 itrepeats = 0
 
 
-def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
+def read_general(datadir,tolerance,minrepeats):
 
     """ Function to read datasets from files in *datadir*.
    
@@ -47,10 +47,6 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
     ----------
     datadir: string
         path to the directory containing the dataset.
-    precedence_tiebreaking: boolean
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     tolerance: float,optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there 
@@ -87,7 +83,7 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
         if beginning is True:
             # when called for the first time just return initial_label_dict
             if not os.path.exists(initial_label_dict_filename):
-                initial_label_dict = maxQ(g1,precedence_tiebreaking=precedence_tiebreaking,tolerance=tolerance,minrepeats=minrepeats)
+                initial_label_dict = maxQ(g1,tolerance=tolerance,minrepeats=minrepeats)
                 with open(initial_label_dict_filename, 'w') as lf:
                     lf.write(repr(initial_label_dict))
 
@@ -99,7 +95,7 @@ def read_general(datadir,precedence_tiebreaking,tolerance,minrepeats):
             yield (t, g1, None)
 
 
-def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
+def maxQ(g1,tolerance=0.00001,minrepeats=10):
 
     """ Function which returns the partitioning of the input graph, into communities, 
     which maximizes the value of the quality function Q. 
@@ -115,10 +111,6 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
         The input graph.
     minrepeats: integer, optional
         The number of variations to try before returning the best partition. 
-    precedence_tiebreaking: boolean, optional
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there 
@@ -145,7 +137,7 @@ def maxQ(g1,precedence_tiebreaking=False,tolerance=0.00001,minrepeats=10):
     # do multiple runs and pick the best
     for r in range(10*minrepeats):
         # best_partition calls agglomerative lpa
-        dictPartition[r] = agglomerate.best_partition(g1,1.0,tolerance,precedence_tiebreaking,lambduh, Zgraph)  # I removed an opt here
+        dictPartition[r] = agglomerate.best_partition(g1,1.0,tolerance,lambduh, Zgraph)  # I removed an opt here
         dictQ[r] = agglomerate.modularity(dictPartition[r], g1)
     logging.info("dictQ = %s", str(dictQ))
     bestr = max(dictQ, key=dictQ.get)
@@ -190,7 +182,7 @@ def make_Zgraph(g0, g1, g0_label_dict):
     return Z 
 
 
-def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
+def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
 
     """ Function to make repeated calls to the Link Propagation Algorithm (LPA) and
     store the values of Q, E and F, as well as the corresponding partitioning
@@ -208,10 +200,6 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
         labels there will be.
-    tiebreaking: boolean
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Zgraph: networkx graph
         Graph where each edges join nodes belonging to the same community over
         previous snapshots
@@ -229,7 +217,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     --------
     >>> g0 = nx.Graph()
     >>> g0.add_edges_from([(1,2,{'weight':1}),(2,3,{'weight':1}),(1,3,{'weight':1}),(3,4,{'weight':1}),(4,5,{'weight':1}),(4,6,{'weight':1}),(5,7,{'weight':1}),(6,7,{'weight':1}),(8,9,{'weight':1}),(8,10,{'weight':1}),(9,10,{'weight':1})])
-    >>> dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(g0, delta=0.05, tolerance=0.01, precedence_tiebreaking=False,lambduh=1,g0,repeats = 3)
+    >>> dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(g0, delta=0.05, tolerance=0.01, lambduh=1,g0,repeats = 3)
     """
 
     dictPartition = {}  # key = run number, val = label_dict
@@ -241,9 +229,9 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
     # agglomerate lpa. Node visitation order is randomized in the LPA thus
     # giving potentially different results each run. 
     for r in range(repeats):
-#        p = multiprocessing.Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q))
+#        p = multiprocessing.Process(target=agglomerate.best_partition,args=(g1, delta, tolerance, lambduh, Zgraph,None,q))
 #        p.start()
-         agglomerate.best_partition(g1, delta, tolerance, tiebreaking, lambduh, Zgraph,None,q)
+         agglomerate.best_partition(g1, delta, tolerance, lambduh, Zgraph,None,q)
 
 
     for r in range(repeats):
@@ -255,7 +243,7 @@ def repeated_runs(g1, delta, tolerance, tiebreaking, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
+def ERA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
 
     """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
     This function detects temporal communities and returns the results. 
@@ -264,10 +252,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     ----------
     dataset_dir: string
         Path to the relevant dataset files
-    precedence_tiebreaking: boolean,optional
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there will be. 
@@ -327,7 +311,6 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
     beginning = True
     snapshot_number = 0
     for t, g1, initial_label_dict in read_general("../" + dataset_dir, 
-                        precedence_tiebreaking=precedence_tiebreaking,
                         tolerance=tolerance,minrepeats=minrepeats):
         
         snapshots_list.append(t)
@@ -349,7 +332,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
             Zgraph = make_Zgraph(g0, g1, prev_label_dict)
 
             # Record Q* for comparison
-            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, delta, tolerance, precedence_tiebreaking, 0.0, Zgraph, minrepeats)
+            dictlabel_dict0, dictQ0, dictE0, dictF0 = repeated_runs(g1, delta, tolerance, 0.0, Zgraph, minrepeats)
             snapstats.Qstar[t] = max(dictQ0.values())
 
             # store some stats for optimization over lambda for a given snapshot this is 
@@ -364,7 +347,7 @@ def ERA(dataset_dir='./data',precedence_tiebreaking=False,tolerance=0.00001,conv
 
                 global itrepeats
                 logging.info("itrepeats: %d", itrepeats)
-                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, delta, tolerance, precedence_tiebreaking, lambduh, Zgraph, itrepeats)
+                dictPartition, dictQ, dictE, dictF = repeated_runs(g1, delta, tolerance, lambduh, Zgraph, itrepeats)
 
                 label_dict_lam[lambduh] = dictPartition
                 Qlam[lambduh] = dictQ

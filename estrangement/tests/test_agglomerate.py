@@ -10,7 +10,6 @@ class opt:
         gap_proof_estrangement = True
         delta = 0
         tolerance = 0.4
-        precedence_tiebreaking = True
 
 class test_agglomerate:
 	def setUp(self):
@@ -54,7 +53,7 @@ class test_agglomerate:
 		assert GM.is_isomorphic()
 
 	def test_generate_dendogram(self):
-		partition_list = agglomerate.generate_dendogram(self.g6, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,nx.Graph())
+		partition_list = agglomerate.generate_dendogram(self.g6, opt.delta, opt.tolerance, 1,nx.Graph())
 		#	a			    e
 		#	|			    |	
 		#   b---e---c   => lpa =>	e---e---e  => induced graph => e
@@ -79,7 +78,7 @@ class test_agglomerate:
 		assert True
 
 	def test_best_partition(self):
-		partition = agglomerate.best_partition(self.g6, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.g6)
+		partition = agglomerate.best_partition(self.g6, opt.delta, opt.tolerance, 1,self.g6)
 		gret1,zret1 = agglomerate.induced_graph(self.label_dict1,self.g6,self.g6)
 		gret2,zret2 = agglomerate.induced_graph(partition,self.g6,self.g6)
 		GM = nx.isomorphism.GraphMatcher(gret1,gret2)

@@ -11,7 +11,6 @@ class opt:
         gap_proof_estrangement = True
         delta = 0.01
         tolerance = 0.4
-        precedence_tiebreaking = True
         lambduh = 0.0
 
 class test_estrangement:
@@ -42,7 +41,7 @@ class test_estrangement:
 		self.label_dict5 = {1:'b',2:'b',3:'b',4:'b',5:'b',6:'b'}
 
 	def test_maxQ(self):	
-		labels = estrangement.maxQ(self.g0,opt.precedence_tiebreaking,opt.tolerance)
+		labels = estrangement.maxQ(self.g0,opt.tolerance)
 		assert labels[1] == labels[3]
 		assert labels[2] == labels[4]
 
@@ -64,7 +63,7 @@ class test_estrangement:
 			
 	def test_repeated_runs(self):
 		# Linear graph 1---2---3---4---5---6---7---8---9---10---11---12
-		dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(self.g9, opt.delta, opt.tolerance, opt.precedence_tiebreaking,1,self.g9,3)
+		dictPartition,dictQ,DictE,DictF = estrangement.repeated_runs(self.g9, opt.delta, opt.tolerance, 1,self.g9,3)
 		print(dictPartition[0])
 		print(dictPartition[1])
 		print(dictPartition[2])

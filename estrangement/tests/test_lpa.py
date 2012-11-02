@@ -10,7 +10,6 @@ class opt:
 	resolution = 0.2
 	delta = 0.01
 	tolerance = 0.01
-	precedence_tiebreaking = True
 
 class test_utils:
 	def setUp(self):
@@ -26,14 +25,14 @@ class test_utils:
 		self.label_dict4 = {1:'a',2:'a',3:'a',4:'a',5:'b',6:'b'}
 
 	def test_lpa(self):
-		out_label_dict = lpa.lpa(self.g0, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict1)  	# all are in the same community => no change
+		out_label_dict = lpa.lpa(self.g0, opt.tolerance, 1,self.label_dict1)  	# all are in the same community => no change
 		assert out_label_dict == self.label_dict1 
-		out_label_dict = lpa.lpa(self.g0, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict2)	# clique with 1 in 'b', others in 'a'
+		out_label_dict = lpa.lpa(self.g0, opt.tolerance, 1,self.label_dict2)	# clique with 1 in 'b', others in 'a'
 		assert out_label_dict == self.label_dict1 
 		# a---a---b    a---a---b    
 		# | x | \ | => | x |   | 
 		# a---a---b    a---a---b  
-		out_label_dict = lpa.lpa(self.g1, opt.tolerance, opt.precedence_tiebreaking,1,self.label_dict3)  
+		out_label_dict = lpa.lpa(self.g1, opt.tolerance, 1,self.label_dict3)  
 		assert out_label_dict == self.label_dict4  
 
           	 

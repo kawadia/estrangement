@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Sample script demonstrating the use of the Estrangement library to plot temporal communities. 
+Sample script demonstrating the use of the Estrangement library to detect and
+visualize temporal communities. 
 """
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
@@ -13,7 +14,6 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Sameet Sreenivasan <sreens@rpi.edu>
 #   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
-#   BSD license. 
 
 
 import sys
@@ -89,7 +89,7 @@ def plot_communities():
         # run multiple processes in parallel, each for a different value of delta
         else:
 	    print("Running simulations for delta=%s"%d)
-            p = multiprocessing.Process(target=estrangement.estrangement.ERA,args=(opt.dataset_dir,opt.precedence_tiebreaking,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
+            p = multiprocessing.Process(target=estrangement.estrangement.ERA,args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
             p.start()
 
     # combine the results stored in the queue into a single dictionary

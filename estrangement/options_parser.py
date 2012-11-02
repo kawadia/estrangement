@@ -56,13 +56,6 @@ def add_options(parser):
             default="exp"
     ) 
 
-    parser.add_argument("-e", "--precedence_tiebreaking",
-            dest="precedence_tiebreaking", 
-            help="turn on precedence tiebreaking which keeps a node's current label if it is one of the dominant lables. (default: %(default)s)",
-            action="store_true",
-            default=False
-    )
-
     parser.add_argument("--maxfun",
             dest="maxfun", 
             help="max number of iterations allowed for scipy optimize (default: %(default)s)",

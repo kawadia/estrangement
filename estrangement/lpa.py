@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-This module implements the Link Propagation Algorithm (LPA) as decribed in: [Raghavan07]_.
+This module implements the Label Propagation Algorithm (LPAm) as decribed in: [Barber09]_.
 """
 
 import networkx as nx
@@ -23,15 +23,13 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   BSD license. 
 
 
-def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
+def lpa(G, tolerance=0.00001, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()):
 
-    """Function to run the Link Propagation Algorithm and return the labelling upon convergence.
+    """Function to run the Label Propagation Algorithm and return the labelling upon convergence.
 
-    The Link Propagation algorithm initially assigns each node a unique label and sequentially
+    The Label Propagation algorithm initially assigns each node a unique label and sequentially
     allows nodes to change their label so as to maximize a specified objective function, which 
-    in this case is modularity. The algorithm converges when each node has a label that is one 
-    of the most popular amongst its neighbors. At the end of LPA, there should be few distinct 
-    labels than in the *initial_label_dict*. The final set of labels is returned.  
+    in this case is modularity.   
     
     Parameters
     ----------
@@ -41,10 +39,6 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
         labels there will be.
-    tiebreaking: boolean, optional
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels.
     Z: networkx.Graph, optional
         Graph where the edges join nodes belonging to the same community over previous snapshots.
     lambduh: 
@@ -75,9 +69,9 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
 
     Examples
     --------
-    >>> labeling = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
-    >>> new_labeling = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, labelling, Z=current_Zgraph)
-    >>> list(lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph))
+    >>> labeling = lpa.lpa(current_graph, tolerance, lambduh, Z=current_Zgraph)
+    >>> new_labeling = lpa.lpa(current_graph, tolerance, lambduh, labelling, Z=current_Zgraph)
+    >>> list(lpa.lpa(current_graph, tolerance, lambduh, Z=current_Zgraph))
     [(0,1),(1,1),(2,2),(3,1)]
     """
 
@@ -155,8 +149,6 @@ def lpa(G, tolerance=0.00001, tiebreaking=False, lambduh=3.0, initial_label_dict
             
             if len(dominant_labels) == 1:        
                 the_dominant_label = dominant_labels[0]
-            elif label_dict[v] in dominant_labels and tiebreaking is True:
-                the_dominant_label = label_dict[v]
             else:    
                 # ties are broken randomly to pick THE dominant_label
                 the_dominant_label = random.choice(dominant_labels)

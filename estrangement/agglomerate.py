@@ -137,7 +137,7 @@ def modularity(partition, graph) :
     return res
 
 
-def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition = None,q=multiprocessing.Queue()) :
+def best_partition(graph, delta, tolerance, lambduh, Zgraph, partition = None,q=multiprocessing.Queue()) :
 
     """Function to compute the partition of the graph nodes which maximises the modularity
     (or tries to) using the Louvain heuristices.
@@ -149,10 +149,6 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
     ----------
     graph : networkx.Graph
        The networkx graph of the network.
-    tiebreaking: boolean
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     tolerance: float
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there 
@@ -210,13 +206,13 @@ def best_partition(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partit
     >>> plt.show()
     """
 
-    dendo = generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, partition)
+    dendo = generate_dendogram(graph, delta, tolerance, lambduh, Zgraph, partition)
     r_partition = partition_at_level(dendo, len(dendo) - 1 )
     q.put(r_partition)
     return partition_at_level(dendo, len(dendo) - 1 )
 
 
-def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, part_init = None) :
+def generate_dendogram(graph, delta, tolerance, lambduh, Zgraph, part_init = None) :
 
     """Function to find communities in a graph and return the associated dendogram.
 
@@ -240,10 +236,6 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there 
         will be.     
-    tiebreaking: boolean
-        This is only relevant when there are multiple dominant labels while running the LPA.
-        If it is set to 'True', the dominant label is set dominant label most recently seen. 
-        If it is set to 'False', the dominant label is randomly chosen from the set of dominant labels. 
     lambduh: float
         The Lagrange multiplier.
     Zgraph : networkx.Graph
@@ -292,7 +284,7 @@ def generate_dendogram(graph, delta, tolerance, tiebreaking, lambduh, Zgraph, pa
     F = -99999999.0
 
     while True :
-        partition = lpa.lpa(current_graph, tolerance, tiebreaking, lambduh, Z=current_Zgraph)
+        partition = lpa.lpa(current_graph, tolerance, lambduh, Z=current_Zgraph)
 
         mod = modularity(partition, current_graph)
         E = utils.Estrangement(current_graph, partition, current_Zgraph)
