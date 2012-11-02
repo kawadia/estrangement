@@ -11,25 +11,31 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-Utils
------
-.. automodule:: estrangement.utils
+
+
+Estrangement
+------------
+.. automodule:: estrangement.estrangement
     :members:
 
-Link Propagation Algorithm
---------------------------
-.. automodule:: estrangement.lpa
+
+EstrangementDemo
+----------------
+.. automodule:: EstrangementDemo
     :members:
+
 
 Agglomerate
 -----------
 .. automodule:: estrangement.agglomerate
     :members:
 
-Estrangement
-------------
-.. automodule:: estrangement.estrangement
+
+Label Propagation Algorithm
+--------------------------
+.. automodule:: estrangement.lpa
     :members:
+
 
 Plot Functions
 --------------
@@ -41,10 +47,11 @@ Options Parser
 .. automodule:: estrangement.options_parser
     :members:
 
-EstrangementDemo
-----------------
-.. automodule:: EstrangementDemo
+ Utils
+-----
+.. automodule:: estrangement.utils
     :members:
+
 
 Indices and tables
 ==================
