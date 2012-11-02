@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-This module implements the Estrangement Reduction Algorithm (ERA) and various functions necessary 
+This module implements the Estrangement Confinement Algorithm (ECA)  and various functions necessary 
 to read the input snapshots, process information and return the results and/or print them to file.
 """
 
-__all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ERA']
+__all__ = ['make_Zgraph','read_general','maxQ','repeated_runs','ECA']
 
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
     'Sameet Sreenivasan <sreens@rpi.edu>',
@@ -101,9 +101,8 @@ def maxQ(g1,tolerance=0.00001,minrepeats=10):
     which maximizes the value of the quality function Q. 
 
     In this case, the quality function is modularity. See, [Blondel08]_ for more details. 
-    Maximizing modularity is NP-hard, so we run multiple iterations, randomizing the order
-    of node visitations and return the partitioning which yields the greatest modularity.
     Note that estrangement is not taken into cosideration in this calculation.
+    This is only used for computing a partition for the intial snapshot.
 
     Parameters
     ----------
@@ -146,21 +145,19 @@ def maxQ(g1,tolerance=0.00001,minrepeats=10):
 
 def make_Zgraph(g0, g1, g0_label_dict):
 
-    """Constructs and returns a graphs with edges that appear in both input graphs,
-    and the nodes connected by the edges have the same label (i.e. they belong to the
-    same community).
+    """Constructs and returns the Zgraph, as defined in Eq 3 of the paper.
 
     Parameters
     ----------
     g0, g1: networkx.Graph
-        Graphs of the current snapshot and previous Zgraph respectively
+        The previous and the current network snapshot, respectively
     g0_label_dict: dictionary {node:community}
-        Dictionary mapping nodes to communities in g0 (the current snapshot)
+        Cpmmunity labels for the nodes in g0 (the previous snapshot)
 
     Returns
     -------
     Z: graph
-        A Zgraph incoorperating the current snapshot into the previous Zgraph 
+        The Zgraph
 
     Examples
     --------
@@ -184,9 +181,9 @@ def make_Zgraph(g0, g1, g0_label_dict):
 
 def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
 
-    """ Function to make repeated calls to the Link Propagation Algorithm (LPA) and
+    """ Function to make repeated calls to the Label Propagation Algorithm (LPA) and
     store the values of Q, E and F, as well as the corresponding partitioning
-    for later use. This is done to help find the optimal value of lambduh.
+    for later use. F is the Lagrangian, referred to in the paper as L.
    
     Parameters
     ----------
@@ -204,7 +201,7 @@ def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
         Graph where each edges join nodes belonging to the same community over
         previous snapshots
     repeats: integer
-        The number of calls to be made to the LPA.      
+        The number of calls made to best partition to best_parition.
 
     Returns
     -------
@@ -243,7 +240,7 @@ def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ERA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
+def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
 
     """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
     This function detects temporal communities and returns the results. 
@@ -285,7 +282,7 @@ def ERA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
  
     Examples
     --------
-    >>> ERA(dataset_dir='tests/sample_data',delta=0.001)
+    >>> ECA(dataset_dir='tests/sample_data',delta=0.001)
     """
 
     # set up directory structure for this delta
@@ -435,8 +432,6 @@ def ERA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
         matched_label_dict = utils.match_labels(label_dict, prev_matched_label_dict)
         matched_labels.update({t:matched_label_dict})
 
-        snapstats.GD[t] = utils.graph_distance(g0, g1, True)
-        snapstats.Node_GD[t] = utils.node_graph_distance(g0, g1)
         snapstats.NumComm[t] = len(set((label_dict.values())))
                 
         snapstats.NumNodes[t] = g1.number_of_nodes()
@@ -471,8 +466,6 @@ def ERA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
 class SnapshotStatistics():
   """ Helper class used to aggregate results. """
   def __init__(self):
-      self.GD = {}      # key = time t, val = Graph distance between graphs t and t-1
-      self.Node_GD = {} # key = time t, val = Node graph distance between graphs t and t-1
       self.NumComm = {} # key = time t, val = Number of communities at time t
       self.Q = {}       # key = time t, val = Modularity of partition at t
       self.Qstar = {}   # key = time t, val = Modularity of partition at t with tau=0

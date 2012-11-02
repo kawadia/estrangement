@@ -40,7 +40,7 @@ def lpa(G, tolerance=0.00001, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()
         value found for the quality function. The smaller the value of tolerance, the fewer dominant 
         labels there will be.
     Z: networkx.Graph, optional
-        Graph where the edges join nodes belonging to the same community over previous snapshots.
+        The Z  graph, see paper for details.
     lambduh: 
         The Lagrange multiplier.
     initial_label_dict : dictionary  {node_identifier:label}, optional

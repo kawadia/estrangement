@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-This module implements static community detection using an agglomerative approach as decribed in [Blondel08]_.
+This module implements community detection using an agglomerative approach as
+decribed in [Blondel08]_. It has been modified for estrangement confinement. Tje
+original code is available here: http://perso.crans.org/aynaud/communities/
 """
-# Downloaded from http://perso.crans.org/aynaud/communities/
 # modified by vkawadia to do agglomerative lpam
 
 __all__ = ["partition_at_level", "modularity", "best_partition", "generate_dendogram", "induced_graph"]
@@ -38,7 +39,7 @@ def partition_at_level(dendogram, level) :
     Parameters
     ----------
     dendogram : list of dict
-       A list of partitions, i.e. dictionnaries where keys at level (i+1) are the values at level i.
+       A list of partitions, i.e. dictionaries where keys at level (i+1) are the values at level i.
     level : int
        The level in the dendogram of the desired partitioning, which belongs to [0..len(dendogram)-1].
 
@@ -167,10 +168,6 @@ def best_partition(graph, delta, tolerance, lambduh, Zgraph, partition = None,q=
     partition : dictionnary {node : community label}
        A dictionary which maps each node to a label (community) in the graph, which maximizes modularity.
 
-    Raises
-    ------
-    NetworkXError:
-       If the graph is not Eulerian.
 
     See Also
     --------

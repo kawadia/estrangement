@@ -89,7 +89,7 @@ def plot_communities():
         # run multiple processes in parallel, each for a different value of delta
         else:
 	    print("Running simulations for delta=%s"%d)
-            p = multiprocessing.Process(target=estrangement.estrangement.ERA,args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
+            p = multiprocessing.Process(target=estrangement.estrangement.ECA,args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
             p.start()
 
     # combine the results stored in the queue into a single dictionary
@@ -106,7 +106,7 @@ def plot_communities():
     os.chdir("..")
 
 
-    # to plot other parameters, set write_stats=True in estrangement.ERA() 
+    # to plot other parameters, set write_stats=True in estrangement.ECA() 
     # and use plots.plot_function(). For example,
     # plots.plot_function(['Estrangement'])
     # plots.plot_function(['ierr','feasible'])

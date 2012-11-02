@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ 
-This module implements functions used to process data and plot line graphs and tiled temporal community plots based on the output of the estrangment reduction algorithm :mod:`estrangement.estrangement.ERA` ."""
+This module implements functions used to produce evolution charts and other
+plots based on the
+output of estrangement confinement :mod:`estrangement.estrangement.ECA` ."""
 
 __all__ = ['GetDeltas','plot_by_param','plot_function','ChoosingDelta','preprocess_temporal_communities','plot_temporal_communities','plot_with_lambdas']
 
@@ -14,7 +16,6 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 #   Sameet Sreenivasan <sreens@rpi.edu>
 #   Stephen Dabideen <dabideen@bbn.com>
 #   All rights reserved. 
-#   BSD license. 
 
 
 import matplotlib
@@ -52,12 +53,37 @@ markers = [
 ]
 
 
+def confidence_interval(nums):
+
+    """Return (half) the 95% confidence interval around the mean for the list of input numbers,
+    i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).
+    
+    Parameters
+    ----------
+    nums: list of floats
+
+    Returns
+    -------
+    half the range of the 95% confidence interval
+
+    Examples
+    --------
+    >>> print(confidence_interval([2,2,2,2]))
+    0
+    >>> print(confidence_interval([2,2,4,4]))
+    0.98
+    """
+
+    return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
+
+
+
 def GetDeltas():
 
     """ Function to scan for simulation folders in the current working directory and read 
-    the values of delta used in ERA.
+    the values of delta used in ECA.
 
-    The :mod:`estrangement.estrangement.ERA` function creates a folder specific to the value 
+    The :mod:`estrangement.estrangement.ECA` function creates a folder specific to the value 
     of delta used in each simulation (e.g. task_delta_0.01). Within each of these folders, 
     a config file (simulation.conf) specifies the value of delta used in the simulation.
     This function reads the value of delta from each such config file and returns them in
@@ -69,7 +95,7 @@ def GetDeltas():
     Returns
     -------
     deltas : list
-        A list of float, where each member denotes a value of delta used in :mod:`estrangement.estrangement.ERA`.
+        A list of float, where each member denotes a value of delta used in :mod:`estrangement.estrangement.ECA`.
 
     Examples
     --------
@@ -106,7 +132,7 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
     dictY : dictionary {lable:[list of values]}
         The Y values of a set of lines to be plotted and their respective label.
     deltas : list of floats
-        The values of delta used for ERA for which there are results.
+        The values of delta used for ECA for which there are results.
     linewidth : float, optional
         The desired font size of the lines to be plotted.
     markersize : float, optional
@@ -202,9 +228,9 @@ def plot_function(listNames,image_extension="svg"):
 
     """ Plots a graph with the attributes specified in *listNames*.
 
-    This function relies on the file output of :mod:`estrangement.estrangement.ERA`.
+    This function relies on the file output of :mod:`estrangement.estrangement.ECA`.
     The value of the parameter *write_stats* should be set to *True* when calling 
-    :mod:`estrangement.estrangement.ERA`. 
+    :mod:`estrangement.estrangement.ECA`. 
 
     Parameters
     ----------
@@ -226,7 +252,7 @@ def plot_function(listNames,image_extension="svg"):
     --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ECA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> plot_function(['Q', 'F',])
     >>> plot_function(['Estrangement'])
     """
@@ -273,7 +299,7 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
     """ Function to plot avg(Q*-E) versus delta to get insights into the best delta for the given dataset.
    
     This module merely processes the data, the plotting is done by :mod:`estrangement.plots.plot_by_param`.
-    It requires the results from :mod:`estrangement.estrangement.ERA` to be outputted to file.        
+    It requires the results from :mod:`estrangement.estrangement.ECA` to be outputted to file.        
  
     Parameters
     ----------
@@ -289,13 +315,13 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
     Notes
     -----
-    To produce the necessary stat files, set 'write_stats=True' when calling :mod:`estrangement.estrangement.ERA`.
+    To produce the necessary stat files, set 'write_stats=True' when calling :mod:`estrangement.estrangement.ECA`.
 
     Examples
     --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ECA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> ChooseingDelta()
     """
 
@@ -369,7 +395,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ECA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict = preprocess_temporal_communities(
         nodes_of_interest=nodes_of_interest)
     >>> print(node_index_dict)
@@ -491,7 +517,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
         evolution, meaning plot only the nodes which ever share a label with a node
         in the nodes_of_interest. If this list is empty, all nodes are plotted. 
     deltas : list of floats, optional
-        The values of delta used for ERA for which there are results. This list
+        The values of delta used for ECA for which there are results. This list
         can be derived from files created during simulation if it is not specified. 
     tiled_figsize : string, optional
         Dimensions of the figure to be plotted.
@@ -540,7 +566,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ECA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> plot_temporal_communities() 
     """
 
@@ -692,7 +718,7 @@ def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
     --------
     >>> deltas = [0.01,0.025,0.05,1.0]
     >>> for d in deltas:
-    ...         estrangement.ERA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
+    ...         estrangement.ECA(dataset_dir='../data',delta=d,increpeats=opt.increpeats,minrepeats=opt.minrepeats)
     >>> plot_with_lambdas()
     """
 

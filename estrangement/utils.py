@@ -24,79 +24,6 @@ import operator
 import numpy
 import logging
 
-def graph_distance(g0, g1, weighted=True):
-
-    """Function to calculate and return the Tanimoto distance between the two input graphs.
-
-    Let **a** be the set of edges belonging to graph *G0* and let **b** be the set of
-    edges belonging to *G1*. The Tanimoto distance between *G0* and *G1* is defined as    
-    (aUb - a.b)/aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
-
-    Parameters
-    ----------
-    g0,g1: networkx.Graph
-        The networkx graphs to be compared.
-    weighted: boolean
-        True if the edges of the graph are weighted, False otherwise.
-
-    Returns
-    -------
-    graph_distance: float
-        The Tanimoto distance between the nodes of g0 and g1.
-
-    Examples
-    --------
-    >>> g0 = nx.complete_graph(5)
-    >>> g1 = nx.complete_graph(5)
-    >>> print(graph_distance(g0,g1,False)
-    0
-    """
-
-    intersection = set(g1.edges_iter()) & set(g0.edges_iter())
-    if weighted is False:
-        union = set(g1.edges_iter()) | set(g0.edges_iter())
-        graph_distance = (len(union) - len(intersection))/float(len(union))
-    else:
-        g0weights = nx.get_edge_attributes(g0,'weight')
-        g1weights = nx.get_edge_attributes(g1,'weight')
-        dot_product = sum((g0weights[i]*g1weights[i] for i in intersection))
-        e1_norm = sum((g1weights[i]**2 for i in g1.edges_iter()))
-        e0_norm = sum((g0weights[i]**2 for i in g0.edges_iter()))
-        graph_distance = 1 - dot_product/float(e0_norm + e1_norm - dot_product)
-
-    return graph_distance
-
-def node_graph_distance(g0, g1):
-
-    """Function to calculate and return the Jaccard distance between the two input graphs.
-
-    Let **a** be the set of nodes belonging to graph *G0* and let **b** be the set of 
-    nodes belonging to *G1*. The Jaccard distance between *G0* and *G1* is defined as    
-    (a.b - (aUb - a.b)) /aUb where a.b is dot product and aUb = a^2 + b^2 - a.b
-
-    Parameters
-    ----------
-    g0,g1: networkx.Graph
-        The networkx graphs to be compared.
-
-    Returns
-    -------
-    node_graph_distance: float
-        The Jaccard distance between the nodes of g0 and g1.
-        
-    Examples
-    --------
-    >>> g0 = nx.path_graph(2)
-    >>> g1 = nx.path_graph(4)
-    >>> print(node_graph_distance(g0,g1)
-    0.5
-    """
-
-    g1_nodes = set(g1.nodes())
-    g0_nodes = set(g0.nodes())
-    graph_distance = 1 - len(g0_nodes & g1_nodes)/float(len(g0_nodes | g1_nodes)) 
-    
-    return graph_distance
 
 def Estrangement(G, label_dict, Zgraph):
 
@@ -153,21 +80,9 @@ def Estrangement(G, label_dict, Zgraph):
 
 def match_labels(label_dict, prev_label_dict):
 
-    """Returns a list of community labels to be preserved, representing the 
-    communities that remain mostly intact between snapshots.
-
-    We start by representing the communities at time *t-1* and at time *t* as 
-    nodes of a bipartite graph. From each node at time *t-1*, we  draw a directed 
-    link to the node at time *t* with which it has maximum overlap. From each node 
-    at time *t*, we  draw a directed link to the node at time *t-1* with which it 
-    has maximum overlap.
-
-    Basically x,y and z choose who they are most similar to among a and b
-    and denote this by arrows directed outward from them. Similarly a and
-    b, choose who they are most similar to among x, y and z. Then the rule
-    is that labels on the t-1 side of every bidirected (symmetric) link is
-    preserved - all other labels on the t-1 side are removed.
-
+    """
+    Map labels betweeb adjacent snapshots. See Fig2 in the paper for details.
+    
     Parameters
     ----------
     label_dict: dictionary
@@ -237,26 +152,4 @@ def match_labels(label_dict, prev_label_dict):
 
     return matched_label_dict
 
-def confidence_interval(nums):
-
-    """Return (half) the 95% confidence interval around the mean for the list of input numbers,
-    i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).
-    
-    Parameters
-    ----------
-    nums: list of floats
-
-    Returns
-    -------
-    half the range of the 95% confidence interval
-
-    Examples
-    --------
-    >>> print(confidence_interval([2,2,2,2]))
-    0
-    >>> print(confidence_interval([2,2,4,4]))
-    0.98
-    """
-
-    return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
 
