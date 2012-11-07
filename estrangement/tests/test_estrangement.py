@@ -74,7 +74,7 @@ class test_estrangement:
 		assert DictF[0] != DictF[1] or DictF[1] != DictF[2] or DictF[0] != DictF[2]		
 
 
-	def test_ERA(self):
+	def test_ECA(self):
 
 #               snapshot 0,1    snapshot 2,3    snapshot 4
 #
@@ -89,7 +89,7 @@ class test_estrangement:
 
 
 		label_dict = {}
-		label_dict = estrangement.ERA(dataset_dir='../sample_data',delta=0.001)
+		label_dict = estrangement.ECA(dataset_dir='../sample_data',delta=0.001)
 #		with open(os.path.join("task_delta_0.001/matched_labels.log"), 'r') as label_file:
 #                        for l in label_file:
 #                                line_dict = eval(l)
@@ -124,8 +124,8 @@ class test_estrangement:
 # Example 1 from: [1] V. Kawadia and S. Sreenivasan, "Online detection of temporal communities 
 #           in evolving networks by estrangement confinement", http://arxiv.org/abs/1203.5126.
 
-		label_dict1 = estrangement.ERA(dataset_dir='../sample_data2',delta=0.2)
-		label_dict2 = estrangement.ERA(dataset_dir='../sample_data2',delta=0.01)
+		label_dict1 = estrangement.ECA(dataset_dir='../sample_data2',delta=0.2)
+		label_dict2 = estrangement.ECA(dataset_dir='../sample_data2',delta=0.01)
 		
 
 #		with open(os.path.join("task_delta_0.2/matched_labels.log"), 'r') as label_file:

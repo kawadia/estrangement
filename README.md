@@ -13,7 +13,7 @@ More details in http://arxiv.org/abs/1203.5126
 * python-multiprocessing
 * python-sphinx (Note: Used for generating documentation only)
 
-### Pip
+### Install from python package index : Pip
 * networkx (Note: Ubuntu's python-networkx package is out of date and will not work)
 * numpydoc (Note: Used for generating documentation only)
 
