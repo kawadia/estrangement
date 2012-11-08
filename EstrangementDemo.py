@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Sample script demonstrating the use of the Estrangement library to detect and
+Script demonstrating the use of the estrangement library to detect and
 visualize temporal communities. 
 """
 
@@ -18,13 +18,14 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
 
 import sys
 import os
-import estrangement.options_parser
-import estrangement.plots
-import estrangement.estrangement
+from Estrangement import estrangement
+from Estrangement import plots
+from Estrangement import options_parser
 import multiprocessing
 
 
-def plot_communities():
+
+def detect_and_plot_temporal_communities():
     """ Function to run simulations, based on a specified dataset, and created 
     tiled plots of the temporal communities. 
     
@@ -44,72 +45,70 @@ def plot_communities():
     >>> # To see all configuarable parameters use the -h option 
     >>> EstrangementDemo.py -h
     >>> # Configurable parameters can be specified at the command line
-    >>> EstrangementDemo.py --dataset_dir ../data --display_on True --exp_name my_experiment
+    >>> EstrangementDemo.py --dataset_dir ./data --display_on True --exp_name my_experiment
     >>> # A config file can be used, but it must be preceeded by an '@'
     >>> # Three config files are provided as examples, check that that path to the dataset is valid.
     >>> EstrangementDemo.py @senate.conf
-    >>> EstrangementDemo.py @random.conf
-    >>> EstrangementDemo.py @mitdata.conf 
+    >>> EstrangementDemo.py @markovian.conf
+    >>> EstrangementDemo.py @realitymining.conf 
     """
 
     # use argparse to parse command-line arguments using optionsadder.py
-    opt = estrangement.options_parser.parse_args()
+    opt = options_parser.parse_args()
 
-    # set the values of delta for which to create plots
+    # A dir is created, specified by the --exp_name argument in 
+    # the current working directory to place all output from the experiment
+    if(not os.path.exists(opt.exp_name)):
+        os.mkdir(opt.exp_name)
+    else:
+        print("""Output dir for exp %s already exists, will use partial results. \\
+            Will redo visualization only, if results for all delta exist.\\
+            Delete %s to redo everything""" % (opt.exp_name, opt.exp_name))
+
+    # set the values of delta to find communities for
     deltas = opt.delta
-
-    # check if there are results for these deltas
-    for d in deltas:
-        if(os.path.isfile(opt.exp_name + "/task_delta_" + str(d) + "/matched_labels.log")):
-             print("WARNING: Using existing results for delta=%s \n \tIf you wish to repeat the simulation, please delete the directory: \"%s\" !! "%(d,opt.exp_name))
 
     # dictionary to pass the simulation output to the plot function
     matched_labels_dict = {}
-
-    # A folder is created, specified by the --exp_name argument in 
-    # the current working directory and all the files from the experiment will
-    # be placed in this file. 
-    if(not os.path.exists(opt.exp_name)):
-        os.mkdir(opt.exp_name)
-    os.chdir(opt.exp_name)
-
+    
     if(not os.path.isdir(opt.dataset_dir)):
-         sys.exit("ERROR: 'dataset_dir' invalid, please specify using --dataset_dir at the command line or in config file.")
+        sys.exit("ERROR: 'dataset_dir' %s invalid, please specify using --dataset_dir at the command line or in config file." 
+            % opt.dataset_dir)
 
-    q = multiprocessing.Queue()
+    # @todo run multiple processes in parallel, each for a different value of delta
+    # multiprocessing  module is not very portable so leave it out from this # demo
+    # q = multiprocessing.Queue()
+
     for d in deltas:
-        # check if the matched_labels.log file file exists, and prompt the user if it does 
-        label_file = "task_delta_" + str(d) + "/matched_labels.log"
-        if(os.path.isfile(label_file) and os.path.getsize(label_file) > 0 ):
-            with open("task_delta_" + str(d) + "/matched_labels.log", 'r') as ml:
-                matched_labels = ml.read()
-                matched_labels_dict[str(d)] = eval(matched_labels)
-
-        # run the simulation if the matched_labels.log file does not exist
-        # run multiple processes in parallel, each for a different value of delta
+        results_file = os.path.join(opt.exp_name, "task_delta_" + str(d) , "matched_labels.log")
+        if not os.path.exists(results_file):
+            print("Detecting temporal communities for delta=%s"%d)
+            result = estrangement.ECA(dataset_dir = opt.dataset_dir, delta = d,
+                        minrepeats = opt.minrepeats, increpeats = opt.increpeats)
+            # result is a dictionary of the form: {time : {node : label}}
+            with open(results_file, 'w') as fw:
+                fw.write(str(result))
         else:
-	    print("Running simulations for delta=%s"%d)
-            p = multiprocessing.Process(target=estrangement.estrangement.ECA,args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,d,opt.minrepeats,opt.increpeats,500,False,q))
-            p.start()
+            print("result file %s found, so using it and not running ECA for this delta value" % results_file)
+            with open(results_file, 'r') as fr:
+                result = eval(fr.read())
+        # combine the results into a single dictionary for plotting
+        matched_labels_dict[d] = result
 
-    # combine the results stored in the queue into a single dictionary
-    for d in deltas:
-        entry = q.get()
-        for k in entry.keys():
-                matched_labels_dict[k] = entry[k]
-        matched_label_file = open("task_delta_" + k +"/matched_labels.log", 'w')
-        matched_label_file.write(str(matched_labels_dict[k]))
-        matched_label_file.close()
-
+    
     # plot the temporal communities 
-    estrangement.plots.plot_temporal_communities(matched_labels_dict)
-    os.chdir("..")
-
+    plots.plot_temporal_communities(matched_labels_dict)
 
     # to plot other parameters, set write_stats=True in estrangement.ECA() 
     # and use plots.plot_function(). For example,
-    # plots.plot_function(['Estrangement'])
-    # plots.plot_function(['ierr','feasible'])
+    # estrangement.plots.plot_function(['Estrangement'])
 
 if __name__ == "__main__":
-    plot_communities()
+    detect_and_plot_temporal_communities()
+
+
+
+
+#p = multiprocessing.Process(target=estrangement.ECA,
+#        args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,
+#            d,opt.minrepeats,opt.increpeats,500,False,q))

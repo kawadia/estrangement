@@ -240,7 +240,7 @@ def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False,q=multiprocessing.Queue()):
+def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
 
     """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
     This function detects temporal communities and returns the results. 
@@ -268,8 +268,6 @@ def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
     write_stats, optional
         If 'True', the stats are written to files named <stat>.log
         These logs are not needed to plot temporal communities but are needed to plot other stats. 
-    q : multiprocessing.Queue
-        Queue to store the results, to be shared across all threads
 
     Returns
     -------
@@ -460,7 +458,6 @@ def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
     os.chdir('../')
     ret_dict = {}
     ret_dict[str(delta)] = matched_labels
-    q.put(ret_dict)
     return matched_labels
 
 class SnapshotStatistics():
