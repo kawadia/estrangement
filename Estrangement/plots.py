@@ -53,29 +53,6 @@ markers = [
 ]
 
 
-def confidence_interval(nums):
-
-    """Return (half) the 95% confidence interval around the mean for the list of input numbers,
-    i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).
-    
-    Parameters
-    ----------
-    nums: list of floats
-
-    Returns
-    -------
-    half the range of the 95% confidence interval
-
-    Examples
-    --------
-    >>> print(confidence_interval([2,2,2,2]))
-    0
-    >>> print(confidence_interval([2,2,4,4]))
-    0.98
-    """
-
-    return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
-
 
 
 def GetDeltas():
@@ -403,7 +380,8 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
     """
 
     if(len(deltas) == 0):
-        deltas = GetDeltas()
+        #deltas = GetDeltas()    
+        deltas = sorted(matched_labels.keys())
     
     all_labels_set = set()
     appearing_nodes_set = set()
@@ -425,8 +403,8 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
  
         # populate 'temporal_label_dict' based on 'matched_labels' 
       
-        for time in matched_labels[str(delta)].keys():
-                labelling = matched_labels[str(delta)][time]
+        for time in matched_labels[delta].keys():
+                labelling = matched_labels[delta][time]
 
                 all_times_set.add(time) 
                 
@@ -571,7 +549,8 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     """
 
     if(len(deltas) == 0):
-        deltas = GetDeltas()    
+        #deltas = GetDeltas()    
+        deltas = sorted(matched_labels.keys())
 
     node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict = preprocess_temporal_communities(
         matched_labels, nodes_of_interest=nodes_of_interest)
@@ -697,6 +676,34 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     pylab.savefig('dynconsuper%s.%s'%(suffix,'pdf'), dpi=dpi)
     if display_on is True:
         pylab.show()
+
+
+
+def confidence_interval(nums):
+
+    """Return (half) the 95% confidence interval around the mean for the list of input numbers,
+    i.e. calculate: 1.96 * std_deviation / sqrt(len(nums)).
+    
+    Parameters
+    ----------
+    nums: list of floats
+
+    Returns
+    -------
+    half the range of the 95% confidence interval
+
+    Examples
+    --------
+    >>> print(confidence_interval([2,2,2,2]))
+    0
+    >>> print(confidence_interval([2,2,4,4]))
+    0.98
+    """
+
+    return 1.96 * numpy.std(nums) / math.sqrt(len(nums))
+
+
+
 
 def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
 

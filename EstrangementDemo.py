@@ -60,44 +60,54 @@ def detect_and_plot_temporal_communities():
     # the current working directory to place all output from the experiment
     if(not os.path.exists(opt.exp_name)):
         os.mkdir(opt.exp_name)
-    else:
-        print("""Output dir for exp %s already exists, will use partial results. \\
-            Will redo visualization only, if results for all delta exist.\\
-            Delete %s to redo everything""" % (opt.exp_name, opt.exp_name))
+    expdir = os.path.abspath(opt.exp_name)
 
     # set the values of delta to find communities for
     deltas = opt.delta
 
-    # dictionary to pass the simulation output to the plot function
-    matched_labels_dict = {}
-    
-    if(not os.path.isdir(opt.dataset_dir)):
-        sys.exit("ERROR: 'dataset_dir' %s invalid, please specify using --dataset_dir at the command line or in config file." 
-            % opt.dataset_dir)
+    datadir = os.path.abspath(opt.dataset_dir)
 
-    # @todo run multiple processes in parallel, each for a different value of delta
-    # multiprocessing  module is not very portable so leave it out from this # demo
-    # q = multiprocessing.Queue()
-
+    # we use the multiprocessing module to run computations for the different
+    # deltas in parallel.
+    process_dict = {}
     for d in deltas:
-        results_file = os.path.join(opt.exp_name, "task_delta_" + str(d) , "matched_labels.log")
-        if not os.path.exists(results_file):
+        output_dir = os.path.join(expdir, "task_delta_" + str(d))
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
+        results_filename = os.path.join(output_dir, "matched_labels.log")
+        if not os.path.exists(results_filename):
             print("Detecting temporal communities for delta=%s"%d)
-            result = estrangement.ECA(dataset_dir = opt.dataset_dir, delta = d,
-                        minrepeats = opt.minrepeats, increpeats = opt.increpeats)
-            # result is a dictionary of the form: {time : {node : label}}
-            with open(results_file, 'w') as fw:
-                fw.write(str(result))
+            kwargs={'dataset_dir' : datadir, 
+                        'delta' : d,
+                        'results_filename' : results_filename,
+                        'minrepeats' : opt.minrepeats, 
+                        'increpeats' : opt.increpeats,
+                        'write_stats': True,
+                        }
+                    
+            os.chdir(output_dir)    
+            process_dict[d] = multiprocessing.Process(target = estrangement.ECA, kwargs = kwargs)
+            process_dict[d].start()
         else:
-            print("result file %s found, so using it and not running ECA for this delta value" % results_file)
-            with open(results_file, 'r') as fr:
-                result = eval(fr.read())
-        # combine the results into a single dictionary for plotting
-        matched_labels_dict[d] = result
+            print("Seems like communities have already been computed for delta=%f; to recompute del dir %s" 
+            %(d, output_dir))
+        
+    for k in process_dict.keys():
+        process_dict[k].join()
 
+    print("\nDone computing all temporal communities, now producing some visualizations")
+    # dictionary to pass the output to the plot function
+    matched_labels_dict = {}
+    for d in deltas:
+        results_filename = os.path.join(expdir, "task_delta_" + str(d), "matched_labels.log")
+        with open(results_filename, 'r') as fr:
+            result = eval(fr.read())
+        matched_labels_dict[d] = result
     
+    os.chdir(expdir)
     # plot the temporal communities 
     plots.plot_temporal_communities(matched_labels_dict)
+    os.chdir('..')
 
     # to plot other parameters, set write_stats=True in estrangement.ECA() 
     # and use plots.plot_function(). For example,
@@ -105,10 +115,3 @@ def detect_and_plot_temporal_communities():
 
 if __name__ == "__main__":
     detect_and_plot_temporal_communities()
-
-
-
-
-#p = multiprocessing.Process(target=estrangement.ECA,
-#        args=(opt.dataset_dir,opt.tolerance,opt.convergence_tolerance,
-#            d,opt.minrepeats,opt.increpeats,500,False,q))

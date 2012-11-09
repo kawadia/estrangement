@@ -240,7 +240,7 @@ def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
         
     return (dictPartition, dictQ, dictE, dictF)
 
-def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
+def ECA(dataset_dir='./data', results_filename= "matched_labels.log", tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
 
     """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
     This function detects temporal communities and returns the results. 
@@ -249,6 +249,9 @@ def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
     ----------
     dataset_dir: string
         Path to the relevant dataset files
+    results_filename: string
+        The resulting community partition is written to this file.    
+        It is a dictionary of the form: {time : {node : label}}
     tolerance: float, optional
         For a label to be considered a dominant label, it must be within this much of the maximum
         value found for the quality function. The smaller it is, the fewer dominant labels there will be. 
@@ -305,7 +308,7 @@ def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
 
     beginning = True
     snapshot_number = 0
-    for t, g1, initial_label_dict in read_general("../" + dataset_dir, 
+    for t, g1, initial_label_dict in read_general(dataset_dir, 
                         tolerance=tolerance,minrepeats=minrepeats):
         
         snapshots_list.append(t)
@@ -450,14 +453,16 @@ def ECA(dataset_dir='./data',tolerance=0.00001,convergence_tolerance=0.01,delta=
 
         # end for t, g1 in ......
         
-    if write_stats: 
+    if write_stats is True: 
         for statname, statobj in vars(snapstats).items():
             with open('%s.log'%statname, 'w') as fout:
                 pprint.pprint(statobj, stream=fout) 
 
-    os.chdir('../')
-    ret_dict = {}
-    ret_dict[str(delta)] = matched_labels
+    print("Done computing temporal communities for delta=%f" %delta)
+    # result is a dictionary of the form: {time : {node : label}}
+    with open(results_filename, 'w') as fw:
+        fw.write(str(matched_labels))
+
     return matched_labels
 
 class SnapshotStatistics():
