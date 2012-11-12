@@ -1,7 +1,7 @@
 # Estrangement Confinement
 
-Method to detect temporal communities in time-varying complex networks.
-Implements the method described in the following paper:
+Method to detect temporal communities in time-varying complex networks based on
+the following paper:
 
 Vikas Kawadia and Sameet Sreenivasan ``Sequential detection of temporal
 communities by estrangement confinement,'' in Nature Scientific Reports, Nov
@@ -9,31 +9,32 @@ communities by estrangement confinement,'' in Nature Scientific Reports, Nov
 
 http://www.nature.com/srep/2012/121109/srep00794/full/srep00794.html
 
+Citation: http://www.nature.com/srep/2012/121109/srep00794/ris/srep00794.ris
 
-[Documentation](estrangement/blob/master/docs/_build/html/index.html)
+## Downloading
 
-## Dependencies
+https://github.com/kawadia/estrangement
 
-### Ubuntu
+## Documentation
+
+cd docs/_build/html
+open index.html in yor browser
+
+## Installing
+
+The python scripts can be run directly from the estrangement dir. See
+EstrangementDemo.py for an example.
+
+### Ubuntu 12.04
 * python-scipy
 * python-numpy
 * python-matplotlib
 * python-sphinx (Note: Used for generating documentation only)
 
 ### Install from python package index : Pip
-* networkx (Note: Ubuntu's python-networkx package is out of date and will not work)
-* numpydoc (Note: Used for generating documentation only)
+* pip install networkx (Ubuntu 12.04's python-networkx package is out of date and will not work)
+* pip install numpydoc (Used for generating documentation only)
 
-### Standard Python Library
-* types
-* logging
-* math
-* os
-* pprint
-* random 
-* collections
-* sys
-* operator
 
 
 
