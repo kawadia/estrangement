@@ -11,12 +11,10 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
     'Sameet Sreenivasan <sreens@rpi.edu>',
     'Stephen Dabideen <dabideen@bbn.com>'])
 
-#   Copyright (C) 2012 by 
-#   Vikas Kawadia <vkawadia@bbn.com>
-#   Sameet Sreenivasan <sreens@rpi.edu>
-#   Stephen Dabideen <dabideen@bbn.com>
-#   All rights reserved. 
-#   BSD license. 
+# Copyright (C) 2012 by 
+# Raytheon BBN Technologies and Rensselaer Polytechnic Institute
+# All rights reserved. 
+# BSD license. 
 
 import networkx as nx
 import math
@@ -242,7 +240,7 @@ def repeated_runs(g1, delta, tolerance, lambduh, Zgraph, repeats):
 
 def ECA(dataset_dir='./data', results_filename= "matched_labels.log", tolerance=0.00001,convergence_tolerance=0.01,delta=0.05,minrepeats=10,increpeats=10,maxfun=500,write_stats=False):
 
-    """ The Estrangement Reduction Algorithm, as decribed in: [Kawadia12]_. 
+    """ The Estrangement Reduction Algorithm, as decribed in: [KS12]_. 
     This function detects temporal communities and returns the results. 
 
     Parameters
@@ -279,7 +277,7 @@ def ECA(dataset_dir='./data', results_filename= "matched_labels.log", tolerance=
     
     References
     ----------
-    .. [Kawadia12] V. Kawadia and S. Sreenivasan, Online detection of temporal communities in evolving networks by estrangement confinement. http://arxiv.org/abs/1203.5126
+    .. [KS12] Vikas Kawadia and Sameet Sreenivasan, ``Sequential detection of temporal communities by estrangement confinement ,'' in Nature Scientific Reports, Nov 2012, http://www.nature.com/srep/2012/121109/srep00794/full/srep00794.html
  
     Examples
     --------

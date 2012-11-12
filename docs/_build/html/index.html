@@ -279,7 +279,7 @@ dictF: List of values of F corresponding to the above labeling</p>
 <dl class="function">
 <dt id="Estrangement.estrangement.ECA">
 <tt class="descclassname">Estrangement.estrangement.</tt><tt class="descname">ECA</tt><big>(</big><em>dataset_dir='./data'</em>, <em>results_filename='matched_labels.log'</em>, <em>tolerance=1e-05</em>, <em>convergence_tolerance=0.01</em>, <em>delta=0.05</em>, <em>minrepeats=10</em>, <em>increpeats=10</em>, <em>maxfun=500</em>, <em>write_stats=False</em><big>)</big><a class="headerlink" href="#Estrangement.estrangement.ECA" title="Permalink to this definition">¶</a></dt>
-<dd><p>The Estrangement Reduction Algorithm, as decribed in: <a class="reference internal" href="#kawadia12">[Kawadia12]</a>. 
+<dd><p>The Estrangement Reduction Algorithm, as decribed in: <a class="reference internal" href="#ks12">[KS12]</a>. 
 This function detects temporal communities and returns the results.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -338,13 +338,10 @@ These logs are not needed to plot temporal communities but are needed to plot ot
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="kawadia12" rules="none">
+<table class="docutils citation" frame="void" id="ks12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Kawadia12]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <ol class="last upperalpha simple" start="22">
-<li>Kawadia and S. Sreenivasan, Online detection of temporal communities in evolving networks by estrangement confinement. <a class="reference external" href="http://arxiv.org/abs/1203.5126">http://arxiv.org/abs/1203.5126</a></li>
-</ol>
-</td></tr>
+<tr><td class="label">[KS12]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> Vikas Kawadia and Sameet Sreenivasan, <a href="#id3"><span class="problematic" id="id4">``</span></a>Sequential detection of temporal communities by estrangement confinement ,&#8217;&#8217; in Nature Scientific Reports, Nov 2012, <a class="reference external" href="http://www.nature.com/srep/2012/121109/srep00794/full/srep00794.html">http://www.nature.com/srep/2012/121109/srep00794/full/srep00794.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -454,7 +451,7 @@ This function merely processes an existing dendogram, which is created by
 <table class="docutils citation" frame="void" id="newman04" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Newman04]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id7">3</a>)</em> M.E.J. Newman and M. Girvan, &#8220;Finding and evaluating community structure in networks.&#8221; Physical Review E 69:26113 (2004).</td></tr>
+<tr><td class="label">[Newman04]</td><td><em>(<a class="fn-backref" href="#id7">1</a>, <a class="fn-backref" href="#id8">2</a>, <a class="fn-backref" href="#id9">3</a>)</em> M.E.J. Newman and M. Girvan, &#8220;Finding and evaluating community structure in networks.&#8221; Physical Review E 69:26113 (2004).</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -467,7 +464,7 @@ This function merely processes an existing dendogram, which is created by
 
 <dl class="function">
 <dt id="Estrangement.agglomerate.best_partition">
-<tt class="descclassname">Estrangement.agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x31bdf50&gt;</em><big>)</big><a class="headerlink" href="#Estrangement.agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Estrangement.agglomerate.</tt><tt class="descname">best_partition</tt><big>(</big><em>graph</em>, <em>delta</em>, <em>tolerance</em>, <em>lambduh</em>, <em>Zgraph</em>, <em>partition=None</em>, <em>q=&lt;multiprocessing.queues.Queue object at 0x3173f90&gt;</em><big>)</big><a class="headerlink" href="#Estrangement.agglomerate.best_partition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to compute the partition of the graph nodes which maximises the modularity
 (or tries to) using the Louvain heuristices.</p>
 <p>This is the partition of highest modularity, i.e. the highest partition of the dendogram
@@ -520,7 +517,7 @@ will be.</p>
 <table class="docutils citation" frame="void" id="blondel08" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Blondel08]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>, <a class="fn-backref" href="#id8">3</a>, <a class="fn-backref" href="#id9">4</a>, <a class="fn-backref" href="#id10">5</a>, <a class="fn-backref" href="#id11">6</a>)</em> Blondel, V.D. et al. Fast unfolding of communities in large networks. J. Stat. Mech 10008, 1-12(2008).</td></tr>
+<tr><td class="label">[Blondel08]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id10">3</a>, <a class="fn-backref" href="#id11">4</a>, <a class="fn-backref" href="#id12">5</a>, <a class="fn-backref" href="#id13">6</a>)</em> Blondel, V.D. et al. Fast unfolding of communities in large networks. J. Stat. Mech 10008, 1-12(2008).</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -684,7 +681,7 @@ The current labelling of the nodes in the graph</p>
 <span class="target" id="module-Estrangement.lpa"></span><p>This module implements the Label Propagation Algorithm (LPAm) as decribed in: <a class="reference internal" href="#barber09">[Barber09]</a>.</p>
 <dl class="function">
 <dt id="Estrangement.lpa.lpa">
-<tt class="descclassname">Estrangement.lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1e-05</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x31c7c50&gt;</em><big>)</big><a class="headerlink" href="#Estrangement.lpa.lpa" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Estrangement.lpa.</tt><tt class="descname">lpa</tt><big>(</big><em>G</em>, <em>tolerance=1e-05</em>, <em>lambduh=3.0</em>, <em>initial_label_dict=None</em>, <em>Z=&lt;networkx.classes.graph.Graph object at 0x3180c90&gt;</em><big>)</big><a class="headerlink" href="#Estrangement.lpa.lpa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to run the Label Propagation Algorithm and return the labelling upon convergence.</p>
 <p>The Label Propagation algorithm initially assigns each node a unique label and sequentially
 allows nodes to change their label so as to maximize a specified objective function, which 
@@ -741,13 +738,13 @@ If the number of iterations is greater than 4 times the number of edges in the g
 <table class="docutils citation" frame="void" id="barber09" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Barber09]</td><td><em>(<a class="fn-backref" href="#id12">1</a>, <a class="fn-backref" href="#id13">2</a>)</em> M.J. Barber and J.W. Clark, &#8220;Detecting Network Communities by propagating labels under constraints.&#8221; Physical Review E 80:026129</td></tr>
+<tr><td class="label">[Barber09]</td><td><em>(<a class="fn-backref" href="#id14">1</a>, <a class="fn-backref" href="#id15">2</a>)</em> M.J. Barber and J.W. Clark, &#8220;Detecting Network Communities by propagating labels under constraints.&#8221; Physical Review E 80:026129</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="raghavan07" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id14">[Raghavan07]</a></td><td>U.N. Raghavan, R. Albert and S. Kumara, &#8220;Near linear time algorithm to detect community structure in large-scale networks.&#8221; Physical Review E 76:036106</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id16">[Raghavan07]</a></td><td>U.N. Raghavan, R. Albert and S. Kumara, &#8220;Near linear time algorithm to detect community structure in large-scale networks.&#8221; Physical Review E 76:036106</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>

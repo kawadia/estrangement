@@ -11,11 +11,10 @@ __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
                             'Sameet Sreenivasan <sreens@rpi.edu>',
                             'Stephen Dabideen <dabideen@bbn.com>'])
 
-#   Copyright (C) 2012 by 
-#   Vikas Kawadia <vkawadia@bbn.com>
-#   Sameet Sreenivasan <sreens@rpi.edu>
-#   Stephen Dabideen <dabideen@bbn.com>
-#   All rights reserved. 
+# Copyright (C) 2012 by 
+# Raytheon BBN Technologies and Rensselaer Polytechnic Institute
+# All rights reserved. 
+# BSD license. 
 
 
 import matplotlib
