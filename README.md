@@ -17,8 +17,7 @@ https://github.com/kawadia/estrangement
 
 ## Documentation
 
-cd docs/_build/html
-open index.html in your browser
+http://kawadia.github.com/estrangement/
 
 ## Installing
 
