@@ -20,9 +20,9 @@ __MIN = 0.0000001
 
 import networkx as nx
 import types
-import lpa
+from . import lpa
 import logging
-import utils
+from . import utils
 import multiprocessing
 
 def partition_at_level(dendogram, level) :
@@ -68,7 +68,7 @@ def partition_at_level(dendogram, level) :
 
     partition = dendogram[0].copy()
     for index in range(1, level + 1) :
-        for node, community in partition.iteritems() :
+        for node, community in partition.items() :
             partition[node] = dendogram[index][community]
     return partition
     
@@ -121,7 +121,7 @@ def modularity(partition, graph) :
     for node in graph :
         com = partition[node]
         deg[com] = deg.get(com, 0.) + graph.degree(node, weight = 'weight')
-        for neighbor, datas in graph[node].iteritems() :
+        for neighbor, datas in graph[node].items() :
             weight = datas.get("weight", 1)
             if partition[neighbor] == com :
                 # inc is A_ij/2 

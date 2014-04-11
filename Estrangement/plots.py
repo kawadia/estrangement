@@ -26,7 +26,7 @@ import numpy
 import collections
 import random
 import logging
-from utils import match_labels
+from .utils import match_labels
 
 markers = [
   'o'   ,
@@ -52,7 +52,8 @@ markers = [
 ]
 
 
-
+# todo: update code to use python3 view objects:
+# http://stackoverflow.com/questions/8957750/what-are-python-dictionary-view-objects
 
 def GetDeltas():
 
@@ -167,7 +168,7 @@ def plot_by_param(dictX, dictY, deltas=[], linewidth=2.0, markersize=15, label_f
     line_dict = {} # key = label, val = pyplot line object
 
     i=0
-    for label in sorted(dictX.keys()):
+    for label in sorted(dictX):
         arrayX = dictX[label]
         arrayY = dictY[label]
 
@@ -259,7 +260,7 @@ def plot_function(listNames,image_extension="svg"):
             for t in data_dict.keys():
                 concat_datadict[label][t] = data_dict[t]
 
-            for k in sorted(concat_datadict[label].keys(),key=int):
+            for k in sorted(list(concat_datadict[label]),key=int):
                 dictX[label].append(int(k))
                 dictY[label].append(concat_datadict[label][k])
 
@@ -317,7 +318,7 @@ def ChoosingDelta(image_extension="svg",deltas=[]):
 
         # remove the lowest time entry since the initial parition is a given
         # this also keeps us consistent with Qstar and E below
-        del(Q_dict[sorted(Q_dict.keys())[0]])
+        del(Q_dict[sorted(Q_dict)[0]])
 
         with open("./task_delta_" + str(delta) +"/Qstar.log", 'r') as f:
             Qstar_dict = eval(f.read())  # {time: Qstar}
@@ -380,7 +381,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
 
     if(len(deltas) == 0):
         #deltas = GetDeltas()    
-        deltas = sorted(matched_labels.keys())
+        deltas = sorted(matched_labels)
     
     all_labels_set = set()
     appearing_nodes_set = set()
@@ -449,7 +450,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
             label_freq = collections.defaultdict(int) # key = label, val = freq
             for l in label_list:
                 label_freq[l] += 1
-            label_count_dict[n] = sorted(label_freq.keys(), key=label_freq.get, reverse=True)
+            label_count_dict[n] = sorted(label_freq, key=label_freq.get, reverse=True)
 
         first_appearances_dict = {} # key = node, val = first time that node appears
         for n in appearances_dict.keys():
@@ -458,7 +459,7 @@ def preprocess_temporal_communities(matched_labels,deltas=[],nodes_of_interest=[
         def node_sorting_function(n):
             return (label_count_dict[n], first_appearances_dict[n])
 
-        ordered_nodes = sorted(label_count_dict.keys(), key=node_sorting_function)
+        ordered_nodes = sorted(label_count_dict, key=node_sorting_function)
 
     if nodes_of_interest:
         filtered_ordered_nodes = [ n for n in ordered_nodes if n in appearing_nodes_set]
@@ -554,7 +555,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
     node_index_dict, t_index_dict, label_index_dict, labels_of_interest_dict = preprocess_temporal_communities(
         matched_labels, nodes_of_interest=nodes_of_interest)
 
-    t_index_to_label_dict = dict([(v,k) for (k,v) in t_index_dict.items()])
+    t_index_to_label_dict = dict([(v,k) for (k,v) in list(t_index_dict.items())])
 
     # Make the tiled plots every set of parameters used in the simulations
     fig1 = pylab.figure(figsize=eval(tiled_figsize))
@@ -608,7 +609,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
         with open(os.path.join(taskdir,"matched_temporal_labels.log"), 'r') as label_file:
             matched_temporal_label_dict = eval(label_file.read())
            
-        for (n,t), l in matched_temporal_label_dict.items():
+        for (n,t), l in list(matched_temporal_label_dict.items()):
             if nodes_of_interest and l in labels_of_interest_dict[str(delta)]:
                 Labels[node_index_dict[n], t_index_dict[t]] = label_index_dict[l]
             elif not nodes_of_interest: 
@@ -628,12 +629,12 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
         if colorbar is True:
             levels = numpy.unique(Labels_masked)
             cb = pylab.colorbar(ticks=levels)
-            reverse_label_index_dict = dict([(v,k) for (k,v) in label_index_dict.items()])
+            reverse_label_index_dict = dict([(v,k) for (k,v) in list(label_index_dict.items())])
             level_labels = [ reverse_label_index_dict[l] for l in levels.compressed() ]
             cb.ax.set_yticklabels(level_labels)
 
-        ylocs = sorted(node_index_dict.values(), key=int)
-        ylabs = sorted(node_index_dict.keys(), key=node_index_dict.get)
+        ylocs = sorted(list(node_index_dict.values()), key=int)
+        ylabs = sorted(list(node_index_dict.keys()), key=node_index_dict.get)
 
         if show_yticklabels is False:
             ax1.set_yticklabels([])
@@ -646,7 +647,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
                 pylab.yticks(ylocs, ylabs, fontsize=10)
 
         # show every 5th label on the x axis
-        xlocs = [x for x in sorted(t_index_dict.values(), key=int) if x%xtick_separation == 0]
+        xlocs = [x for x in sorted(list(t_index_dict.values()), key=int) if x%xtick_separation == 0]
         logging.debug("xlocs:%s", str(xlocs))
         xlabs = [t_index_to_label_dict[x] for x in xlocs]
         logging.debug("xlabs:%s", str(xlabs))
@@ -665,7 +666,7 @@ def plot_temporal_communities(matched_labels,nodes_of_interest=[],deltas=[],tile
         else:    
             suffix='-'.join([str(n) for n in nodes_of_interest])
             
-        xvals = t_index_dict.values()    
+        xvals = list(t_index_dict.values())    
         ax1.set_xlim((min(xvals), max(xvals)))
 
     fig1.subplots_adjust(wspace=wspace, bottom=bottom)
@@ -760,11 +761,11 @@ def plot_with_lambdas(linewidth=2.0,image_extension='svg'):
         for l in sorted(Flam.keys()):
             dictX['Q'].append(l)
             dictY['Q'].append(max(Qlam[l].values()))
-            dictErr['Q'].append( confidence_interval(Qlam[l].values()) )
+            dictErr['Q'].append( confidence_interval(list(Qlam[l].values())) )
 
             dictX['F'].append(l)
             dictY['F'].append(max(Flam[l].values()))
-            dictErr['F'].append( confidence_interval(Flam[l].values()) )
+            dictErr['F'].append( confidence_interval(list(Flam[l].values())) )
 
         ax2 = postpro.plot_by_param(dictX, dictY, listLinestyles=['b-', 'g-', 'r-',],
             xlabel="$\lambda$", ylabel="Dual function", title="Dual function at t=%s"%(str(t)),

@@ -8,7 +8,7 @@ import networkx as nx
 import random
 import collections
 import logging
-import agglomerate
+from . import agglomerate
 
 __all__ = ['lpa']
 __author__ = """\n""".join(['Vikas Kawadia (vkawadia@bbn.com)',
@@ -128,7 +128,7 @@ def lpa(G, tolerance=0.00001, lambduh=3.0, initial_label_dict=None, Z=nx.Graph()
                     if nbr != v:
                         obj_fn_dict[label_dict[nbr]] += lambduh*float(eattr["weight"]) 
                                                 
-            for l in obj_fn_dict.keys():
+            for l in list(obj_fn_dict.keys()):
                 obj_fn_dict[l] -= degree_dict[v]*label_volume_dict[l]/two_m
                 if l == label_dict[v]:
                     obj_fn_dict[l] += term3_dict[v]

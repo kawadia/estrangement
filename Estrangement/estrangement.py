@@ -21,9 +21,9 @@ import math
 import os
 from scipy import optimize
 import pprint
-import lpa
-import utils
-import agglomerate
+from . import lpa
+from . import utils
+from . import agglomerate
 import logging
 import multiprocessing
 
@@ -456,7 +456,7 @@ def ECA(dataset_dir='./data', results_filename= "matched_labels.log", tolerance=
             with open('%s.log'%statname, 'w') as fout:
                 pprint.pprint(statobj, stream=fout) 
 
-    print("Done computing temporal communities for delta=%f" %delta)
+    print(("Done computing temporal communities for delta=%f" %delta))
     # result is a dictionary of the form: {time : {node : label}}
     with open(results_filename, 'w') as fw:
         fw.write(str(matched_labels))
